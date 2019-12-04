@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    h1.greeting Admin Area
+    button 
+        a(style = "text-decoration: none;" href="/admin/addAirportPage") Add and View Airport
+    br 
+    button(style = "margin-top:10px;")
+        a(style = "text-decoration: none;" href="/admin/addAirplaneTypePage") Add Air plane types and View seatings 
+    br 
+    button(style = "margin-top:10px;")
+        a(style = "text-decoration: none;" href="/admin/addAirplanePage") Add and View Air planes
+    br 
+    button(style = "margin-top:10px;")
+        a(style = "text-decoration: none;" href="/admin/addPassengerCategoryPage") Add and View Passenger categories
+    br 
+    button(style = "margin-top:10px;")
+        a(style = "text-decoration: none;" href="/admin/addRoutePage") Add a today shedule
+
+
+append links 
+    li(style="float: right;")
+        a(href="/admin/loggout") Logout 
+
+
+    

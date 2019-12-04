@@ -1,0 +1,32 @@
+extends layout
+
+block content
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Edit a passenger category
+        br
+        +function(category)
+
+mixin function(category)
+        if category != null
+            form(method="post" action="/admin/editPassengerCategory")
+                table 
+                    tr
+                        td Category
+                        td 
+                            input(type="text" name="category" value="#{category.category}" readonly = "true")
+                    tr 
+                        td Description
+                        td 
+                            input(type="text" name="description" value = "#{category.description}")
+                    tr 
+                        td Discount
+                        td 
+                            input(type="text" name="discount" value = "#{category.discount}")
+                    tr 
+                        td
+                        td
+                            input(type="submit" value="Edit")
+        else
+            p No entry found
+            
+   

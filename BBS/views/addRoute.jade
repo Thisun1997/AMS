@@ -1,0 +1,64 @@
+extends layout
+
+block content
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Add a route
+            +function3(sehdule_id)
+        br
+        form(method="post" action="/admin/addRoute")
+            table 
+                tr
+                    td Comapny id for the airplane 
+                    td 
+                        +function1(airplanes)
+                tr 
+                    td Code of the depature airport
+                    td 
+                        +function2(airports)
+                tr 
+                    td Code of the destination airport
+                    td 
+                        +function2(airports)
+                tr 
+                    td Depature time
+                    td 
+                        input(type="time" name="dept_time")
+                tr 
+                    td Arrival time
+                    td 
+                        input(type="time" name="arr_time")
+                tr 
+                    td Price of an economy seat (in $)
+                    td 
+                        input(type="text" name="economy_price")
+                tr 
+                    td Price of an business seat (in $)
+                    td 
+                        input(type="text" name="business_price")
+                tr 
+                    td Price of an platinum seat (in $)
+                    td 
+                        input(type="text" name="platinum_price")
+                tr 
+                    td
+                    td
+                        input(type="submit" value="Add")
+
+mixin function1(airplanes)
+    if airplanes!= null
+        select(name="plane_id")
+            each airplane in airplanes
+                option(value="#{airplane.plane_id}") #{airplane.plane_id}
+    else
+        p no planes are added yet. Add a plane and try again!
+
+mixin function2(airports)
+    if airports!= null
+        select(name="plane_id")
+            each airport in airports
+                option(value="#{airport.code}") #{airport.code}
+    else
+        p no airports are added yet. Add an airport and try again!
+
+mixin function3(sehdule_id)
+    p routes are added for the date 

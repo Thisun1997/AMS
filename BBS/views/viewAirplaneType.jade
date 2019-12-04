@@ -1,0 +1,79 @@
+extends layout
+
+block content
+    .login-panel(style="float:none")
+        +function(economy,business,platinum)
+
+mixin function(economy,business,platinum)
+    if platinum != null
+            h3 Platinum Seats
+            table( class = "table table2" )
+                tbody
+                        tr
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "A"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+                        tr
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "B"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+                        tr(colspan= platinum.length/4)
+                            td(colspan= platinum.length/4) 
+                                b passage
+                        tr
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "C"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+                        tr
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "D"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+    if business != null
+            h3 Business Seats
+            table( class = "table table2")
+                tbody
+                        tr
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "A"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+                        tr
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "B"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+                        tr(colspan= business.length/4)
+                            td(colspan= business.length/4) 
+                                b passage
+                        tr
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "C"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+                        tr
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "D"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+    if economy != null
+            h3 Economy Seats
+            table( class = "table table2")
+                        tr
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "A"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+                        tr
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "B"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+                        tr(colspan= economy.length/4)
+                            td(colspan= economy.length/4) 
+                                b passage
+                        tr
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "C"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+                        tr
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "D"
+                                    td= seat_id.seat_id[7]+seat_id.seat_id[8]
+    else 
+        p  No Airplane types found
+
+

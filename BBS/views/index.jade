@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  .login-panel
+    h3 Member Login
+    br
+    include includes/login-form
+  .registerguest
+    ul(style = "padding-left:30px;")
+      li
+        a(href="/registerRedirect") register as a member 
+      li
+        a(href="/loginGuest") login as a guest
+  
+append links 
+  li(style="float: right;")
+      a(href="admin/login") Admin 

@@ -1,0 +1,63 @@
+extends layout
+
+block content
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Add an airplane type
+        br
+        form(method="post" action="/admin/addAirplaneType")
+            table 
+                tr
+                    td International Code for the Airplane 
+                    td 
+                        input(type="text" name="plane_type")
+                tr 
+                    td Total number of 
+                        b economy class seats available 
+                    td 
+                        input(type="text" name="tot_economy_seats")
+                tr 
+                    td Total number of 
+                        b business class seats available 
+                    td 
+                        input(type="text" name="tot_business_seats")
+                tr 
+                    td Total number of 
+                        b platinum class seats available  
+                    td 
+                        input(type="text" name="tot_platinum_seats")
+                tr 
+                    td
+                    td
+                        input(type="submit" value="Add")
+        
+    .dashboard(style = "margin-top: 15px;")
+        .user
+            +function(airplanetypes)
+
+mixin function(airplanetypes)
+    if airplanetypes != null
+            table( class = "table")
+                thead 
+                    tr
+                        th International code
+                        th Total economy class seats	
+                        th Total business class seats 
+                        th Total platinum class seats
+                        th action
+                tbody
+                    each airplanetype in airplanetypes
+                        tr
+                            td= airplanetype.plane_type
+                            td= airplanetype.tot_economy_seats
+                            td= airplanetype.tot_business_seats
+                            td= airplanetype.tot_platinum_seats
+                            td
+                                a(href="/admin/viewAirplaneType/#{airplanetype.plane_type}" rel="noopener" class="btn btn-sm btn-success") View
+                                br
+                                a(href="/admin/deleteAirplaneType/#{airplanetype.plane_type}" rel="noopener" class="btn btn-sm btn-danger") Delete
+                               
+      
+    else 
+        p  No Airplane types found
+
+
