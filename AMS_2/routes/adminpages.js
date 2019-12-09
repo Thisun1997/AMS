@@ -25,6 +25,7 @@ router.get('/home', (req, res, next) => {
     if(user) {
         res.render('admin', {opp:req.session.opp, name:user.full_name});
         return;
+        
     }
     res.redirect('/');
 });
