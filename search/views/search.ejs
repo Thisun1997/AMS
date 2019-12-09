@@ -1,0 +1,37 @@
+<html>
+    <head></head>
+
+    <body>
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+                <h1>You Searched for : <%=data.userquery %></h1>
+                <% if(data.loggedIn){ %>
+                    <h2>You are logg in as : <%= data.username %> </h2>
+               <% } %>
+                <ul>
+                    <% data.listItem.forEach(result=>{ %>
+                        <li> <%= result %></li>
+                      <% } ); %>
+                </ul>
+            </div>
+        </div>
+    </body>
+
+    <!-- <body>
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+                <h1>You Searched for : <%=data.userquery %></h1>
+                <% if(data.loggedIn){ %>
+                    <h2>You are logg in as : <%= data.username %> </h2>
+               <% } %>
+                <ul>
+                    <% data.listItem.forEach(result=>{ %>
+                        <li> <%= result %></li>
+                      <% } ); %>
+                </ul>
+            </div>
+        </div>
+    </body> -->
+</html>
