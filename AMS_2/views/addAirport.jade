@@ -1,0 +1,58 @@
+extends layout
+
+block content
+    .login-panel(style="float:none; padding-left:310px")
+        h3 Add an airport
+        br
+        form(method="post" action="/admin/addAirport")
+            table 
+                tr
+                    td International Airport Code 
+                    td 
+                        input(type="text" name="code")
+                tr 
+                    td City 
+                    td 
+                        input(type="text" name="city")
+                tr 
+                    td State 
+                    td 
+                        input(type="text" name="state")
+                tr 
+                    td Country 
+                    td 
+                        input(type="text" name="country")
+                tr 
+                    td
+                    td
+                        input(type="submit" value="Add")
+        
+    .dashboard(style = "margin-top: 15px;")
+        .user
+            +function(airports)
+
+mixin function(airports)
+    if airports != null
+            table( class = "table")
+                thead 
+                    tr
+                        th International code
+                        th city
+                        th state
+                        th country
+                        th action
+                tbody
+                    each airport in airports
+                        tr
+                            td= airport.code
+                            td= airport.city
+                            td= airport.state
+                            td= airport.country
+                            td
+                                a(href="/admin/deleteAirport/#{airport.airport_id}" rel="noopener" class="btn btn-sm btn-danger") Delete
+                               
+      
+    else 
+        p  No Airports found
+
+

@@ -1,0 +1,28 @@
+form(method="post" action="/guestLogin")
+    table(style="margin-left:200px;")
+        tr 
+            td Fullname 
+            td 
+                input(type="text" name="full_name")
+        tr
+            td date of birth 
+            td 
+                input(type="date" name="date_of_birth")
+        tr
+            td gender 
+            td 
+                select(name="gender" style="width:98%")
+                    option(value="male") male
+                    option(value="female") female
+        tr
+            td citizenship 
+            td 
+                input(type="text" name="citizenship")
+        tr
+            td email 
+            td 
+                input(type="text" name="email")
+        tr 
+            td
+            td
+                input(type="submit" value="Register")
