@@ -441,8 +441,8 @@ Admin.prototype = {
 
     },
 
-    //shedule
-    addShedule : function(date,callback)
+    //time table
+    addTimeTable : function(date,callback)
     {
         var bind = []
         bind.push(date);
