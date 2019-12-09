@@ -212,7 +212,6 @@ router.post('/addAirplane', (req, res, next) => {
     // call create function. to create a new user. if there is no error this function will return it's id.
     admin.addAirplane(userInput)
     res.redirect("/admin/addAirplanePage")
-
 });
 
 router.get("/deleteAirplane/:plane_id",(req,res,next)=>{
@@ -363,7 +362,7 @@ router.post('/addShedule', (req, res, next) => {
         });
     }
     else{
-        admin.addShedule(date,function(result1){
+        admin.addTimeTable(date,function(result1){
             admin.getRoute(function(result2) {
                 admin.getRouteTime(route_id,function(result3){
                     admin.getAroute(route_id,function(result4){
@@ -375,6 +374,24 @@ router.post('/addShedule', (req, res, next) => {
             });
         });
     }
+});
+
+
+//add trip
+router.post('/addTrip',(req,res,next) => {
+    let userInput2 = {
+        economy_price: req.body.economy_price,
+        business_price: req.body.business_price,
+        platinum_price: req.body.platinum_price
+    }
+    let userInput1 = {
+        route_id: req.body.route_id,
+        dept_time: req.body.dept_time,
+        arr_time: req.body.arr_time
+    }
+    let time_table_id = req.body.time_table_id;
+    admin.addSheduleAndTrip(userInput1,userInput2,time_table_id);
+    res.redirect('/admin/addShedule');
 });
 
 

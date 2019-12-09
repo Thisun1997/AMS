@@ -597,6 +597,53 @@ Admin.prototype = {
         });
     },
 
+    //add shedule
+
+    addSheduleAndTrip : function(body1, body2, time_table_id)
+    {
+        var bind1 = [];
+        // loop in the attributes of the object and push the values into the bind array.
+        for(prop in body1){
+            bind1.push(body1[prop]);
+        }
+        pool.beginTransaction(function(err){
+            if(err) throw err;
+            let sql = `INSERT INTO shedule(route_id,dept_time,arr_time) VALUES (?, ?, ?)`;
+            console.log(bind1);
+            pool.query(sql, bind1,function(err, result) {
+                if(err){
+                    pool.rollback(function() {
+                        throw err;
+                    });
+                }
+                var id  = result.insertId;
+                var bind2 = [time_table_id,id];
+                let sql = `CALL AddSheduleAndTrip(?, ?, ?, ?, ?)`;
+                for(prop in body2){
+                    bind2.push(body2[prop]);
+                }
+                pool.query(sql, bind2,function(err, result) {
+                    if(err){
+                        pool.rollback(function() {
+                            throw err;
+                        });
+                    }
+                    pool.commit(function(err) {
+                        if (err) { 
+                            pool.rollback(function() {
+                            throw err;
+                        });
+                        }
+                        //console.log('Transaction Complete.');
+                        //callback(log)
+                    });
+                });
+            });
+        });
+        
+    },
+
+
 }
 
 module.exports = Admin;

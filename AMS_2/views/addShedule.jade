@@ -47,7 +47,7 @@ mixin function1(timetable,timedata,route)
                     td
                         input(type="text" name="route" value="#{route.x} -> #{route.y}" readonly = "true")
                     td
-                        input(type="hidden" name="route" value="#{route.route_id}" readonly = "true")
+                        input(type="hidden" name="route_id" value="#{route.route_id}" readonly = "true")
                 if timedata != null
                     tr
                         td depature time 
@@ -85,16 +85,16 @@ mixin function2(seats)
                     td Price of an economy seat 
                         b (in $)
                     td 
-                        input(type="text" name="tot_economy_seats")
+                        input(type="text" name="economy_price")
             if(seats.tot_business_seats)
                 tr
                     td Price of a business seat 
                         b (in $)
                     td 
-                        input(type="text" name="tot_business_seats")
+                        input(type="text" name="business_price")
             if(seats.tot_platinum_seats)
                 tr
                     td Price of a platinum seat 
                         b (in $)
                     td 
-                        input(type="text" name="tot_platinum_seats")
+                        input(type="text" name="platinum_price")
