@@ -7,26 +7,17 @@ module.exports = function (app, passport) {
         res.render('searchNew.ejs');
     })
 
-    app.post('/searchNew', passport.authenticate('new-search', {
-        successRedirect: '/searchNew',
-        failureRedirect: '/index',
-        failureFlash: true
-    }),
-    function(req,res){
-        if(req.body.remember){
-            req.session.cookie.maxAge= 1000*60*3;
-        }else{
-            req.session.cookie.expires=false;
-        }
-        res.redirect('/');
-    })
+    // app.post('/searchNew',(req,res)=>{
+    //     console.log(req.body)
+    //     res.render('searchNew');
+   // })
 
     
-    app.get('/:userquery', (req, res) => {
+    app.post('/searchNew', (req, res) => {
         var list = ['books', 'cars']
         var dbDictionary = { books: ['book1', 'book2', 'book3'], cars: ['car1', 'car2'] };
-        tempList: []
-        userSearched = req.params.userquery
+        var tempList =  []
+        var userSearched = req.body.search
 
         for (var key in dbDictionary) {
             // check if the property/key is defined in the object itself, not in parent
@@ -37,7 +28,7 @@ module.exports = function (app, passport) {
 
                     res.render('search', {
                         data: {
-                            userquery: req.params.userquery,
+                            userquery: req.body.search,
                             list: list,
                             listItem: tempList,
                             loggedIn: true,
