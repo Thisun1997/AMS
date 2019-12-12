@@ -3,6 +3,7 @@ extends layout
 block content
     .login-panel(style="float:none; padding-left:200px")
         h3 Add a route
+        +functione(msg)
         br
         form(method="post" action="/admin/addRoute")
             table 
@@ -98,3 +99,8 @@ mixin function(routrDetails)
       
     else 
         p  No Passenger Category found
+
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}

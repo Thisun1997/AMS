@@ -3,6 +3,7 @@ extends layout
 block content
   .login-panel(style="float:none; padding-left:310px")
     h3 Admin Login
+    +functione(msg)
     br
     form(method="post" action="/admin/login")
         table 
@@ -18,3 +19,9 @@ block content
                 td
                 td
                     input(type="submit" value="Login")
+
+
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}

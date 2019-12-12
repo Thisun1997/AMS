@@ -3,6 +3,7 @@ extends layout
 block content
     .login-panel(style="float:none; padding-left:200px")
         h3 Add an airplane
+        +functione(msg)
         br
         form(method="post" action="/admin/addAirplane")
             table 
@@ -52,4 +53,7 @@ mixin function2(airplanetypes)
         p no plane types are added yet. Add a plane type and try again!
 
 
-
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}

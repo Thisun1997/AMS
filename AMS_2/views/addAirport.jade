@@ -3,6 +3,7 @@ extends layout
 block content
     .login-panel(style="float:none; padding-left:310px")
         h3 Add an airport
+        +functione(msg)
         br
         form(method="post" action="/admin/addAirport")
             table 
@@ -55,4 +56,7 @@ mixin function(airports)
     else 
         p  No Airports found
 
-
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}

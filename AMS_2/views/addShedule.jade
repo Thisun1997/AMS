@@ -3,8 +3,8 @@ extends layout
 block content
     .login-panel(style="float:none; padding-left:200px")
         h3 Add a route
+        +functione(msg)
         br
-        +function_error(msg)
         form(method="post" action="/admin/addShedule")
             table 
                 tr
@@ -19,6 +19,7 @@ block content
                     td
                     td
                         input(type="submit" value="Proceed to shedule")
+                        
     .login-panel(style="float:none; padding-left:200px; margin-top: 10px")
         +function1(timetable,timedata,route)
                 
@@ -76,8 +77,10 @@ mixin function1(timetable,timedata,route)
                 
 
 
-mixin function_error(msg)
-    p #{msg}
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}
 
 mixin function2(seats)
             if(seats.tot_economy_seats)

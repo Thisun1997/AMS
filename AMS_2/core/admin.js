@@ -481,7 +481,6 @@ Admin.prototype = {
                         throw err;
                     });
                 }
-                console.log(result);
                 if (result.length){
                     
                 }
@@ -494,7 +493,6 @@ Admin.prototype = {
                             });
                         }
                         var id = result.insertId;
-                        console.log(id)
                         let sql = `INSERT INTO  regular_route_time(route_id,dept_time,arr_time) VALUES (?, ?, ?)`;
                         let bind2 = [id];
                         // loop in the attributes of the object and push the values into the bind array.

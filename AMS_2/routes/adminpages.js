@@ -1,10 +1,12 @@
 const express = require('express');
 const Admin = require('../core/admin');
+const Validate = require('../core/validate');
 const router = express.Router();
 const shortid = require('shortid');
 
 // create an object from the class User in the file core/user.js
 const admin = new Admin();
+const validate = new Validate();
 
 // Get the index page
 router.get('/', (req, res, next) => {
@@ -34,7 +36,7 @@ router.post('/login', (req, res, next) => {
     // The data sent from the user are stored in the req.body object.
     // call our login function and it will return the result(the user data).
     if ( req.body.email == "" || req.body.password == ""){
-        res.send('empty too')
+        res.render('adminLogin',{msg:'fields cannot be empty!'})
     }
     else{
         if(req.body.email == "admin" & req.body.password == "admin") {
@@ -46,7 +48,7 @@ router.post('/login', (req, res, next) => {
             res.redirect('/admin/home');
         }else {
             // if the login function returns null send this error message back to the user.
-            res.send('Username/Password incorrect!');
+            res.render('adminLogin',{msg:'Username/Password incorrect!'});
         }
     }
 
@@ -77,9 +79,18 @@ router.post('/addAirport', (req, res, next) => {
         state: req.body.state,
         country:req.body.country,
     };
+    validate.check(userInput,function(result){
+        if (result == true){
+            admin.getAirports(function(result) {
+                res.render('addAirport', {airports: result,msg:"fields cannot be empty"});
+            });
+        }
+        else{
+            admin.addAirport(userInput)
+            res.redirect("/admin/addAirportPage")
+        }
+    });
     // call create function. to create a new user. if there is no error this function will return it's id.
-    admin.addAirport(userInput)
-    res.redirect("/admin/addAirportPage")
 
 });
 
@@ -127,8 +138,18 @@ router.post('/addAirplaneType', (req, res, next) => {
         tot_platinum_seats:req.body.tot_platinum_seats,
     };
     //admin.addAirplaneType(userInput)
-    admin.addAirplaneTypeAndSeats(userInput)
-    res.redirect("/admin/addAirplaneTypePage")
+    validate.check(userInput,function(result){
+        if (result == true){
+            admin.getAirplaneTypes(function(result) {
+                res.render('addAirplaneType', {airplanetypes: result, msg:"fields cannot be empty"});
+            });
+        }
+        else{
+            admin.addAirplaneTypeAndSeats(userInput)
+            res.redirect("/admin/addAirplaneTypePage")
+        }
+    });
+    
 
 });
 
@@ -210,8 +231,19 @@ router.post('/addAirplane', (req, res, next) => {
         plane_type: req.body.plane_type
     };
     // call create function. to create a new user. if there is no error this function will return it's id.
-    admin.addAirplane(userInput)
-    res.redirect("/admin/addAirplanePage")
+    validate.check(userInput,function(result){
+        if (result == true){
+            admin.getAirplanes(function(result) {
+                admin.getAirplaneTypes(function(result2){
+                    res.render('addAirplane', {airplanes: result, airplanetypes: result2, msg:"fields cannot be empty"});
+                })   
+            });
+        }
+        else{
+            admin.addAirplane(userInput)
+            res.redirect("/admin/addAirplanePage")
+        }
+    });
 });
 
 router.get("/deleteAirplane/:plane_id",(req,res,next)=>{
@@ -261,8 +293,17 @@ router.post('/addPassengerCategory', (req, res, next) => {
         No_of_reservations: req.body.No_of_reservations,
         discount: req.body.discount,
     };
-    admin.addPassengerCategory(userInput)
-    res.redirect("/admin/addPassengerCategoryPage")
+    validate.check(userInput,function(result){
+        if (result == true){
+            admin.getPassengerCategories(function(result) {
+                res.render('addPassengerCategory', {categories: result, msg:"fields cannot be empty"});
+            });
+        }
+        else{
+            admin.addPassengerCategory(userInput)
+            res.redirect("/admin/addPassengerCategoryPage")
+        }
+    });
 
 });
 
@@ -356,9 +397,7 @@ router.post('/addShedule', (req, res, next) => {
     let route_id = req.body.route_id
     if (date == "" || route_id == ""){
         admin.getRoute(function(result2) {
-            admin.getRouteTime(route_id,function(result3){
-                res.render('addShedule',{routeDetails: result2,timedata: result3,msg: "empty"})
-            });
+                res.render('addShedule',{routeDetails: result2,msg: "fields cannot be empty"})
         });
     }
     else{
@@ -389,9 +428,20 @@ router.post('/addTrip',(req,res,next) => {
         dept_time: req.body.dept_time,
         arr_time: req.body.arr_time
     }
-    let time_table_id = req.body.time_table_id;
-    admin.addSheduleAndTrip(userInput1,userInput2,time_table_id);
-    res.redirect('/admin/addShedule');
+    validate.check(userInput1,function(result1){
+        validate.check(userInput2,function(result2){
+            if (result1 == true || result2 == true){
+                admin.getRoute(function(result2) {
+                        res.render('addShedule',{routeDetails: result2,msg: "fields cannot be empty"})
+                });
+            }
+            else{
+                let time_table_id = req.body.time_table_id;
+                admin.addSheduleAndTrip(userInput1,userInput2,time_table_id);
+                res.redirect('/admin/addShedulePage');
+            }
+        });
+    });
 });
 
 
