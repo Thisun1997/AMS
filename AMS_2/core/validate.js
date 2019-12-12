@@ -15,6 +15,20 @@ Validate.prototype = {
         else{
             callback(false)
         }
+    },
+
+    checkAdmin : function(user,callback){
+        if(user){
+            if(user.email == "admin" & user.password == "admin"){
+                callback(true)
+            }
+            else{
+                callback(false)
+            }
+        }
+        else{
+            callback(false)
+        }
     }
 }
 

@@ -4,6 +4,7 @@ block content
     .login-panel(style="float:none; padding-left:200px")
         h3 Add a route
         +functione(msg)
+        +functions(msg2)
         br
         form(method="post" action="/admin/addShedule")
             table 
@@ -81,6 +82,11 @@ mixin functione(msg)
     if(msg)
         .error
             p #{msg}
+
+mixin functions(msg2)
+    if(msg2)
+        .success
+            p #{msg2}
 
 mixin function2(seats)
             if(seats.tot_economy_seats)

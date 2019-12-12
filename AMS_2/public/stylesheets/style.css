@@ -115,6 +115,15 @@ input[type="submit"]:hover
     width:50%;
 }
 
+.success
+{
+    background-color: rgb(153, 214, 161);
+    border: 1px solid rgb(19, 121, 44);
+    color: rgb(19, 121, 44);
+    height: 50px;
+    width:50%;
+}
+
 .dashboard
 {
     padding: 20px;

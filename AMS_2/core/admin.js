@@ -93,12 +93,12 @@ Admin.prototype = {
         });
     },
 
-    getAnAirplaneType : function(plane_type = null,callback)
+    getAnAirplaneType : function(plane_type_id = null,callback)
     {
-        let sql = `SELECT * FROM plane_type WHERE plane_type = ?`;
+        let sql = `SELECT * FROM plane_type WHERE plane_type_id = ?`;
 
 
-        pool.query(sql, plane_type, function(err, result) {
+        pool.query(sql, plane_type_id, function(err, result) {
             if(err) throw err
            
             if(result.length) {
@@ -453,11 +453,10 @@ Admin.prototype = {
             if(result.length) {
                 callback([bind[0],result[0].time_table_id]);
             }else {
-                let shedule_id = 'S-'+date;
-                bind.push(shedule_id);
                 let sql = `INSERT INTO time_table(date) VALUES (?) `;
-                pool.query(sql, bind, function(err, _result) {
+                pool.query(sql, bind, function(err, result) {
                     if(err) throw err;
+                    console.log(result.insertId)
                     callback([bind[0],result.insertId]);
                 });
             }
@@ -615,6 +614,7 @@ Admin.prototype = {
                     });
                 }
                 var id  = result.insertId;
+                console.log(id);
                 var bind2 = [time_table_id,id];
                 let sql = `CALL AddSheduleAndTrip(?, ?, ?, ?, ?)`;
                 for(prop in body2){

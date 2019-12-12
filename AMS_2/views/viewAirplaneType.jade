@@ -2,9 +2,10 @@ extends layout
 
 block content
     .login-panel(style="float:none")
-        +function(economy,business,platinum)
+        +function(economy,business,platinum,plane_type_name)
 
-mixin function(economy,business,platinum)
+mixin function(economy,business,platinum,plane_type_name)
+    h3 #{plane_type_name.plane_type}
     if platinum != null
             h3 Platinum Seats
             table( class = "table table2" )

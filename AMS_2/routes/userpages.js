@@ -21,7 +21,6 @@ router.get('/', (req, res, next) => {
 // Get home page
 router.get('/home', (req, res, next) => {
     let user = req.session.user;
-    console.log(user);
     if(user.email == "admin" & user.password == "admin"){
         res.redirect('/admin/home');
         return;
