@@ -1,4 +1,4 @@
-extends layout
+extends admin
 
 block content
     .login-panel(style="float:none; padding-left:200px")
@@ -31,7 +31,7 @@ block content
 mixin function(categories)
     if categories != null
             table( class = "table")
-                thead 
+                thead(class="thead-dark") 
                     tr
                         th category
                         th No of reservations required	

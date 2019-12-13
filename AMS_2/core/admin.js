@@ -641,7 +641,85 @@ Admin.prototype = {
         
     },
 
+    viewTrips : function(date,callback)
+    {
+        sql = `CALL TripsDate(?)`
+        pool.query(sql, date,function(err, result) {
+            if(err) throw err
+            if(result[0]){
+                //console.log(result[0]);
+                if(result[0].length) {
+                    callback(result[0]);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
 
+    viewForEditTrips : function(trip_id,callback)
+    {
+        sql = `CALL TripDetails(?)`
+        pool.query(sql, trip_id,function(err, result) {
+            if(err) throw err
+            if(result[0]){
+                //console.log(result[0]);
+                if(result[0].length) {
+                    callback(result[0]);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
+
+    editTrip : function(body1,body2,callback)
+    {
+        var bind1 = [];
+        // loop in the attributes of the object and push the values into the bind array.
+        for(prop in body1){
+            bind1.push(body1[prop]);
+        }
+        pool.beginTransaction(function(err){
+            if(err) throw err;
+            let sql = `UPDATE shedule SET arr_time = ?, dept_time = ? WHERE shedule_id = ?`;
+            pool.query(sql, bind1,function(err, result) {
+                if(err){
+                    pool.rollback(function() {
+                        throw err;
+                    });
+                }
+                var bind2 = [];
+                let sql = `UPDATE trip SET economy_price = ?, business_price = ?, platinum_price = ? WHERE trip_id = ?`;
+                for(prop in body2){
+                    bind2.push(body2[prop]);
+                }
+                console.log(bind2)
+                pool.query(sql, bind2,function(err, result) {
+                    if(err){
+                        pool.rollback(function() {
+                            throw err;
+                        });
+                    }
+                    pool.commit(function(err) {
+                        if (err) { 
+                            pool.rollback(function() {
+                            throw err;
+                        });
+                        }
+                        //console.log('Transaction Complete.');
+                        callback(true)
+                    });
+                });
+            });
+        });
+    }
 }
 
 module.exports = Admin;

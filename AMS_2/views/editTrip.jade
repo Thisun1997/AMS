@@ -1,0 +1,82 @@
+extends admin
+
+block content
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Edit trip and shedule details
+        +functione(msg)
+        +function1(tripDetails)
+                
+mixin function1(tripDetails)
+    form(method="post" action="/admin/editTrip")
+        if tripDetails != null
+            table
+                tr
+                    td date 
+                    td
+                        input(type="date" name="date" value="#{moment(tripDetails.date).format('YYYY-MM-DD')}" readonly = "true")
+                tr 
+                    td Route
+                    td
+                        input(type="text" name="plane" value="#{tripDetails.company_plane_code}" readonly = "true")
+                tr 
+                    td Plane
+                    td
+                        input(type="text" name="route" value="#{tripDetails.x} -> #{tripDetails.y}" readonly = "true")
+                    //- td
+                    //-     input(type="hidden" name="route_id" value="#{route.route_id}" readonly = "true")
+                
+                tr
+                        td depature time 
+                        td 
+                            input(type="time" name="dept_time" value="#{tripDetails.dept_time}")
+                tr
+                        td arrival time 
+                        td 
+                            input(type="time" name="arr_time" value="#{tripDetails.arr_time}")
+                        td
+                            input(type="hidden" name="shedule_id" value="#{tripDetails.shedule_id}" readonly = "true")
+                        td
+                            input(type="hidden" name="trip_id" value="#{tripDetails.trip_id}" readonly = "true")
+                if(tripDetails.economy_price != null & tripDetails.economy_price != "0")
+                    tr
+                        td Price of an economy seat 
+                            b (in $)
+                        td 
+                            input(type="text" name="economy_price" value="#{tripDetails.economy_price}")
+                else
+                        td 
+                            input(type="hidden" name="economy_price" value="#{tripDetails.economy_price}")
+
+                if(tripDetails.business_price != null & tripDetails.business_price != "0")
+                    tr
+                            td Price of a business seat 
+                                b (in $)
+                            td 
+                                input(type="text" name="business_price" value="#{tripDetails.business_price}")
+                else
+                        td 
+                            input(type="hidden" name="business_price" value="#{tripDetails.business_price}")
+                if(tripDetails.platinum_price != null & tripDetails.platinum_price != "0")
+                    tr
+                            td Price of a platinum seat 
+                                b (in $)
+                            td 
+                                input(type="text" name="platinum_price" value="#{tripDetails.platinum_price}")
+                else
+                        td 
+                            input(type="hidden" name="platinum_price" value="#{tripDetails.platinum_price}")
+                tr 
+                        td
+                        td
+                            input(type="submit" value="update" )
+                
+        else
+            p add date and select route and click on proceed to shedule to enter other details..
+                
+
+
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}
+

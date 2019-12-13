@@ -1,4 +1,4 @@
-extends layout
+extends admin
 
 block content
     .login-panel(style="float:none; padding-left:200px")
@@ -27,7 +27,7 @@ block content
 mixin function(airplanes)
     if airplanes != null
             table( class = "table")
-                thead 
+                thead(class="thead-dark") 
                     tr
                         th Company id
                         th International code	

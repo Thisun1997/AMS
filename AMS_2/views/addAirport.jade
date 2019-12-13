@@ -1,4 +1,4 @@
-extends layout
+extends admin
 
 block content
     .login-panel(style="float:none; padding-left:310px")
@@ -35,7 +35,7 @@ block content
 mixin function(airports)
     if airports != null
             table( class = "table")
-                thead 
+                thead(class="thead-dark") 
                     tr
                         th International code
                         th city

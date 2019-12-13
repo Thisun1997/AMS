@@ -2,7 +2,16 @@ extends layout
 
 block content
     h1.greeting Admin Area
-    button 
+    p click here to add a shedule   
+        button
+            a(style = "text-decoration: none;" href="/admin/addShedulePage") Add Shedules
+        br
+    p click here to mark a delay    
+        button
+            a(style = "text-decoration: none;" href="/admin/addShedulePage") Mark delays 
+        br
+    h4 Trip details
+    button(style = "margin-top:10px;") 
         a(style = "text-decoration: none;" href="/admin/addAirportPage") Add and View Airport
     br 
     button(style = "margin-top:10px;")
@@ -16,14 +25,23 @@ block content
     br 
     button(style = "margin-top:10px;")
         a(style = "text-decoration: none;" href="/admin/addRoutePage") Add route
-    br 
-    button(style = "margin-top:10px;")
-        a(style = "text-decoration: none;" href="/admin/addShedulePage") Add Shedules
 
 
 append links 
     li(style="float: right;")
         a(href="/admin/loggout") Logout 
+    li
+        a(href="/admin/addAirportPage") | Add Airport | 
+    li
+        a(href="/admin/addAirplaneTypePage") | Add Air plane types and View seatings |
+    li
+        a(href="/admin/addAirplanePage") | Add Air planes |
+    li
+        a( href="/admin/addPassengerCategoryPage") | Add Passenger categories |
+    li
+        a(href="/admin/addRoutePage") | Add route |
+    li
+        a(href="/admin/addShedulePage") | Add Shedules |
 
 
     

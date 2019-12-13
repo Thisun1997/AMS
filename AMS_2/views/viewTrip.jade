@@ -1,0 +1,59 @@
+extends admin
+
+block content
+        +functione(msg,date)
+        +functions(msg2)
+        +function(tripDetails,date)
+
+mixin functione(msg,date)
+    if (msg)
+        .login-panel(style="float:none; padding-left:200px")
+            p #{msg} for #{date}
+
+mixin function(tripDetails,date)
+    if (tripDetails)
+            br
+            h3 trips sheduled for 
+                b #{date}
+            br
+            table( class = "table table-hovered")
+                thead(class="thead-dark")
+                    tr
+                        th plane code
+                        th route
+                        th depatuer time
+                        th arrival time
+                        th economy price
+                        th business price
+                        th platinum price
+                        th action
+                tbody
+                    each trip in tripDetails
+                        tr
+                            td= trip.company_plane_code
+                            td #{trip.x} -> #{trip.y}
+                            td= trip.dept_time
+                            td= trip.arr_time
+                            if (trip.economy_price)
+                                td(style="text-align:right") $ #{trip.economy_price}.00
+                            if (trip.business_price)
+                                td(style="text-align:right") $ #{trip.business_price}.00
+                            if (trip.platinum_price)
+                                td(style="text-align:right") $ #{trip.platinum_price}.00
+                            else
+                                td Not applicable
+                            td
+                                a(href="/admin/editTrip/#{trip.trip_id}" style = "margin-right:10px;" rel="noopener" class="btn btn-sm btn-success") Edit
+                            
+                            
+
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}
+
+mixin functions(msg2)
+    if(msg2)
+        .success
+            p #{msg2}
+            

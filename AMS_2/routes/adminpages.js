@@ -2,7 +2,7 @@ const express = require('express');
 const Admin = require('../core/admin');
 const Validate = require('../core/validate');
 const router = express.Router();
-const shortid = require('shortid');
+const moment = require('moment');
 
 // create an object from the class User in the file core/user.js
 const admin = new Admin();
@@ -12,10 +12,12 @@ const validate = new Validate();
 router.get('/', (req, res, next) => {
     let user = req.session.user;
     // If there is a session named user that means the use is logged in. so we redirect him to home page by using /home route below
-    if(user) {
-        res.redirect('/admin/home');
-        return;
-    }
+    validate.checkAdmin(req.body,function(result){
+        if(result) {
+            res.redirect('/admin/home');
+            return;
+        }
+    });
     // IF not we just send the index page.
     res.redirect('/');
 });
@@ -23,11 +25,12 @@ router.get('/', (req, res, next) => {
 // Get home page
 router.get('/home', (req, res, next) => {
     let user = req.session.user;
-
-    if(user) {
-        res.render('admin', {opp:req.session.opp, name:user.full_name});
-        return;
-    }
+    validate.checkAdmin(req.body,function(result){
+        if(result) {
+            res.render('admin', {opp:req.session.opp, name:user.full_name});
+            return;
+        }
+    });
     res.redirect('/');
 });
 
@@ -45,7 +48,7 @@ router.post('/login', (req, res, next) => {
                 req.session.user = result;
                 req.session.opp = 1;
                 // redirect the user to the home page.
-                res.redirect('/admin/home');
+                res.render('admin');
             }else {
                 // if the login function returns null send this error message back to the user.
                 res.render('adminLogin',{msg:'Username/Password incorrect!'});
@@ -533,6 +536,95 @@ router.post('/addTrip',(req,res,next) => {
                     }
                 });
         });
+
+
+router.post('/viewTrips',(req,res,next)=>{
+    let user = req.session.user;
+    var date = req.body.date
+    validate.checkAdmin(user,function(result){
+        if(result){
+                    if (date){
+                        admin.viewTrips(date,function(result) {
+                            if (result){
+                                //console.log(result);
+                                res.render('viewTrip',{date: date,tripDetails: result})
+                            }
+                            else{
+                                res.render('viewTrip',{date: date,msg: "No trips found"})
+                            }
+                        });
+                    }
+                    else{
+                        admin.getRoute(function(result2) {
+                            res.render('addShedule',{date: date,tripDetails: result2,msg: "fields cannot be empty"})
+                        }); 
+                    }
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
+});
+
+router.get('/editTrip/:trip_id',(req,res,next)=>{
+    let user = req.session.user;
+    let trip_id = req.params.trip_id;
+    validate.checkAdmin(user,function(result){
+        if(result){
+                        admin.viewForEditTrips(trip_id,function(result) {
+                            //console.log(result);
+                            if (result){
+                                res.render('editTrip',{tripDetails: result[0],moment: moment})
+                            }
+                            else{
+                                res.render('editTrip',{msg: "No trips found"})
+                            }
+                        });
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
+});
+
+router.post('/editTrip',(req,res,next)=>{
+    let user = req.session.user;
+    let date = req.body.date;
+    let userInput1= {
+        arr_time: req.body.arr_time,
+        dept_time: req.body.dept_time,
+        shedule_id: req.body.shedule_id
+    }
+    let userInput2 = {
+        economy_price: req.body.economy_price,
+        business_price: req.body.business_price,
+        platinum_price: req.body.platinum_price,
+        trip_id: req.body.trip_id
+    }
+    validate.checkAdmin(user,function(result){
+        if(result){
+            admin.editTrip(userInput1,userInput2,function(result1){
+                if(result1 == true){
+                    admin.viewTrips(date,function(result) {
+                        if (result){
+                            //console.log(result);
+                            res.render('viewTrip',{date: date,tripDetails: result,msg2:"updated succesfully"})
+                        }
+                        else{
+                            res.render('viewTrip',{date: date,msg: "No trips found"})
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
+});
 
 
 // Get loggout page

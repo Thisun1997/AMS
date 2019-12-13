@@ -1,4 +1,4 @@
-extends layout
+extends admin
 
 block content
     .login-panel(style="float:none; padding-left:200px")
@@ -38,7 +38,7 @@ block content
 mixin function(airplanetypes)
     if airplanetypes != null
             table( class = "table")
-                thead 
+                thead(class="thead-dark") 
                     tr
                         th International code
                         th Total economy class seats	

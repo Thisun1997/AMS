@@ -1,4 +1,4 @@
-extends layout
+extends admin
 
 block content
     .login-panel(style="float:none; padding-left:200px")
@@ -23,6 +23,18 @@ block content
                         
     .login-panel(style="float:none; padding-left:200px; margin-top: 10px")
         +function1(timetable,timedata,route)
+    
+    .login-panel(style="float:none; padding-left:200px; margin-top: 10px")
+        form(method="post" action="/admin/viewTrips")
+            table
+                tr
+                    td select date to edit the added trips 
+                    td 
+                        input(type="date" name="date")
+                tr 
+                    td
+                    td
+                        input(type="submit" value="Proceed to edit")
                 
 
 mixin function(routeDetails)
