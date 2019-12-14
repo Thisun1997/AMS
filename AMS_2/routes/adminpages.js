@@ -12,26 +12,32 @@ const validate = new Validate();
 router.get('/', (req, res, next) => {
     let user = req.session.user;
     // If there is a session named user that means the use is logged in. so we redirect him to home page by using /home route below
-    validate.checkAdmin(req.body,function(result){
+    validate.checkAdmin(user,function(result){
         if(result) {
             res.redirect('/admin/home');
             return;
         }
+        else{
+            res.redirect('/');
+        }
     });
     // IF not we just send the index page.
-    res.redirect('/');
+    
 });
 
 // Get home page
 router.get('/home', (req, res, next) => {
     let user = req.session.user;
-    validate.checkAdmin(req.body,function(result){
+    validate.checkAdmin(user,function(result){
         if(result) {
             res.render('admin', {opp:req.session.opp, name:user.full_name});
             return;
         }
+        else{
+            res.redirect('/');
+        }
     });
-    res.redirect('/');
+    
 });
 
 // Post login data
@@ -48,7 +54,7 @@ router.post('/login', (req, res, next) => {
                 req.session.user = result;
                 req.session.opp = 1;
                 // redirect the user to the home page.
-                res.render('admin');
+                res.redirect('/admin/home');
             }else {
                 // if the login function returns null send this error message back to the user.
                 res.render('adminLogin',{msg:'Username/Password incorrect!'});
@@ -90,17 +96,8 @@ router.post('/addAirport', (req, res, next) => {
     
     validate.checkAdmin(user,function(result){
         if(result){
-            validate.check(userInput,function(result){
-                if (result == true){
-                    admin.getAirports(function(result) {
-                        res.render('addAirport', {airports: result,msg:"fields cannot be empty"});
-                    });
-                }
-                else{
                     admin.addAirport(userInput)
                     res.redirect("/admin/addAirportPage")
-                }
-            });
         }else {
              // if the login function returns null send this error message back to the user.
             res.redirect("/")
@@ -624,6 +621,64 @@ router.post('/editTrip',(req,res,next)=>{
             res.redirect("/")
         }
     });
+});
+
+
+router.get("/viewTimeTablePage",(req,res,next)=>{
+    let user = req.session.user;
+    if(user){
+        validate.checkAdmin(user,function(result){
+            if(result){
+                        admin.viewTimeTables(function(result) {
+                            if (result){
+                                //console.log(result);
+                                res.render('viewTimeTable',{timetables: result,moment: moment})
+                            }
+                            else{   
+                                res.render('viewTimeTable',{msg: "No time tables found"})
+                            }
+                        });
+            }
+            else {
+                // if the login function returns null send this error message back to the user.
+                res.redirect("/")
+            }
+        });
+    }
+    else{
+        res.redirect("/")
+    }
+});
+
+
+router.get("/viewTripDetails/:time_table_id",(req,res,next)=>{
+    let time_table_id = req.params.time_table_id;
+    let user = req.session.user;
+    if(user){
+        validate.checkAdmin(user,function(result){
+            if(result){
+                        admin.viewTripDetails(time_table_id,function(result1) {
+                            admin.viewTimeTables(function(result2) {
+                                if (result1){
+                                    //console.log(result);
+                                    console.log(result1)
+                                    res.render('viewTimeTable',{sheduleDetails: result1,timetables: result2,to_view: time_table_id,moment: moment})
+                                }
+                                else{   
+                                    res.render('viewTimeTable',{timetables: result2,to_view: time_table_id,moment: moment,msg: "nothing found"})
+                                }
+                            });
+                        });
+            }
+            else {
+                // if the login function returns null send this error message back to the user.
+                res.redirect("/")
+            }
+        });
+    }
+    else{
+        res.redirect("/")
+    }
 });
 
 

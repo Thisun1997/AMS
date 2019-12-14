@@ -1,21 +1,24 @@
 extends admin
 
 block content
-        +functione(msg,date)
-        +functions(msg2)
-        +function(tripDetails,date)
+        +functione(msg)
+        +function(timetables)
 
-mixin functione(msg,date)
+mixin functione(msg)
     if (msg)
         .login-panel(style="float:none; padding-left:200px")
-            p #{msg} for #{date}
+            p #{msg}
 
-mixin function(tripDetails,date)
-    if (tripDetails)
-            br
-            h3 trips sheduled for 
-                b #{date}
-            br
+mixin function(timetables)
+    if (timetables)
+        each timetable in timetables
+            .jumbotron(id="#{timetable.time_table_id}" style="padding: 0px !important;background-color: rgb(245, 255, 245) ;") 
+                p(style="margin-bottom: 0px !important;") date: #{moment(timetable.date).format('YYYY-MM-DD')}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total trips added: #{timetable.tot_shedules}
+                    a(href="/admin/viewTripDetails/#{timetable.time_table_id}" style = "margin-right:10px;float:right" rel="noopener" class="btn btn-sm btn-success") View
+                +functiont(sheduleDetails,to_view,timetable)           
+
+mixin functiont(sheduleDetails,to_view,timetable)
+        if(to_view == timetable.time_table_id)
             table( class = "table table-striped")
                 thead(class="thead-dark")
                     tr
@@ -26,9 +29,10 @@ mixin function(tripDetails,date)
                         th economy price
                         th business price
                         th platinum price
-                        th action
+                        th total passengers
+                        th delay time
                 tbody
-                    each trip in tripDetails
+                    each trip in sheduleDetails
                         tr
                             td= trip.company_plane_code
                             td #{trip.x} -> #{trip.y}
@@ -41,11 +45,13 @@ mixin function(tripDetails,date)
                             if (trip.platinum_price)
                                 td(style="text-align:right") $ #{trip.platinum_price}.00
                             else
-                                td Not applicable
-                            td
-                                a(href="/admin/editTrip/#{trip.trip_id}" style = "margin-right:10px;" rel="noopener" class="btn btn-sm btn-success") Edit
-                            
-                            
+                                td -
+                            td= trip.tot_no_passengers
+                            if (trip.delay_time)
+                                td(style="text-align:right") #{trip.delay_time}
+                            else
+                                td -
+                                
 
 mixin functione(msg)
     if(msg)

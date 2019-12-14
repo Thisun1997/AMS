@@ -643,7 +643,7 @@ Admin.prototype = {
 
     viewTrips : function(date,callback)
     {
-        sql = `CALL TripsDate(?)`
+        sql = `CALL SheduleDate(?)`
         pool.query(sql, date,function(err, result) {
             if(err) throw err
             if(result[0]){
@@ -662,7 +662,7 @@ Admin.prototype = {
 
     viewForEditTrips : function(trip_id,callback)
     {
-        sql = `CALL TripDetails(?)`
+        sql = `CALL SheduleDetails(?)`
         pool.query(sql, trip_id,function(err, result) {
             if(err) throw err
             if(result[0]){
@@ -719,7 +719,45 @@ Admin.prototype = {
                 });
             });
         });
-    }
+    },
+
+    viewTimeTables : function(callback)
+    {
+        sql = `SELECT time_table_id,date,COUNT(DISTINCT shedule_id) as tot_shedules FROM time_table LEFT OUTER JOIN time_table_shedule USING(time_table_id) GROUP BY (time_table_id)`
+        pool.query(sql, function(err, result) {
+            //console.log(result);
+            if(err) throw err
+            if(result){
+                if(result.length) {
+                    callback(result);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
+
+    viewTripDetails : function(time_table_id,callback)
+    {
+        sql = `CALL TripDetails(?)`
+        pool.query(sql, time_table_id,function(err, result) {
+            if(err) throw err
+            if(result[0]){
+                //console.log(result[0]);
+                if(result[0].length) {
+                    callback(result[0]);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
 }
 
 module.exports = Admin;
