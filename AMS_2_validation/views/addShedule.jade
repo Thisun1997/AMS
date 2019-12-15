@@ -1,0 +1,100 @@
+extends layout
+
+block content
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Add a route
+        br
+        +function_error(msg)
+        form(method="post" action="/admin/addShedule")
+            table 
+                tr
+                    td date 
+                    td 
+                        input(type="date" name="date")
+                tr 
+                    td Route
+                    td 
+                        +function(routeDetails)
+                tr 
+                    td
+                    td
+                        input(type="submit" value="Proceed to shedule")
+    .login-panel(style="float:none; padding-left:200px; margin-top: 10px")
+        +function1(timetable,timedata,route)
+                
+
+mixin function(routeDetails)
+    if routeDetails!= null
+        select(name="route_id")
+            each route in routeDetails
+                option(value="#{route.route_id}") #{route.x} -> #{route.y}
+    else
+        p no routes are added yet. Add a route and try again!
+
+mixin function1(timetable,timedata,route)
+    form(method="post" action="/admin/addTrip")
+        if timetable != null
+            h5 Shedule and trip details
+            table
+                tr
+                    td date 
+                    td 
+                        input(type="date" name="date" value="#{timetable[0]}" readonly = "true")
+                    td 
+                        input(type="hidden" name="time_table_id" value="#{timetable[1]}" readonly = "true")
+                tr 
+                    td Route
+                    td
+                        input(type="text" name="route" value="#{route.x} -> #{route.y}" readonly = "true")
+                    td
+                        input(type="hidden" name="route_id" value="#{route.route_id}" readonly = "true")
+                if timedata != null
+                    tr
+                        td depature time 
+                        td 
+                            input(type="time" name="dept_time" value="#{timedata.dept_time}")
+                    tr
+                        td arrival time 
+                        td 
+                            input(type="time" name="arr_time" value="#{timedata.arr_time}")
+                else
+                    tr
+                        td depature time 
+                        td 
+                            input(type="time" name="dept_time")
+                    tr
+                        td arrival time 
+                        td 
+                            input(type="time" name="arr_time")
+                +function2(seats)
+                tr 
+                    td
+                    td
+                        input(type="submit" value="complete sheduling")
+        else
+            p add date and select route and click on proceed to shedule to enter other details..
+                
+
+
+mixin function_error(msg)
+    p #{msg}
+
+mixin function2(seats)
+            if(seats.tot_economy_seats)
+                tr
+                    td Price of an economy seat 
+                        b (in $)
+                    td 
+                        input(type="text" name="economy_price")
+            if(seats.tot_business_seats)
+                tr
+                    td Price of a business seat 
+                        b (in $)
+                    td 
+                        input(type="text" name="business_price")
+            if(seats.tot_platinum_seats)
+                tr
+                    td Price of a platinum seat 
+                        b (in $)
+                    td 
+                        input(type="text" name="platinum_price")

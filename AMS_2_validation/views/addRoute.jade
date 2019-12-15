@@ -1,0 +1,100 @@
+extends layout
+
+block content
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Add a route
+        br
+        form(method="post" action="/admin/addRoute")
+            table 
+                tr
+                    td Comapny id for the airplane 
+                    td 
+                        +function1(airplanes)
+                tr 
+                    td Code of the depature airport
+                    td 
+                        +function4(airports)
+                tr 
+                    td Code of the destination airport
+                    td 
+                        +function2(airports)
+                tr
+                    td 
+                        h4 Regular time of the route
+                tr 
+                    td Depature time
+                     td 
+                         input(type="time" name="dept_time")
+                tr 
+                     td Arrival time
+                     td 
+                         input(type="time" name="arr_time")
+                tr 
+                    td
+                    td
+                        input(type="submit" value="Add")
+    .dashboard(style = "margin-top: 15px;")
+        .user
+            +function(routeDetails)
+
+
+
+mixin function1(airplanes)
+    if airplanes!= null
+        select(name="plane_id" id="plane_id")
+            each airplane in airplanes
+                option(value="#{airplane.plane_id}") #{airplane.company_plane_code}
+    else
+        p no planes are added yet. Add a plane and try again!
+
+mixin function2(airports)
+    if airports!= null
+        select(name="dest_airport_code")
+            each airport in airports
+                option(value="#{airport.airport_id}") #{airport.code}
+    else
+        p no airports are added yet. Add an airport and try again!
+
+//- mixin function3(dates)
+//-     tr
+//-     td Date of shedule
+//-     td 
+//-         input(type="date" name="date" min ="#{dates[0]}" max="#{dates[1]}")
+
+mixin function4(airports)
+    if airports!= null
+        select(name="dept_airport_code")
+            each airport in airports
+                option(value="#{airport.airport_id}") #{airport.code}
+    else
+        p no airports are added yet. Add an airport and try again!
+
+//- mixin function5(sheduled_dates)
+//-     form(action="admin/viewShedule" method="post")
+//-             table
+//-                 tr
+//-                     td Enter date to view and edit the shedule
+//-                     td
+//-                         input(type="date" name="sheduled_date" min="#{sheduled_dates[0].date.getYear()}" max="#{sheduled_dates[1].date}")
+//-                     td  
+//-                         input(type="submit" value="search")
+
+mixin function(routrDetails)
+    if routrDetails != null
+            table( class = "table")
+                thead 
+                    tr
+                        th company plane code
+                        th depature airport code
+                        th destination airport code
+                tbody
+                    each routrDetail in routrDetails
+                        tr
+                            td= routrDetail.company_plane_code
+                            td= routrDetail.x
+                            td= routrDetail.y 
+                            
+                               
+      
+    else 
+        p  No Passenger Category found

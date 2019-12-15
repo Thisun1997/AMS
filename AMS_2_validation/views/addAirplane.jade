@@ -1,0 +1,55 @@
+extends layout
+
+block content
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Add an airplane
+        br
+        form(method="post" action="/admin/addAirplane")
+            table 
+                tr
+                    td Comapny id for the airplane 
+                    td 
+                        input(type="text" name="plane_id" id="plane_id")
+                tr 
+                    td International Code for the Airplane  
+                    td 
+                        +function2(airplanetypes)
+                tr 
+                    td
+                    td
+                        input(type="submit" value="Add")
+        
+    .dashboard(style = "margin-top: 15px;")
+        .user
+            +function(airplanes)
+
+mixin function(airplanes)
+    if airplanes != null
+            table( class = "table")
+                thead 
+                    tr
+                        th Company id
+                        th International code	
+                        th action
+                tbody
+                    each airplane in airplanes
+                        tr
+                            td= airplane.company_plane_code
+                            td= airplane.plane_type
+                            td
+                                a(href="/admin/deleteAirplane/#{airplane.plane_id}" rel="noopener" class="btn btn-sm btn-danger") Delete
+                               
+      
+    else 
+        p  No Airplane types found
+
+mixin function2(airplanetypes)
+    if airplanetypes!= null
+        select(name="plane_type")
+            each airplanetype in airplanetypes
+                option(value="#{airplanetype.plane_type}") #{airplanetype.plane_type}
+    else
+        p no plane types are added yet. Add a plane type and try again!
+
+
+
