@@ -661,7 +661,7 @@ router.get("/viewTripDetails/:time_table_id",(req,res,next)=>{
                             admin.viewTimeTables(function(result2) {
                                 if (result1){
                                     //console.log(result);
-                                    console.log(result1)
+                                    //console.log(result1)
                                     res.render('viewTimeTable',{sheduleDetails: result1,timetables: result2,to_view: time_table_id,moment: moment})
                                 }
                                 else{   

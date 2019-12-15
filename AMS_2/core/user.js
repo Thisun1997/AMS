@@ -115,7 +115,7 @@ User.prototype = {
         // find the user data by his username.
         this.findmember(email, function(user) {
             // if there is a user by this username.
-            console.log(user);
+            //console.log(user);
             if(user) {
                 // now we check his password.
                 if(password = user.password) {
@@ -127,6 +127,40 @@ User.prototype = {
             // if the username/password is wrong then return null.
             callback(null);
         });    
+    },
+
+    getAirports : function(callback)
+    {
+        let sql = `SELECT * FROM airport`;
+
+        pool.query(sql, function(err, result) {
+            if(err) throw err
+           
+            if(result.length) {
+                callback(result);
+            }else {
+                callback(null);
+            }
+        });
+    },
+
+    search : function(body, callback)
+    {
+        bind = []
+        for(prop in body){
+            bind.push(body[prop]);
+        }
+        let sql = `CALL search(?,?,?)`;
+
+        pool.query(sql, bind, function(err, result) {
+            if(err) throw err
+           
+            if(result[0].length) {
+                callback(result[0]);
+            }else {
+                callback(null);
+            }
+        });
     }
 
 }

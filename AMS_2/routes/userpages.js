@@ -2,20 +2,46 @@ const express = require('express');
 const User = require('../core/user');
 const router = express.Router();
 var bcrypt = require('bcrypt-nodejs');
-
+var moment = require('moment');
 // create an object from the class User in the file core/user.js
 const user = new User();
 
 // Get the index page
 router.get('/', (req, res, next) => {
-    let user = req.session.user;
+    //const user = new User();
+    //let user = req.session.user;
+    //console.log(req.session.user)
     // If there is a session named user that means the use is logged in. so we redirect him to home page by using /home route below
-    if(user) {
-        res.redirect('/home');
-        return;
-    }
+    // if(user) {
+    //      res.redirect('/home');
+    //      return;
+    // }
+    //
     // IF not we just send the index page.
-    res.render('index', {title:"My application"});
+    user.getAirports(function(result){
+        res.render('index', {title:"My application",locations:result})
+    });
+    
+})
+
+router.post('/search', (req, res, next) => {
+    let userInput = {
+        dest_airport_code: req.body.dest_airport_code,
+        dept_airport_code: req.body.dept_airport_code,
+        date: req.body.date
+    }
+    user.search(userInput, function(result1){
+        if(result1){
+            user.getAirports(function(result2){
+                res.render('index', {title:"My application",locations: result2,search: result1,moment:moment})
+            }); 
+        } 
+        else{
+            user.getAirports(function(result2){
+                res.render('index', {title:"My application",locations: result2,msg: "no results found"})
+            }); 
+        } 
+    });
 })
 
 // Get home page
@@ -26,7 +52,8 @@ router.get('/home', (req, res, next) => {
         return;
     }
     else if(user) {
-        res.render('home', {opp:req.session.opp, name:user.full_name});
+        //console.log(user);
+        res.render('home', {opp:req.session.opp, user,moment:moment});
         return;
     }
     res.redirect('/');

@@ -1,12 +1,18 @@
 extends layout
 
-mixin message(opp, name)
+mixin message(opp, user)
     if(opp)
-        h1.greeting Logged in as 
-            span=name 
+        .greeting 
+            h1
+                span=user.full_name 
+            p email address: #{user.email}
+            p date of birth: #{moment(user.date_of_birth).format('YYYY-MM-DD')}
+            p citizenship: #{user.citizenship}
+            p total number of reservations:
+            p passenger category:
     else 
         h1.greeting Welcome 
-            span=name 
+            span=user.full_name  
             |  to our website
 
 
@@ -15,6 +21,5 @@ append links
         a(href="/loggout") Loggout 
 
 block content
-    .dashboard 
-        .user 
-            +message(opp, name)
+    .dashboard_user
+            +message(opp, user)

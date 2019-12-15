@@ -165,11 +165,11 @@ Admin.prototype = {
                     var tot_economy_seats = result.tot_economy_seats;
                     var tot_business_seats = result.tot_business_seats;
                     var tot_platinum_seats = result.tot_platinum_seats;
-                    console.log(result);
+                    //console.log(result);
                     var letters = ["A","B","C","D"];
                     for(j in letters){
                         for(i=1; i<(parseInt(tot_economy_seats)/4)+1; i++){
-                            console.log(tot_business_seats);
+                            //console.log(tot_business_seats);
                             var eco = [];
                             let seat_id = plane_type+"-E-"+letters[j]+i.toString();
                             eco.push(seat_id);
@@ -282,7 +282,7 @@ Admin.prototype = {
         // call the query give it the sql string and the values (bind array)
         pool.beginTransaction(function(err){
             if(err) throw err;
-            console.log(bind)
+            //console.log(bind)
             pool.query(sql, bind[1], function(err, result) {
                 if(err){
                     pool.rollback(function() {
@@ -290,7 +290,7 @@ Admin.prototype = {
                     });
                 }
                 var id = result[0].plane_type_id;
-                console.log(id);
+                //console.log(id);
                 let sql = `INSERT INTO plane(company_plane_code,plane_type_id) VALUES (?, ?)`;
                 let bind2 = [bind[0],id];
                 pool.query(sql, bind2, function(err, result) {
@@ -396,7 +396,7 @@ Admin.prototype = {
             bind.push(body[prop]);
         }
         // prepare the sql query
-        console.log(bind)
+        //console.log(bind)
         let sql = `UPDATE passenger_category SET No_of_reservations = ?, discount = ? WHERE category_name = ?`;
         // call the query give it the sql string and the values (bind array)
         pool.query(sql, bind, function(err, result) {
@@ -456,7 +456,7 @@ Admin.prototype = {
                 let sql = `INSERT INTO time_table(date) VALUES (?) `;
                 pool.query(sql, bind, function(err, result) {
                     if(err) throw err;
-                    console.log(result.insertId)
+                   // console.log(result.insertId)
                     callback([bind[0],result.insertId]);
                 });
             }
@@ -606,7 +606,7 @@ Admin.prototype = {
         pool.beginTransaction(function(err){
             if(err) throw err;
             let sql = `INSERT INTO shedule(route_id,dept_time,arr_time) VALUES (?, ?, ?)`;
-            console.log(bind1);
+            //console.log(bind1);
             pool.query(sql, bind1,function(err, result) {
                 if(err){
                     pool.rollback(function() {
@@ -614,7 +614,7 @@ Admin.prototype = {
                     });
                 }
                 var id  = result.insertId;
-                console.log(id);
+                //console.log(id);
                 var bind2 = [time_table_id,id];
                 let sql = `CALL AddSheduleAndTrip(?, ?, ?, ?, ?)`;
                 for(prop in body2){
@@ -700,7 +700,7 @@ Admin.prototype = {
                 for(prop in body2){
                     bind2.push(body2[prop]);
                 }
-                console.log(bind2)
+                //console.log(bind2)
                 pool.query(sql, bind2,function(err, result) {
                     if(err){
                         pool.rollback(function() {

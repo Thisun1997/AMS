@@ -64,7 +64,8 @@ nav ul li a:hover
     float: right;
 }
 .registerguest{
-    width: 50%;
+    width: 64.5%;
+    font-size:20px;
 }
 .image, .join-us-img
 {
@@ -127,7 +128,7 @@ input[type="submit"]:hover
 
 .dashboard
 {
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #ccc;
     background-color: #fff;
 }
@@ -173,4 +174,15 @@ p
 .greeting span
 {
     color: rgb(112, 172, 16);
+}
+
+.dashboard_user
+{
+    float:left;
+    width: 25%;
+    border-radius: 10px;
+}
+
+.greeting p{
+    margin-bottom: 0px;
 }
