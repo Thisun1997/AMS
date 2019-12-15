@@ -138,10 +138,18 @@ router.get('/loggout', (req, res, next) => {
 
 
 function checkNoAuthenticated(req,res,next){
-    if(req.isAuthenticated()){
+    if(req.session.user){
+        console.log('is no authenticated')
         return res.redirect('/')
     }
     next()
+}
+
+function isLoggedIn(req,res,next){
+    if(req.session.user){
+        return next()
+    }
+    res.redirect('/')
 }
 
 module.exports = router;
