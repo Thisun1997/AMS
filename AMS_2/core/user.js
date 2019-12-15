@@ -24,7 +24,7 @@ User.prototype = {
 
     findmember : function(user = null, callback)
     {
-        let sql = `SELECT * FROM member_passenger WHERE passenger_id = ?`;
+        let sql = `SELECT * FROM user_account NATURAL JOIN member_passenger WHERE email = ?`;
 
 
         pool.query(sql, user, function(err, result) {
@@ -115,6 +115,7 @@ User.prototype = {
         // find the user data by his username.
         this.findmember(email, function(user) {
             // if there is a user by this username.
+            console.log(user);
             if(user) {
                 // now we check his password.
                 if(password = user.password) {

@@ -1,8 +1,9 @@
-extends layout
+extends admin
 
 block content
     .login-panel(style="float:none; padding-left:200px")
         h3 Add a route
+        +functione(msg)
         br
         form(method="post" action="/admin/addRoute")
             table 
@@ -81,8 +82,8 @@ mixin function4(airports)
 
 mixin function(routrDetails)
     if routrDetails != null
-            table( class = "table")
-                thead 
+            table( class = "table table-striped")
+                thead(class="thead-dark") 
                     tr
                         th company plane code
                         th depature airport code
@@ -98,3 +99,8 @@ mixin function(routrDetails)
       
     else 
         p  No Passenger Category found
+
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}

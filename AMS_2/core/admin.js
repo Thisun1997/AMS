@@ -93,12 +93,12 @@ Admin.prototype = {
         });
     },
 
-    getAnAirplaneType : function(plane_type = null,callback)
+    getAnAirplaneType : function(plane_type_id = null,callback)
     {
-        let sql = `SELECT * FROM plane_type WHERE plane_type = ?`;
+        let sql = `SELECT * FROM plane_type WHERE plane_type_id = ?`;
 
 
-        pool.query(sql, plane_type, function(err, result) {
+        pool.query(sql, plane_type_id, function(err, result) {
             if(err) throw err
            
             if(result.length) {
@@ -453,11 +453,10 @@ Admin.prototype = {
             if(result.length) {
                 callback([bind[0],result[0].time_table_id]);
             }else {
-                let shedule_id = 'S-'+date;
-                bind.push(shedule_id);
                 let sql = `INSERT INTO time_table(date) VALUES (?) `;
-                pool.query(sql, bind, function(err, _result) {
+                pool.query(sql, bind, function(err, result) {
                     if(err) throw err;
+                    console.log(result.insertId)
                     callback([bind[0],result.insertId]);
                 });
             }
@@ -481,7 +480,6 @@ Admin.prototype = {
                         throw err;
                     });
                 }
-                console.log(result);
                 if (result.length){
                     
                 }
@@ -494,7 +492,6 @@ Admin.prototype = {
                             });
                         }
                         var id = result.insertId;
-                        console.log(id)
                         let sql = `INSERT INTO  regular_route_time(route_id,dept_time,arr_time) VALUES (?, ?, ?)`;
                         let bind2 = [id];
                         // loop in the attributes of the object and push the values into the bind array.
@@ -617,6 +614,7 @@ Admin.prototype = {
                     });
                 }
                 var id  = result.insertId;
+                console.log(id);
                 var bind2 = [time_table_id,id];
                 let sql = `CALL AddSheduleAndTrip(?, ?, ?, ?, ?)`;
                 for(prop in body2){
@@ -643,7 +641,123 @@ Admin.prototype = {
         
     },
 
+    viewTrips : function(date,callback)
+    {
+        sql = `CALL SheduleDate(?)`
+        pool.query(sql, date,function(err, result) {
+            if(err) throw err
+            if(result[0]){
+                //console.log(result[0]);
+                if(result[0].length) {
+                    callback(result[0]);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
 
+    viewForEditTrips : function(trip_id,callback)
+    {
+        sql = `CALL SheduleDetails(?)`
+        pool.query(sql, trip_id,function(err, result) {
+            if(err) throw err
+            if(result[0]){
+                //console.log(result[0]);
+                if(result[0].length) {
+                    callback(result[0]);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
+
+    editTrip : function(body1,body2,callback)
+    {
+        var bind1 = [];
+        // loop in the attributes of the object and push the values into the bind array.
+        for(prop in body1){
+            bind1.push(body1[prop]);
+        }
+        pool.beginTransaction(function(err){
+            if(err) throw err;
+            let sql = `UPDATE shedule SET arr_time = ?, dept_time = ? WHERE shedule_id = ?`;
+            pool.query(sql, bind1,function(err, result) {
+                if(err){
+                    pool.rollback(function() {
+                        throw err;
+                    });
+                }
+                var bind2 = [];
+                let sql = `UPDATE trip SET economy_price = ?, business_price = ?, platinum_price = ? WHERE trip_id = ?`;
+                for(prop in body2){
+                    bind2.push(body2[prop]);
+                }
+                console.log(bind2)
+                pool.query(sql, bind2,function(err, result) {
+                    if(err){
+                        pool.rollback(function() {
+                            throw err;
+                        });
+                    }
+                    pool.commit(function(err) {
+                        if (err) { 
+                            pool.rollback(function() {
+                            throw err;
+                        });
+                        }
+                        //console.log('Transaction Complete.');
+                        callback(true)
+                    });
+                });
+            });
+        });
+    },
+
+    viewTimeTables : function(callback)
+    {
+        sql = `SELECT time_table_id,date,COUNT(DISTINCT shedule_id) as tot_shedules FROM time_table LEFT OUTER JOIN time_table_shedule USING(time_table_id) GROUP BY (time_table_id)`
+        pool.query(sql, function(err, result) {
+            //console.log(result);
+            if(err) throw err
+            if(result){
+                if(result.length) {
+                    callback(result);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
+
+    viewTripDetails : function(time_table_id,callback)
+    {
+        sql = `CALL TripDetails(?)`
+        pool.query(sql, time_table_id,function(err, result) {
+            if(err) throw err
+            if(result[0]){
+                //console.log(result[0]);
+                if(result[0].length) {
+                    callback(result[0]);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
 }
 
 module.exports = Admin;

@@ -1,8 +1,9 @@
-extends layout
+extends admin
 
 block content
     .login-panel(style="float:none; padding-left:310px")
         h3 Add an airport
+        +functione(msg)
         br
         form(method="post" action="/admin/addAirport")
             table 
@@ -33,8 +34,8 @@ block content
 
 mixin function(airports)
     if airports != null
-            table( class = "table")
-                thead 
+            table( class = "table table-striped")
+                thead(class="thead-dark") 
                     tr
                         th International code
                         th city
@@ -55,4 +56,7 @@ mixin function(airports)
     else 
         p  No Airports found
 
-
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}

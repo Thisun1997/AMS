@@ -1,0 +1,65 @@
+extends admin
+
+block content
+        +functione(msg)
+        +function(timetables)
+
+mixin functione(msg)
+    if (msg)
+        .login-panel(style="float:none; padding-left:200px")
+            p #{msg}
+
+mixin function(timetables)
+    if (timetables)
+        each timetable in timetables
+            .jumbotron(id="#{timetable.time_table_id}" style="padding: 0px !important;background-color: rgb(245, 255, 245) ;") 
+                p(style="margin-bottom: 0px !important;") date: #{moment(timetable.date).format('YYYY-MM-DD')}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total trips added: #{timetable.tot_shedules}
+                    a(href="/admin/viewTripDetails/#{timetable.time_table_id}" style = "margin-right:10px;float:right" rel="noopener" class="btn btn-sm btn-success") View
+                +functiont(sheduleDetails,to_view,timetable)           
+
+mixin functiont(sheduleDetails,to_view,timetable)
+        if(to_view == timetable.time_table_id)
+            table( class = "table table-striped")
+                thead(class="thead-dark")
+                    tr
+                        th plane code
+                        th route
+                        th depatuer time
+                        th arrival time
+                        th economy price
+                        th business price
+                        th platinum price
+                        th total passengers
+                        th delay time
+                tbody
+                    each trip in sheduleDetails
+                        tr
+                            td= trip.company_plane_code
+                            td #{trip.x} -> #{trip.y}
+                            td= trip.dept_time
+                            td= trip.arr_time
+                            if (trip.economy_price)
+                                td(style="text-align:right") $ #{trip.economy_price}.00
+                            if (trip.business_price)
+                                td(style="text-align:right") $ #{trip.business_price}.00
+                            if (trip.platinum_price)
+                                td(style="text-align:right") $ #{trip.platinum_price}.00
+                            else
+                                td -
+                            td= trip.tot_no_passengers
+                            if (trip.delay_time)
+                                td(style="text-align:right") #{trip.delay_time}
+                            else
+                                td -
+                                
+
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}
+
+mixin functions(msg2)
+    if(msg2)
+        .success
+            p #{msg2}
+            

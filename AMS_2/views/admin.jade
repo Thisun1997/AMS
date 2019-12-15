@@ -2,28 +2,59 @@ extends layout
 
 block content
     h1.greeting Admin Area
-    button 
-        a(style = "text-decoration: none;" href="/admin/addAirportPage") Add and View Airport
-    br 
-    button(style = "margin-top:10px;")
-        a(style = "text-decoration: none;" href="/admin/addAirplaneTypePage") Add Air plane types and View seatings 
-    br 
-    button(style = "margin-top:10px;")
-        a(style = "text-decoration: none;" href="/admin/addAirplanePage") Add and View Air planes
-    br 
-    button(style = "margin-top:10px;")
-        a(style = "text-decoration: none;" href="/admin/addPassengerCategoryPage") Add and View Passenger categories
-    br 
-    button(style = "margin-top:10px;")
-        a(style = "text-decoration: none;" href="/admin/addRoutePage") Add route
-    br 
-    button(style = "margin-top:10px;")
-        a(style = "text-decoration: none;" href="/admin/addShedulePage") Add Shedules
-
+    .login-panel(style="float:none; padding-left:50px; padding-bottom:20px; margin-bottom:20px;")
+        table(class="table")
+                tr
+                    td Add, view and edit shedules
+                    td
+                        a(style = "text-decoration: none;" href="/admin/addShedulePage" class="btn btn-info") Add Shedules
+                tr
+                    td Mark delays for the shedules available  
+                    td
+                        a(style = "text-decoration: none;" href="/admin/addShedulePage" class="btn btn-info") Mark delays 
+                tr
+                    td View full details of all the time tables 
+                    td  
+                        a(style = "text-decoration: none;" href="/admin/viewTimeTablePage" class="btn btn-info") view trip details 
+                tr
+                    td Add, delete airports
+                    td   
+                        a(style = "text-decoration: none;" href="/admin/addAirportPage" class="btn btn-info") Add and View Airport
+                tr
+                    td Add, delete airplaneTypes
+                    td 
+                        a(style = "text-decoration: none;" href="/admin/addAirplaneTypePage" class="btn btn-info") Add Air plane types and View seatings 
+                tr
+                    td Add and View Air planes
+                    td 
+                        a(style = "text-decoration: none;" href="/admin/addAirplanePage" class="btn btn-info") Add and View Air planes
+                tr
+                    td dd and View Passenger categories
+                    td 
+                        a(style = "text-decoration: none;" href="/admin/addPassengerCategoryPage" class="btn btn-info") Add and View Passenger categories
+                tr
+                    td Add, delete airplaneTypes
+                    td 
+                        a(style = "text-decoration: none;" href="/admin/addRoutePage" class="btn btn-info") Add route
 
 append links 
     li(style="float: right;")
         a(href="/admin/loggout") Logout 
+    li
+        a(href="/admin/addAirportPage") | Airport | 
+    li
+        a(href="/admin/addAirplaneTypePage") | Air plane types |
+    li
+        a(href="/admin/addAirplanePage") | Air planes |
+    li
+        a( href="/admin/addPassengerCategoryPage") | Passenger categories |
+    li
+        a(href="/admin/addRoutePage") | Routes |
+    li
+        a(href="/admin/addShedulePage") | Shedules |
 
 
+//- mixin function(time_table_result)
+//-     each time_table in time_table_result
+//-         p #{time_table.date} 
     
