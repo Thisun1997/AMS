@@ -34,7 +34,12 @@ router.get('/home', (req, res, next) => {
             return;
         }
         else{
-            res.redirect('/');
+            if(user){
+                res.redirect('http://localhost:3000/home');
+            }else{
+                res.redirect('/')
+            }
+                
         }
     });
     
