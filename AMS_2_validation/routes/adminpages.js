@@ -418,18 +418,33 @@ router.get('/loggout',isLoggedIn, (req, res, next) => {
 // }
 
 function checkNoAuthenticated(req,res,next){
-    if(req.session.user){
-        console.log('is no authenticated')
+    let User=req.session.user;
+
+    if(User=={ email: 'admin', password: 'admin' }){
         return res.redirect('/admin/home')
+    }else if(User){
+        //member page
+        res.redirect('http://localhost:3000/')
     }
+    // if(req.session.user){
+    //     console.log(User)
+    //     let AdminPassword= req.session.user.password
+    //     console.log('is no authenticated')
+    //     return res.redirect('/admin/home')
+    // }
     next()
 }
 
 function isLoggedIn(req,res,next){
-    if(req.session.user){
+    let User=req.session.user;
+    if(User=={ email: 'admin', password: 'admin' }){
         return next()
     }
-    res.redirect('/')
+
+    // if(req.session.user){
+    //     return next()
+    // }
+    res.redirect('http://localhost:3000/')
 }
 
 module.exports = router;
