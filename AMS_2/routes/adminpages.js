@@ -700,24 +700,23 @@ router.get('/loggout', (req, res, next) => {
 
 
 function checkNoAuthenticated(req,res,next){
-    let User=req.session.user;
-
-    if(User=={ email: 'admin', password: 'admin' }){
-        return res.redirect('/admin/home')
-    }else if(User){
-        //member page
-        res.redirect('/')
+    let user=req.session.user;
+    console.log("user")
+    if(user){
+        if(user.email == "admin"){
+            return res.redirect('/admin/home')
+        }
+        else{
+            res.redirect('/home')
+        }
     }
-    // if(req.session.user){
-    //     console.log(User)
-    //     let AdminPassword= req.session.user.password
-    //     console.log('is no authenticated')
-    //     return res.redirect('/admin/home')
-    // }
-    next()
+    else{
+        next()
+    }
+    
 }
 
-// function isLoggedIn(req,res,next){
+// function isLoggedIn(req,res,next
 //     let User=req.session.user;
 //     if(User){
 //         return next()
