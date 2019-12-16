@@ -9,7 +9,7 @@ const admin = new Admin();
 const validate = new Validate();
 
 // Get the index page
-router.get('/', (req, res, next) => {
+router.get('/',checkNoAuthenticated, (req, res, next) => {
     let user = req.session.user;
     // If there is a session named user that means the use is logged in. so we redirect him to home page by using /home route below
     validate.checkAdmin(user,function(result){
@@ -46,7 +46,7 @@ router.get('/home', (req, res, next) => {
 });
 
 // Post login data
-router.post('/login', (req, res, next) => {
+router.post('/login',(req, res, next) => {
     // The data sent from the user are stored in the req.body object.
     // call our login function and it will return the result(the user data).
     if ( req.body.email == "" || req.body.password == ""){
@@ -301,7 +301,7 @@ router.get("/deleteAirplane/:plane_id",(req,res,next)=>{
 });
 
 //
-router.get('/login',(req,res,next)=>{
+router.get('/login',checkNoAuthenticated,(req,res,next)=>{
     res.render('adminLogin')
 });
 
@@ -697,5 +697,36 @@ router.get('/loggout', (req, res, next) => {
         });
     }
 });
+
+
+function checkNoAuthenticated(req,res,next){
+    let User=req.session.user;
+
+    if(User=={ email: 'admin', password: 'admin' }){
+        return res.redirect('/admin/home')
+    }else if(User){
+        //member page
+        res.redirect('/')
+    }
+    // if(req.session.user){
+    //     console.log(User)
+    //     let AdminPassword= req.session.user.password
+    //     console.log('is no authenticated')
+    //     return res.redirect('/admin/home')
+    // }
+    next()
+}
+
+// function isLoggedIn(req,res,next){
+//     let User=req.session.user;
+//     if(User){
+//         return next()
+//     }
+
+//     // if(req.session.user){
+//     //     return next()
+//     // }
+//     res.redirect('http://localhost:3000/')
+// }
 
 module.exports = router;
