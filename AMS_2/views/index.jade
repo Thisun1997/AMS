@@ -17,6 +17,7 @@ block content
   .login-panel(style="float:none; padding-bottom:20px; margin:20px 20px;")
       .searchbar(style="padding-left:200px;")
         h4 Search your flight 
+        br
         form(method="post" action="/search")
               table 
                   tr
@@ -38,6 +39,7 @@ block content
                           input(type="submit" value="Search")
       br
       +function_res(search,msg)
+
   
 append links 
   li(style="float: right;")
@@ -57,6 +59,8 @@ mixin functiondest(locations)
 
 mixin function_res(search,msg)
           if(search != null)
+            div(id="ex1" class="modal" style="height:10%")
+              p You should login to your account first.
             table( class = "table table-striped")
                 thead 
                     tr
@@ -70,12 +74,12 @@ mixin function_res(search,msg)
                     each s in search
                         tr
                             td #{moment(s.date).format('YYYY-MM-DD')}
-                            td= s.dept_code
+                            td #{s.dept_code} (#{s.dept_city})
                             td= s.dept_time
-                            td= s.dest_code
+                            td #{s.dest_code} (#{s.dest_city})
                             td= s.arr_time
                             td
-                              a(href="" rel="noopener" class="btn btn-sm btn-danger") Book
+                              a(href="#ex1" rel="modal:open" class="btn btn-sm btn-success") Book
           else if (msg != null)
             h5 #{msg}
           else

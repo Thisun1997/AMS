@@ -8,21 +8,21 @@ const user = new User();
 
 // Get the index page
 router.get('/', (req, res, next) => {
-    //const user = new User();
-    //let user = req.session.user;
-    //console.log(req.session.user)
-    // If there is a session named user that means the use is logged in. so we redirect him to home page by using /home route below
-    // if(user) {
-    //      res.redirect('/home');
-    //      return;
-    // }
-    //
-    // IF not we just send the index page.
-    user.getAirports(function(result){
-        res.render('index', {title:"My application",locations:result})
-    });
-    
-})
+    if(req.session.search){
+        //console.log(req.session.locations);
+        res.render('index', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment});
+    }
+    else if(req.session.msg){
+        user.getAirports(function(result2){
+            res.render('index', {title:"My application",locations: result2,msg: req.session.msg})
+        });
+    }
+    else{
+        user.getAirports(function(result2){
+            res.render('index', {title:"My application",locations: result2})
+        });
+    }
+});
 
 router.post('/search', (req, res, next) => {
     let userInput = {
@@ -33,30 +33,41 @@ router.post('/search', (req, res, next) => {
     user.search(userInput, function(result1){
         if(result1){
             user.getAirports(function(result2){
-                res.render('index', {title:"My application",locations: result2,search: result1,moment:moment})
+                req.session.search = result1;
+                req.session.locations = result2;
+                //console.log(req.session)
+                res.redirect('/') 
             }); 
         } 
         else{
             user.getAirports(function(result2){
-                res.render('index', {title:"My application",locations: result2,msg: "no results found"})
+                req.session.search = null;
+                req.session.msg = "No results found"
+                res.redirect('/')
             }); 
         } 
     });
-})
+});
 
 // Get home page
 router.get('/home', (req, res, next) => {
     let user = req.session.user;
-    if(user.email == "admin" & user.password == "admin"){
-        res.redirect('/admin/home');
-        return;
+    if(user){
+        if(user.email == "admin" & user.password == "admin"){
+            res.redirect('/admin/home');
+            return;
+        }
+        else if(user) {
+            //console.log(user);
+            //console.log(req.session);
+            res.render('home', {opp:req.session.x, user,moment:moment});
+            return;
+        }
     }
-    else if(user) {
-        //console.log(user);
-        res.render('home', {opp:req.session.opp, user,moment:moment});
-        return;
+    else{
+        res.redirect('/');
     }
-    res.redirect('/');
+    
 });
 
 // Post login data
@@ -71,7 +82,7 @@ router.post('/login', (req, res, next) => {
         if(result) {
             // Store the user data in a session.
             req.session.user = result;
-            req.session.opp = 1;
+            req.session.x = 1;
             // redirect the user to the home page.
             res.redirect('/home');
         }else {
