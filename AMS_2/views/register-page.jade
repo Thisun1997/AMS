@@ -1,5 +1,13 @@
 extends layout
 
 block content
+  script(type='text/javascript', src="/javascripts/form-validation.js")
   .register-panel
+    +functione(msg)
     include includes/register-form
+
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}
+        br

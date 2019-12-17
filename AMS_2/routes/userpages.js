@@ -74,10 +74,6 @@ router.get('/home', (req, res, next) => {
 router.post('/login', (req, res, next) => {
     // The data sent from the user are stored in the req.body object.
     // call our login function and it will return the result(the user data).
-    if ( req.body.email == "" || req.body.password == ""){
-        res.send('empty')
-    }
-    else{
     user.login(req.body.email, req.body.password, function(result) {
         if(result) {
             // Store the user data in a session.
@@ -87,9 +83,11 @@ router.post('/login', (req, res, next) => {
             res.redirect('/home');
         }else {
             // if the login function returns null send this error message back to the user.
-            res.send('Username/Password incorrect!');
+            user.getAirports(function(result2){
+                res.render('index',{msg:'Username/Password incorrect!',locations: result2});
+            });
         }
-    })}
+    });
 
 });
 
@@ -127,7 +125,7 @@ router.post('/register', (req, res, next) => {
 
         
         }else {
-            console.log('Error creating a new user ...');
+            res.render('register-Page',{msg: "email already registered"});
         }
     });
 

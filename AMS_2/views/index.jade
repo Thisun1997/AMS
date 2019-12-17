@@ -4,6 +4,7 @@ block content
   script(type='text/javascript', src='/javascripts/location.js')
   .login-panel
     h3 Member Login
+    +functione(msg)
     br
     include includes/login-form
   .registerguest
@@ -84,3 +85,8 @@ mixin function_res(search,msg)
             h5 #{msg}
           else
             h5 search results will appear here..
+
+mixin functione(msg)
+    if(msg)
+        .error_2
+            p #{msg}

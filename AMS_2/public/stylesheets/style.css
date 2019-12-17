@@ -4,7 +4,7 @@ body
 {
     background-color: #F0F0F0;
 }
-.table, .table td, .table tr
+.table, .table td, .table tr, .table select
 {
     border-collapse: collapse;
     border: 1px solid #ccc;
@@ -115,6 +115,12 @@ input[type="submit"]:hover
     color: rgb(245, 49, 49);
     height: 50px;
     width:50%;
+}
+
+.error_2
+{
+    color: rgb(245, 49, 49);
+    height: 10px;
 }
 
 .success

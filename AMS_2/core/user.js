@@ -24,9 +24,12 @@ User.prototype = {
 
     findmember : function(user = null, callback)
     {
-        let sql = `SELECT * FROM user_account NATURAL JOIN member_passenger WHERE email = ?`;
-
-
+        if (Number.isInteger(user)){
+            sql = `SELECT * FROM user_account NATURAL JOIN member_passenger WHERE passenger_id = ?`;
+        }
+        else{
+            sql = `SELECT * FROM user_account NATURAL JOIN member_passenger WHERE email = ?`;
+        }
         pool.query(sql, user, function(err, result) {
             if(err) throw err
            
@@ -70,47 +73,54 @@ User.prototype = {
             bind1.push(body1[prop]);
         }
         
-        // prepare the sql query
-        let sql = `INSERT INTO member_passenger(full_name, date_of_birth, gender, citizenship) VALUES (?, ?, ?, ?)`;
-        // call the query give it the sql string and the values (bind array)
-        pool.beginTransaction(function(err){
-            if(err) throw err;
-            pool.query(sql, bind1, function(err, result) {
-                if(err){
-                    pool.rollback(function() {
-                        throw err;
-                    });
-                }
-                var log = result.insertId; 
-                let sql = `INSERT INTO user_account(passenger_id,email,password) VALUES (?,?,?)`
-                // return the last inserted id. if there is no error
-                bind2.push(log)
-                for(prop in body2){
-                    bind2.push(body2[prop]);
-                }
-                pool.query(sql, bind2, function(err, result) {
-                    if(err){
-                        pool.rollback(function() {
-                            throw err;
-                        });
-                    }
-                    pool.commit(function(err) {
-                        if (err) { 
+        this.findmember(body2['email'], function(user){
+            if(user){
+                callback(null)
+            }
+            else{
+                let sql = `INSERT INTO member_passenger(full_name, date_of_birth, gender, citizenship) VALUES (?, ?, ?, ?)`;
+                // call the query give it the sql string and the values (bind array)
+                pool.beginTransaction(function(err){
+                    if(err) throw err;
+                    pool.query(sql, bind1, function(err, result) {
+                        if(err){
                             pool.rollback(function() {
-                            throw err;
-                        });
+                                throw err;
+                            });
                         }
-                        //console.log('Transaction Complete.');
-                        callback(log)
+                        var log = result.insertId; 
+                        let sql = `INSERT INTO user_account(passenger_id,email,password) VALUES (?,?,?)`
+                        // return the last inserted id. if there is no error
+                        bind2.push(log)
+                        for(prop in body2){
+                            bind2.push(body2[prop]);
+                        }
+                        pool.query(sql, bind2, function(err, result) {
+                            if(err){
+                                pool.rollback(function() {
+                                    throw err;
+                                });
+                            }
+                            pool.commit(function(err) {
+                                if (err) { 
+                                    pool.rollback(function() {
+                                    throw err;
+                                });
+                                }
+                                //console.log('Transaction Complete.');
+                                callback(log)
+                            });
+                        });
                     });
-                });
-            });
 
-        });
+                });
+            }
+        })
+        // prepare the sql query
             
     },
 
-    login : function(email, password, callback)
+    login : function(email,password, callback)
     {
         // find the user data by his username.
         this.findmember(email, function(user) {
