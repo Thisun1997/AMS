@@ -4,7 +4,7 @@ block content
   script(type='text/javascript', src='/javascripts/location.js')
   .login-panel
     h3 Member Login
-    +functione(msg)
+    +functione(msg2)
     br
     include includes/login-form
   .registerguest
@@ -16,77 +16,16 @@ block content
   .registerguest(style="margin-top:5px;")
     p search for your destination and book the flights
   .login-panel(style="float:none; padding-bottom:20px; margin:20px 20px;")
-      .searchbar(style="padding-left:200px;")
-        h4 Search your flight 
-        br
-        form(method="post" action="/search")
-              table 
-                  tr
-                      td date 
-                      td 
-                          input(type="date" name="date")
-                  tr 
-                      td From  
-                      td 
-                          +functiondept(locations)
-                      td &nbsp; To
-                      td
-                          +functiondest(locations)
-                  tr 
-                      td
-                      td
-                      td
-                      td
-                          input(type="submit" value="Search")
+    .searchbar(style="padding-left:70px;")
+      h4 Search your flight 
       br
-      +function_res(search,msg)
-
+      include includes/searchbar
   
 append links 
   li(style="float: right;")
       a(href="admin/login") Admin 
 
-mixin functiondept(locations)
-      select(name="dept_airport_code" id="dept_airport_code")
-            option(disabled selected value) -- select an option -- 
-            each location in locations
-                option(value="#{location.airport_id}") #{location.city} - #{location.country} (#{location.code})
-
-mixin functiondest(locations)
-      select(name="dest_airport_code" id="dest_airport_code")
-            option(disabled selected value) -- select an option -- 
-            each location in locations
-                option(value="#{location.airport_id}") #{location.city} - #{location.country} (#{location.code})
-
-mixin function_res(search,msg)
-          if(search != null)
-            div(id="ex1" class="modal" style="height:10%")
-              p You should login to your account first.
-            table( class = "table table-striped")
-                thead 
-                    tr
-                        th date
-                        th depatuer airport
-                        th depatuer time
-                        th destination airport
-                        th arrival time
-                        th action
-                tbody
-                    each s in search
-                        tr
-                            td #{moment(s.date).format('YYYY-MM-DD')}
-                            td #{s.dept_code} (#{s.dept_city})
-                            td= s.dept_time
-                            td #{s.dest_code} (#{s.dest_city})
-                            td= s.arr_time
-                            td
-                              a(href="#ex1" rel="modal:open" class="btn btn-sm btn-success") Book
-          else if (msg != null)
-            h5 #{msg}
-          else
-            h5 search results will appear here..
-
-mixin functione(msg)
-    if(msg)
+mixin functione(msg2)
+    if(msg2)
         .error_2
-            p #{msg}
+            p #{msg2}

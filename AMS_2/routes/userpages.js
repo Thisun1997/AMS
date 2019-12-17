@@ -8,19 +8,37 @@ const user = new User();
 
 // Get the index page
 router.get('/', (req, res, next) => {
-    if(req.session.search){
-        //console.log(req.session.locations);
-        res.render('index', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment});
-    }
-    else if(req.session.msg){
-        user.getAirports(function(result2){
-            res.render('index', {title:"My application",locations: result2,msg: req.session.msg})
-        });
+    if(req.session.user){
+        if(req.session.search){
+            //console.log(req.session.locations);
+            res.render('home', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment,user:req.session.user,opp:req.session.x});
+        }
+        else if(req.session.msg){
+            user.getAirports(function(result2){
+                res.render('home', {title:"My application",locations: result2,msg: req.session.msg,user:req.session.user,opp:req.session.x,moment:moment})
+            });
+        }
+        else{
+            user.getAirports(function(result2){
+                res.render('home', {title:"My application",locations: result2,user:req.session.user,opp:req.session.x,moment: moment})
+            });
+        }
     }
     else{
-        user.getAirports(function(result2){
-            res.render('index', {title:"My application",locations: result2})
-        });
+        if(req.session.search){
+            //console.log(req.session.locations);
+            res.render('index', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment});
+        }
+        else if(req.session.msg){
+            user.getAirports(function(result2){
+                res.render('index', {title:"My application",locations: result2,msg: req.session.msg})
+            });
+        }
+        else{
+            user.getAirports(function(result2){
+                res.render('index', {title:"My application",locations: result2})
+            });
+        }
     }
 });
 
@@ -30,9 +48,11 @@ router.post('/search', (req, res, next) => {
         dept_airport_code: req.body.dept_airport_code,
         date: req.body.date
     }
-    user.search(userInput, function(result1){
+    let seats = req.body.seats
+    user.search(userInput,seats, function(result1){
         if(result1){
             user.getAirports(function(result2){
+                console.log(result1)
                 req.session.search = result1;
                 req.session.locations = result2;
                 //console.log(req.session)
@@ -51,16 +71,14 @@ router.post('/search', (req, res, next) => {
 
 // Get home page
 router.get('/home', (req, res, next) => {
-    let user = req.session.user;
-    if(user){
-        if(user.email == "admin" & user.password == "admin"){
+    let user1 = req.session.user;
+    if(user1){
+        if(user1.email == "admin" & user1.password == "admin"){
             res.redirect('/admin/home');
             return;
         }
-        else if(user) {
-            //console.log(user);
-            //console.log(req.session);
-            res.render('home', {opp:req.session.x, user,moment:moment});
+        else if(user1) {
+            res.redirect('/')
             return;
         }
     }
@@ -79,12 +97,13 @@ router.post('/login', (req, res, next) => {
             // Store the user data in a session.
             req.session.user = result;
             req.session.x = 1;
+            console.log(req.session);
             // redirect the user to the home page.
             res.redirect('/home');
         }else {
             // if the login function returns null send this error message back to the user.
             user.getAirports(function(result2){
-                res.render('index',{msg:'Username/Password incorrect!',locations: result2});
+                res.render('index',{msg2:'Username/Password incorrect!',locations: result2});
             });
         }
     });
@@ -96,7 +115,10 @@ router.get('/registerRedirect',(req,res,next)=>{
 });
 
 router.get('/loginGuest',(req,res,next)=>{
-    res.render('guestlogin')
+    //if(req.session.search){
+        console.log(req.session);
+        res.render('guestlogin', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment});
+  
 });
 
 // Post register data
@@ -148,6 +170,7 @@ router.post('/guestLogin', (req, res, next) => {
             user.findguest(lastId, function(result) {
                 req.session.user = result;
                 req.session.opp = 0;
+                console.log(req.session)
                 res.redirect('/home');
             });
 

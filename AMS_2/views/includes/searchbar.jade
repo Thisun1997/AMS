@@ -1,33 +1,4 @@
-extends layout
-
-mixin message(opp, user)
-    if(opp)
-        .greeting(style = "margin-right:15px;")
-            h1
-                span=user.full_name 
-            p email address: #{user.email}
-            p date of birth: #{moment(user.date_of_birth).format('YYYY-MM-DD')}
-            p citizenship: #{user.citizenship}
-            p total number of reservations:
-            p passenger category:
-    else 
-        h1.greeting Welcome 
-            span=user.full_name  
-            |  to our website
-
-
-append links 
-    li(style="float: right;")
-        a(href="/loggout") Loggout 
-
-block content
-    script(type='text/javascript', src='/javascripts/location.js')
-    .dashboard_user
-            +message(opp, user)
-    .login-panel(style="float:none; padding-bottom:20px; margin:15px 20px 20px 0px;")
-        .searchbar(style="padding-left:70px;")
-            h4 search your flight
-            form(method="post" action="/search")
+form(method="post" action="/search")
               table 
                   tr
                       td date 
@@ -40,7 +11,7 @@ block content
                       td &nbsp; To
                       td
                           +functiondest(locations)
-                    tr
+                  tr
                       td seats
                       td
                         input(type="text" name="seats")
@@ -65,10 +36,10 @@ mixin functiondest(locations)
             each location in locations
                 option(value="#{location.airport_id}") #{location.city} - #{location.country} (#{location.code})
 
-
 mixin function_res(search,msg)
           if(search != null)
-            br
+            div(id="ex1" class="modal" style="height:10%")
+              p You should login to your account first.
             table( class = "table table-striped")
                 thead 
                     tr
@@ -87,7 +58,7 @@ mixin function_res(search,msg)
                             td #{s.dest_code} (#{s.dest_city})
                             td= s.arr_time
                             td
-                              a(href="/book/#{s.trip_id}" rel="noopener" class="btn btn-sm btn-success") Book
+                              a(href="#ex1" rel="modal:open" class="btn btn-sm btn-success") Book
           else if (msg != null)
             h5 #{msg}
           else

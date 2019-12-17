@@ -154,9 +154,10 @@ User.prototype = {
         });
     },
 
-    search : function(body, callback)
+    search : function(body, seats, callback)
     {
         bind = []
+        res = []
         for(prop in body){
             bind.push(body[prop]);
         }
@@ -166,7 +167,17 @@ User.prototype = {
             if(err) throw err
            
             if(result[0].length) {
-                callback(result[0]);
+                for(i in result[0]){
+                    if(result[0][i].available_seats>seats){
+                        res.push(result[0][i])
+                    }
+                }
+                if(res.length>0){
+                    callback(res)
+                }
+                else{
+                    callback(null);
+                }
             }else {
                 callback(null);
             }
