@@ -10,8 +10,8 @@ const user = new User();
 router.get('/', (req, res, next) => {
     if(req.session.user){
         if(req.session.search){
-            //console.log(req.session.locations);
-            res.render('home', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment,user:req.session.user,opp:req.session.x});
+            console.log(req.session);
+            res.render('home', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment,user:req.session.user,opp:req.session.x,guests: req.session.guests});
         }
         else if(req.session.msg){
             user.getAirports(function(result2){
@@ -26,8 +26,8 @@ router.get('/', (req, res, next) => {
     }
     else{
         if(req.session.search){
-            //console.log(req.session.locations);
-            res.render('index', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment});
+            console.log(req.session);
+            res.render('index', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment,guests: req.session.guests});
         }
         else if(req.session.msg){
             user.getAirports(function(result2){
@@ -49,12 +49,14 @@ router.post('/search', (req, res, next) => {
         date: req.body.date,
         seats: req.body.seats
     }
+    var guests = [req.body.adults,req.body.children,req.body.infants]
     user.search(userInput,function(result1){
         if(result1){
             user.getAirports(function(result2){
                 console.log(result1)
                 req.session.search = result1;
                 req.session.locations = result2;
+                req.session.guests = guests;
                 //console.log(req.session)
                 res.redirect('/') 
             }); 
