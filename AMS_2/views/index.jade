@@ -2,6 +2,8 @@ extends layout
 
 block content
   script(type='text/javascript', src='/javascripts/location.js')
+  script(type='text/javascript', src='/javascripts/guest_input.js')
+
   .login-panel
     h3 Member Login
     +functione(msg2)
@@ -16,7 +18,7 @@ block content
   .registerguest(style="margin-top:5px;")
     p search for your destination and book the flights
   .login-panel(style="float:none; padding-bottom:20px; margin:20px 20px;")
-    .searchbar(style="padding-left:70px;")
+    .searchbar(style="padding:15px;")
       h4 Search your flight 
       br
       include includes/searchbar

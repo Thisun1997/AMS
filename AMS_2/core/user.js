@@ -154,30 +154,19 @@ User.prototype = {
         });
     },
 
-    search : function(body, seats, callback)
+    search : function(body, callback)
     {
         bind = []
-        res = []
         for(prop in body){
             bind.push(body[prop]);
         }
-        let sql = `CALL search(?,?,?)`;
-
+        console.log(bind)
+        let sql = `CALL search(?,?,?,?)`;
         pool.query(sql, bind, function(err, result) {
             if(err) throw err
-           
+            console.log(result)
             if(result[0].length) {
-                for(i in result[0]){
-                    if(result[0][i].available_seats>seats){
-                        res.push(result[0][i])
-                    }
-                }
-                if(res.length>0){
-                    callback(res)
-                }
-                else{
-                    callback(null);
-                }
+                    callback(result[0])
             }else {
                 callback(null);
             }

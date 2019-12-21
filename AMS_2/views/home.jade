@@ -25,7 +25,7 @@ block content
     .dashboard_user
             +message(opp, user)
     .login-panel(style="float:none; padding-bottom:20px; margin:15px 20px 20px 0px;")
-        .searchbar(style="padding-left:70px;")
+        .searchbar(style="padding:70px;")
             h4 search your flight
             form(method="post" action="/search")
               table 
@@ -50,7 +50,7 @@ block content
                       td
                       td
                           input(type="submit" value="Search")
-    +function_res(search,msg)
+    +function_res(search,msg,seat_type)
 
 
 mixin functiondept(locations)
@@ -66,28 +66,40 @@ mixin functiondest(locations)
                 option(value="#{location.airport_id}") #{location.city} - #{location.country} (#{location.code})
 
 
-mixin function_res(search,msg)
-          if(search != null)
+mixin function_res(search,msg,seat_type)
+        if(search != null)
+            div(id="ex1" class="modal" style="height:10%")
+              p You should login to your account first.
+            br
+            h4 search results for flights from #{search[0].dept_code} (#{search[0].dept_city}) to #{search[0].dest_code} (#{search[0].dest_city}) on #{moment(search[0].date).format('YYYY-MM-DD')}
             br
             table( class = "table table-striped")
                 thead 
                     tr
-                        th date
-                        th depatuer airport
+                        th plane
                         th depatuer time
-                        th destination airport
                         th arrival time
+                        th economy seat (in $)
+                        th business seat (in $)
+                        th platinum seat (in $)
                         th action
-                tbody
+                tbody                    
                     each s in search
                         tr
-                            td #{moment(s.date).format('YYYY-MM-DD')}
-                            td #{s.dept_code} (#{s.dept_city})
+                            td= s.company_plane_code
                             td= s.dept_time
-                            td #{s.dest_code} (#{s.dest_city})
                             td= s.arr_time
+                            if (s.economy_price)
+                                td(style="text-align:right") $ #{s.economy_price}.00 (#{s.available_economy_seats} available seats)
+                            if (s.business_price)
+                                td(style="text-align:right") $ #{s.business_price}.00 (#{s.available_business_seats} available seats)
+                            if (s.platinum_price)
+                                td(style="text-align:right") $ #{s.platinum_price}.00 (#{s.available_platinum_seats} available seats)
+                            else
+                                td Not applicable
                             td
-                              a(href="/book/#{s.trip_id}" rel="noopener" class="btn btn-sm btn-success") Book
+                                a(href="#ex1" rel="modal:open" class="btn btn-sm btn-success") Book
+                            
           else if (msg != null)
             h5 #{msg}
           else

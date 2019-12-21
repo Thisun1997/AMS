@@ -1,27 +1,54 @@
 form(method="post" action="/search")
               table 
                   tr
-                      td date 
+                      th date 
                       td 
                           input(type="date" name="date")
                   tr 
-                      td From  
+                      th From  
                       td 
                           +functiondept(locations)
-                      td &nbsp; To
-                      td
+                      td &nbsp; 
+                        b To
                           +functiondest(locations)
                   tr
-                      td seats
+                      th(rowspan="2") Guests: 
+                      td Adults
+                      td Children (3-18 yrs)
+                      td Infants (<3 yrs)
+                  tr 
+                      td 
+                        div(class="input-group input-number-group")
+                            div(class="input-group-button")
+                                span(class="input-number-decrement dec-adults") -
+                            input(class="input-number-adults" type="number"  value="1" )
+                            div(class="input-group-button")
+                                span(class="input-number-increment inc-adults") +
                       td
-                        input(type="text" name="seats")
+                        div(class="input-group input-number-group")
+                            div(class="input-group-button")
+                                span(class="input-number-decrement dec-child") -
+                            input(class="input-number-children" type="number" value="0")
+                            div(class="input-group-button")
+                                span(class="input-number-increment inc-child") +
+                      td
+                        div(class="input-group input-number-group")
+                            div(class="input-group-button")
+                                span(class="input-number-decrement dec-infants") -
+                            input(class="input-number-infants" type="number" value="0")
+                            div(class="input-group-button")
+                                span(class="input-number-increment inc-infants") +
+                  tr
+                        th Total guests
+                        td 
+                            input(type="text" name="seats" class="total")
                   tr 
                       td
                       td
                       td
                       td
                           input(type="submit" value="Search")
-    +function_res(search,msg)
+    +function_res(search,msg,seat_type)
 
 
 mixin functiondept(locations)
@@ -36,30 +63,49 @@ mixin functiondest(locations)
             each location in locations
                 option(value="#{location.airport_id}") #{location.city} - #{location.country} (#{location.code})
 
-mixin function_res(search,msg)
+mixin function_res(search,msg,seat_type)
           if(search != null)
             div(id="ex1" class="modal" style="height:10%")
               p You should login to your account first.
+            br
+            h4 search results for flights from #{search[0].dept_code} (#{search[0].dept_city}) to #{search[0].dest_code} (#{search[0].dest_city}) on #{moment(search[0].date).format('YYYY-MM-DD')}
+            br
             table( class = "table table-striped")
                 thead 
                     tr
-                        th date
-                        th depatuer airport
+                        th plane
                         th depatuer time
-                        th destination airport
                         th arrival time
+                        th economy seat (in $)
+                        th business seat (in $)
+                        th platinum seat (in $)
                         th action
-                tbody
+                tbody                    
                     each s in search
                         tr
-                            td #{moment(s.date).format('YYYY-MM-DD')}
-                            td #{s.dept_code} (#{s.dept_city})
+                            td= s.company_plane_code
                             td= s.dept_time
-                            td #{s.dest_code} (#{s.dest_city})
                             td= s.arr_time
+                            if (s.economy_price)
+                                td(style="text-align:right") $ #{s.economy_price}.00 (#{s.available_economy_seats} available seats)
+                            if (s.business_price)
+                                td(style="text-align:right") $ #{s.business_price}.00 (#{s.available_business_seats} available seats)
+                            if (s.platinum_price)
+                                td(style="text-align:right") $ #{s.platinum_price}.00 (#{s.available_platinum_seats} available seats)
+                            else
+                                td Not applicable
                             td
-                              a(href="#ex1" rel="modal:open" class="btn btn-sm btn-success") Book
+                                a(href="#ex1" rel="modal:open" class="btn btn-sm btn-success") Book
+                            
           else if (msg != null)
             h5 #{msg}
           else
             h5 search results will appear here..
+
+//- mixin functionx()
+//-     div(class="input-group input-number-group")
+//-                             div(class="input-group-button")
+//-                                 span(class="input-number-decrement")-
+//-                             input(class="input-number" type="number" value="1" min="0" max="1000")
+//-                                 div(class="input-group-button")
+//-                                     span(class="input-number-increment")+

@@ -41,7 +41,7 @@ mixin function(routeDetails)
     if routeDetails!= null
         select(name="route_id")
             each route in routeDetails
-                option(value="#{route.route_id}") #{route.x} -> #{route.y}
+                option(value="#{route.route_id}") #{route.x} -> #{route.y} - #{route.company_plane_code}
     else
         p no routes are added yet. Add a route and try again!
 
@@ -59,7 +59,7 @@ mixin function1(timetable,timedata,route)
                 tr 
                     td Route
                     td
-                        input(type="text" name="route" value="#{route.x} -> #{route.y}" readonly = "true")
+                        input(type="text" name="route" value="#{route.x} -> #{route.y} - #{route.company_plane_code}" readonly = "true")
                     td
                         input(type="hidden" name="route_id" value="#{route.route_id}" readonly = "true")
                 if timedata != null

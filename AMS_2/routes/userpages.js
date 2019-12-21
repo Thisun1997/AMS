@@ -46,10 +46,10 @@ router.post('/search', (req, res, next) => {
     let userInput = {
         dest_airport_code: req.body.dest_airport_code,
         dept_airport_code: req.body.dept_airport_code,
-        date: req.body.date
+        date: req.body.date,
+        seats: req.body.seats
     }
-    let seats = req.body.seats
-    user.search(userInput,seats, function(result1){
+    user.search(userInput,function(result1){
         if(result1){
             user.getAirports(function(result2){
                 console.log(result1)
