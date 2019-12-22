@@ -1,8 +1,10 @@
 * {padding: 0; margin: 0;}
 
+
 body 
 {
-    background-image: radial-gradient(circle, #05b2dc, #0096ce, #007abd, #005ea8, #004190, #013784, #073688, #00246b, #002a6a, #002f67, #003464, #033860);
+    background-image: radial-gradient(circle, #6a8eae, #5e8db2, #518bb6, #3f8ab9, #2589bd);
+    font-family: sans-serif;
 }
 .table, .table td, .table tr, .table select
 {
@@ -23,7 +25,7 @@ nav
     background-color: #fff;
     border: 1px solid #ccc;
     margin-bottom: 5px;
-    border-radius: 0.2px;
+    border-radius: 5px;
 }
 nav ul
 {
@@ -67,6 +69,7 @@ nav ul li a:hover
     border: 1px solid #ccc;
     background-color: #D9D7DD;
     overflow: auto;
+    border-radius: 10px;;
 }
 .login-panel
 {
