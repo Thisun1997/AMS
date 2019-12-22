@@ -1,0 +1,308 @@
+extends layout
+
+block content
+    .login-panel(style="float:none")
+        +function(economy,business,platinum,plane_type_name)
+
+mixin function(economy,business,platinum,plane_type_name)
+    h3 #{plane_type_name.plane_type}
+    if platinum != null
+            div(id="#{s.seat_id}" class="modal" style="height:10%")
+                p You should login to your account first.
+            h3 Platinum Seats
+            table( class = "table table2" )
+                tbody
+                        tr
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "A"
+                                    if seat_id.seat_id[9] == undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "A"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                        tr
+                           each seat_id in platinum
+                                if seat_id.seat_id[7] == "B"
+                                    if seat_id.seat_id[9] == undefined
+                                       if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "B"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                        tr(colspan= platinum.length/4)
+                            td(colspan= platinum.length/4) 
+                                b passage
+                        tr
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "C"
+                                    if seat_id.seat_id[9] == undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "C"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                        tr
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "D"
+                                    if seat_id.seat_id[9] == undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in platinum
+                                if seat_id.seat_id[7] == "D"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+    if business != null
+            h3 Business Seats
+            table( class = "table table2")
+                tbody
+                        tr
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "A"
+                                    if seat_id.seat_id[9] == undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
+                                                    p #{seat_id.seat_id}
+                                                    a(href="/") home
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "A"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                        tr
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "B"
+                                    if seat_id.seat_id[9] == undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "B"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                        tr(colspan= business.length/4)
+                            td(colspan= business.length/4) 
+                                b passage
+                        tr
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "C"
+                                    if seat_id.seat_id[9] == undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "C"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                        tr
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "D"
+                                    if seat_id.seat_id[9] == undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in business
+                                if seat_id.seat_id[7] == "D"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+    if economy != null
+            h3 Economy Seats
+            table( class = "table table2")
+                        tr
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "A"
+                                    if seat_id.seat_id[9] == undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "A"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                        tr
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "B"
+                                    if seat_id.seat_id[9] == undefined
+                                       if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "B"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                        tr(colspan= economy.length/4)
+                            td(colspan= economy.length/4) 
+                                b passage
+                        tr
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "C"
+                                    if seat_id.seat_id[9] == undefined
+                                       if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "C"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                        tr
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "D"
+                                    if seat_id.seat_id[9] == undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
+                            each seat_id in economy
+                                if seat_id.seat_id[7] == "D"
+                                    if seat_id.seat_id[9] != undefined
+                                        if seat_id.ticket_issued == 1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        else
+                                            td
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                    p #{seat_id.seat_id}
+                                                    p You should login to your account first.
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+    else 
+        p  No Airplane types found

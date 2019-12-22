@@ -164,14 +164,71 @@ User.prototype = {
         let sql = `CALL search(?,?,?,?)`;
         pool.query(sql, bind, function(err, result) {
             if(err) throw err
-            console.log(result)
+            //console.log(result)
             if(result[0].length) {
                     callback(result[0])
             }else {
                 callback(null);
             }
         });
-    }
+    },
+
+    getEconomyAirplaneTypeSeats : function(plane_type_id = null, callback)
+    {
+        let sql = `SELECT * FROM seat LEFT OUTER JOIN ticket USING (seat_id) WHERE plane_type_id = ? AND seat_type = "economy"`;
+        pool.query(sql, plane_type_id,  function(err, result) {
+            if(err) throw err
+           
+            if(result.length) {
+                callback(result);
+            }else {
+                callback(null);
+            }
+        });
+    },
+
+    getBusinessAirplaneTypeSeats : function( plane_type_id = null, callback)
+    {
+        let sql = `SELECT * FROM seat LEFT OUTER JOIN ticket USING (seat_id) WHERE plane_type_id = ? AND seat_type = "business"`
+        pool.query(sql, plane_type_id, function(err, result) {
+            if(err) throw err
+           
+            if(result.length) {
+                callback(result);
+            }else {
+                callback(null);
+            }
+        });
+    },
+
+    getPlatinumAirplaneTypeSeats : function(plane_type_id = null, callback)
+    {
+        let sql = `SELECT * FROM seat LEFT OUTER JOIN ticket USING (seat_id) WHERE plane_type_id = ? AND seat_type = "platinum"`
+        pool.query(sql, plane_type_id, function(err, result) {
+            if(err) throw err
+           
+            if(result.length) {
+                callback(result);
+            }else {
+                callback(null);
+            }
+        });
+    },
+    getAnAirplaneType : function(plane_type_id = null,callback)
+    {
+        let sql = `SELECT * FROM plane_type WHERE plane_type_id = ?`;
+
+
+        pool.query(sql, plane_type_id, function(err, result) {
+            if(err) throw err
+           
+            if(result.length) {
+                callback(result[0]);
+            }else {
+                callback(null);
+            }
+        });
+    },
 
 }
 

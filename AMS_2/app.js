@@ -3,6 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const userRouter = require('./routes/userpages');
 const adminRouter = require('./routes/adminpages');
+const guestRouter = require('./routes/guestpages');
 const app = express();
 
 
@@ -32,6 +33,7 @@ app.use(session({
 // Routers
 app.use('/', userRouter);
 app.use('/admin',adminRouter);
+app.use('/guest',guestRouter);
 
 // Errors => page not found 404
 app.use((req, res, next) =>  {

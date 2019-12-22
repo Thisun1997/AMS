@@ -95,6 +95,8 @@ mixin functiondest(locations)
 
 mixin function_res(search,msg,seat_type)
           if(search != null)
+            div(id="ex1" class="modal" style="height:10%")
+              p You should login to your account first.
             br
             h4 search results for flights from #{search[0].dept_code} (#{search[0].dept_city}) to #{search[0].dest_code} (#{search[0].dest_city}) on #{moment(search[0].date).format('YYYY-MM-DD')}
             br
@@ -123,7 +125,7 @@ mixin function_res(search,msg,seat_type)
                             else
                                 td Not applicable
                             td
-                                a(href="/bookTrip/#{s.trip_id}" class="btn btn-sm btn-success") Book
+                                a(href="#ex1" rel="modal:open" class="btn btn-sm btn-success") Book
                             
           else if (msg != null)
             h5 #{msg}

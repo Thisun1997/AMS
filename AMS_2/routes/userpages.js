@@ -10,7 +10,7 @@ const user = new User();
 router.get('/', (req, res, next) => {
     if(req.session.user){
         if(req.session.search){
-            console.log(req.session);
+            //console.log(req.session);
             res.render('home', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment,user:req.session.user,opp:req.session.x,guests: req.session.guests});
         }
         else if(req.session.msg){
@@ -53,10 +53,11 @@ router.post('/search', (req, res, next) => {
     user.search(userInput,function(result1){
         if(result1){
             user.getAirports(function(result2){
-                console.log(result1)
+                //console.log(result1)
                 req.session.search = result1;
                 req.session.locations = result2;
                 req.session.guests = guests;
+                req.session.msg = null;
                 //console.log(req.session)
                 res.redirect('/') 
             }); 
@@ -99,7 +100,7 @@ router.post('/login', (req, res, next) => {
             // Store the user data in a session.
             req.session.user = result;
             req.session.x = 1;
-            console.log(req.session);
+            //console.log(req.session);
             // redirect the user to the home page.
             res.redirect('/home');
         }else {
@@ -181,6 +182,38 @@ router.post('/guestLogin', (req, res, next) => {
         }
     });
 
+});
+
+router.get("/bookTrip/:trip_id",(req,res,next)=>{
+    //if(req.session.search){
+        if(req.session.user){
+                    var trip_id =parseInt(req.params.trip_id)
+                    var search = req.session.search ;
+                    for( s in req.session.search ){
+                        //console.log(search[s], trip_id)
+                        if (search[s].trip_id == trip_id){
+                            req.session.trip = search[s];
+                        }
+                    }
+                    //console.log(req.session.trip);
+                    //console.log(req.session);
+                    //res.render('guestlogin', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment});
+                    let plane_type = req.session.trip.plane_type_id;
+                    //console.log(plane_type);
+                    user.getEconomyAirplaneTypeSeats(plane_type, function(resulte) {
+                        user.getBusinessAirplaneTypeSeats(plane_type, function(resultb) {
+                            user.getPlatinumAirplaneTypeSeats(plane_type, function(resultp) {
+                                user.getAnAirplaneType(plane_type,function(resultt){
+                                    //console.log(resultb);
+                                    res.render('bookSeat', {economy: resulte, business: resultb, platinum: resultp, plane_type_name: resultt});
+                                });
+                            });
+                        });
+                    });
+        }
+        else{
+            res.redirect("/")
+        }
 });
 
 
