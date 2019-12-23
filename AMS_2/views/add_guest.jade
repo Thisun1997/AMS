@@ -1,0 +1,128 @@
+extends layout
+
+block content
+    script(type='text/javascript', src='/javascripts/prevent_back.js')
+    .login-panel(style="float:none")
+        h3 You are going to make a reservation for flight from #{trip.dept_code}(#{trip.dept_city}) to #{trip.dest_code}(#{trip.dest_city}) on #{moment(trip.date).format('YYYY-MM-DD')}
+        p depatuer time: #{trip.dept_time} &nbsp;&nbsp; arrival time: #{trip.arr_time}
+    br
+    .login-panel(style="float:none")
+        +function(guests,trip,type,guests_booked)
+        +function2(guests_details)
+
+mixin function(guests,trip,type,guests_booked)
+        
+        if guests_booked[0] != 0
+            h4 Booking for adult guest #{guests[0]-guests_booked[0]+1}
+            form(method="post" action="/addGuest")
+                table
+                    tr
+                        td full name 
+                        td 
+                            input(type="text" name="name" required)
+                    tr
+                        td age 
+                        td 
+                            input(type="number" class="guest_num" name="age" min="18" required)
+                    tr
+                        td gender 
+                            td 
+                                select(name="gender" id="gender" required)
+                                    option(value="male") male
+                                    option(value="female") female
+                    tr
+                        td requirements 
+                        td 
+                            input(type="text" name="requirements")
+                    tr 
+                        td
+                        td
+                            input(type="submit" value="Add")
+        else if guests_booked[1] != 0
+            h4 Booking for child guest  #{guests[1]-guests_booked[1]+1}
+            form(method="post" action="/addGuest")
+                table
+                    tr
+                        td full name 
+                        td 
+                            input(type="text" name="name" required)
+                    tr
+                        td age 
+                        td 
+                            input(type="number" class="guest_num" name="age" min="4" max="11" required)
+
+                    tr
+                        td gender 
+                            td 
+                                select(name="gender" id="gender" required)
+                                    option(value="male") male
+                                    option(value="female") female
+                    tr
+                        td requirements 
+                        td 
+                            input(type="text" name="requirements")
+                    tr 
+                        td
+                        td
+                            input(type="submit" value="Add")
+        else if guests_booked[2] != 0
+            h4 Booking for infant guest  #{guests[2]-guests_booked[2]+1}
+            form(method="post" action="/addGuest")
+                table
+                    tr
+                        td full name 
+                        td 
+                            input(type="text" name="name" required)
+                    tr
+                        td age 
+                        td 
+                            input(type="number" class="guest_num" name="age" min="1" max="3" required)
+
+                    tr
+                        td gender 
+                        td 
+                            select(name="gender" id="gender" required)
+                                option(value="male") male
+                                option(value="female") female
+                    tr 
+                        td Guardian's name
+                        td 
+                            +function3(guests_details)
+                    tr
+                        td requirements 
+                        td 
+                            input(type="text" name="requirements")
+                    tr 
+                        td
+                        td
+                            input(type="submit" value="Add")
+
+mixin function3(guests_details)
+    if guests_details != null
+        select(name="guardian")
+            each guardian in guests_details
+                if guardian.guest[0] == "a"
+                    option(value="#{guardian.name}") #{guardian.name}
+
+mixin function2(guests_details)
+    if(guests_details != null)
+        table( class = "table table-striped")
+                thead 
+                    tr
+                        th name of the guest
+                        th age	
+                        th gender
+                        th requirements
+                tbody
+                    each g in guests_details
+                        tr
+                            if(g.guardian)
+                                td #{g.name} (#{g.guardian} as the guardian)
+                            else
+                                td= g.name
+                            td= g.age
+                            td= g.gender
+                            td= g.requirements
+    else
+        p added guests will appear here
+                            

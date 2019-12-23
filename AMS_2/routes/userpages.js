@@ -185,37 +185,113 @@ router.post('/guestLogin', (req, res, next) => {
 });
 
 router.get("/bookTrip/:trip_id",(req,res,next)=>{
-    //if(req.session.search){
         if(req.session.user){
                     var trip_id =parseInt(req.params.trip_id)
                     var search = req.session.search ;
+                    req.session.guests_booked = null;
+                    req.session.guests_details = [];
                     for( s in req.session.search ){
                         //console.log(search[s], trip_id)
                         if (search[s].trip_id == trip_id){
                             req.session.trip = search[s];
                         }
                     }
-                    //console.log(req.session.trip);
+                    console.log(req.session.trip);
                     //console.log(req.session);
                     //res.render('guestlogin', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment});
-                    let plane_type = req.session.trip.plane_type_id;
+                    //let plane_type = req.session.trip.plane_type_id;
                     //console.log(plane_type);
-                    user.getEconomyAirplaneTypeSeats(plane_type, function(resulte) {
-                        user.getBusinessAirplaneTypeSeats(plane_type, function(resultb) {
-                            user.getPlatinumAirplaneTypeSeats(plane_type, function(resultp) {
-                                user.getAnAirplaneType(plane_type,function(resultt){
-                                    //console.log(resultb);
-                                    res.render('bookSeat', {economy: resulte, business: resultb, platinum: resultp, plane_type_name: resultt});
-                                });
-                            });
-                        });
-                    });
-        }
+                    // user.getEconomyAirplaneTypeSeats(plane_type, function(resulte) {
+                    //     user.getBusinessAirplaneTypeSeats(plane_type, function(resultb) {
+                    //         user.getPlatinumAirplaneTypeSeats(plane_type, function(resultp) {
+                    //             user.getAnAirplaneType(plane_type,function(resultt){
+                    //                 //console.log(resultb);
+                    //                 res.render('bookSeat', {economy: resulte, business: resultb, platinum: resultp, plane_type_name: resultt,trip: req.session.trip});
+                    //             });
+                    //         });
+                    //     });
+                    // });
+                    guests_booked = []
+                    for(i in req.session.guests){
+                        console.log(i);
+                        req.session.guests[i] = parseInt(req.session.guests[i]);
+                        guests_booked.push(req.session.guests[i])
+                    }
+                    req.session.guests_booked = guests_booked;
+    
+                    res.render('add_guest', {guests: req.session.guests,guests_booked: req.session.guests_booked,trip: req.session.trip,type: "a",moment:moment});
+                }
         else{
             res.redirect("/")
         }
 });
 
+// router.get("/bookTrip", (req,res,next) =>{
+//     if(req.session.user){
+//         res.render('add_guest', {guests: req.session.guests,trip: req.session.trip});
+//     }
+//     else{
+//         res.redirect("/")
+//     }
+// });
+
+router.post('/addGuest', (req,res,next)=>{
+    if(req.session.user){
+        let guests_details = req.session.guests_details
+        let adults = parseInt(req.session.guests_booked[0])
+        let children = parseInt(req.session.guests_booked[1])
+        let infants = parseInt(req.session.guests_booked[2])
+        if (adults > 0){
+            let userInput = {
+                guest: "a" + (req.session.guests[0]-req.session.guests_booked[0]).toString(),
+                name: req.body.name,
+                age: req.body.age,
+                gender: req.body.gender,
+                requirements: req.body.requirements
+            }
+            guests_details.push(userInput);
+            adults -= 1
+            req.session.guests_details = guests_details
+            req.session.guests_booked[0] = adults
+            console.log(req.session.guests,req.session.guests_booked,req.session.guests_details)
+            res.render('add_guest', {guests: req.session.guests,guests_booked: req.session.guests_booked,trip: req.session.trip,guests_details: req.session.guests_details,type: "a",moment: moment});
+        }
+        else if(children > 0){
+            let userInput = {
+                guest: "c"+(req.session.guests[1]-req.session.guests_booked[1]).toString(),
+                name: req.body.name,
+                age: req.body.age,
+                gender: req.body.gender,
+                requirements: req.body.requirements
+            }
+            guests_details.push(userInput);
+            children -= 1
+            req.session.guests_details = guests_details
+            req.session.guests_booked[1] = children
+            console.log(req.session.guests,req.session.guests_booked,req.session.guests_details)
+            res.render('add_guest', {guests: req.session.guests,guests_booked: req.session.guests_booked,trip: req.session.trip,guests_details: req.session.guests_details,type:"c",moment: moment});
+        }
+        else if(infants > 0){
+            let userInput = {
+                guest: "i"+(req.session.guests[2]-req.session.guests_booked[2]).toString(),
+                name: req.body.name,
+                age: req.body.age,
+                gender: req.body.gender,
+                requirements: req.body.requirements,
+                guardian: req.body.guardian
+            }
+            guests_details.push(userInput);
+            infants -= 1
+            req.session.guests_details = guests_details
+            req.session.guests_booked[2] = infants
+            console.log(req.session.guests,req.session.guests_booked,req.session.guests_details)
+            res.render('add_guest', {guests: req.session.guests,guests_booked: req.session.guests_booked,trip: req.session.trip,guests_details: req.session.guests_details,type:"i",moment: moment});
+        }
+    }
+    else{
+         res.redirect("/")
+    }
+});
 
 // Get loggout page
 router.get('/loggout', (req, res, next) => {

@@ -2,9 +2,9 @@ extends layout
 
 block content
     .login-panel(style="float:none")
-        +function(economy,business,platinum,plane_type_name)
+        +function(economy,business,platinum,plane_type_name,trip)
 
-mixin function(economy,business,platinum,plane_type_name)
+mixin function(economy,business,platinum,plane_type_name,trip)
     h3 #{plane_type_name.plane_type}
     if platinum != null
             div(id="#{s.seat_id}" class="modal" style="height:10%")
@@ -120,8 +120,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                         else
                                             td
                                                 div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    a(href="/") home
+                                                    include includes/add_guest
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in business
                                 if seat_id.seat_id[7] == "A"
@@ -130,9 +129,8 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
+                                                    include includes/add_guest
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                         tr
                             each seat_id in business
@@ -142,9 +140,8 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+s.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
+                                                    include includes/add_guest
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in business
                                 if seat_id.seat_id[7] == "B"
@@ -153,9 +150,8 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
+                                                    include includes/add_guest
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                         tr(colspan= business.length/4)
                             td(colspan= business.length/4) 
@@ -168,9 +164,8 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+s.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
+                                                    include includes/add_guest
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in business
                                 if seat_id.seat_id[7] == "C"
@@ -179,9 +174,8 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
+                                                    include includes/add_guest
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                         tr
                             each seat_id in business
@@ -191,7 +185,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+s.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
@@ -202,7 +196,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
@@ -217,7 +211,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+s.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
@@ -228,7 +222,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
@@ -240,7 +234,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+s.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
@@ -251,7 +245,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
@@ -266,7 +260,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+s.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
@@ -277,7 +271,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
@@ -289,7 +283,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+s.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
@@ -300,7 +294,7 @@ mixin function(economy,business,platinum,plane_type_name)
                                             td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:10%")
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
                                                     p #{seat_id.seat_id}
                                                     p You should login to your account first.
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
