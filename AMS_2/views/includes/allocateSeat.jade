@@ -1,0 +1,27 @@
+form(method="post" action="/reserveSeat")
+            table 
+                  tr
+                      td This seat is reserved for 
+                      td
+                        +functiong(guest_details)
+                  tr 
+                      td price of a seat
+                      td 
+                        if seat_id.seat_type = "economy"
+                          input(type="text" value= "#{trip.economy_price}.00" name="price" readonly)
+                        else if seat_id.seat_type = "business"
+                          input(type="text" value= "#{trip.business_price}.00" name="price" readonly)
+                        else if seat_id.seat_type = "platinum"
+                          input(type="text" value= "#{trip.platinum_price}.00" name="price" readonly)
+                  tr 
+                      td Make the payment now?  
+                      td 
+                        input(type="checkbox" name="pay")
+                  tr 
+                      td 
+                        input(type="hidden" name="seat_id" value= "#{seat_id.seat_id}")
+                  tr 
+                      td
+                      td
+                      td
+                        input(type="submit" value="Book")

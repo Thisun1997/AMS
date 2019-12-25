@@ -218,7 +218,10 @@ router.get("/bookTrip/:trip_id",(req,res,next)=>{
                         guests_booked.push(req.session.guests[i])
                     }
                     req.session.guests_booked = guests_booked;
-    
+                    var seat_list = []
+                    var total = 0
+                    req.session.seat_list = seat_list
+                    req.session.total = total;
                     res.render('add_guest', {guests: req.session.guests,guests_booked: req.session.guests_booked,trip: req.session.trip,type: "a",moment:moment});
                 }
         else{
@@ -226,14 +229,29 @@ router.get("/bookTrip/:trip_id",(req,res,next)=>{
         }
 });
 
-// router.get("/bookTrip", (req,res,next) =>{
-//     if(req.session.user){
-//         res.render('add_guest', {guests: req.session.guests,trip: req.session.trip});
-//     }
-//     else{
-//         res.redirect("/")
-//     }
-// });
+router.get("/bookTrip", (req,res,next) =>{
+    //console.log(req.session.trip) 
+    if(req.session.user){
+
+        var plane_type = req.session.trip.plane_type_id;
+
+        user.getEconomyAirplaneTypeSeats(plane_type, function(resulte) {
+                user.getBusinessAirplaneTypeSeats(plane_type, function(resultb) {
+                    user.getPlatinumAirplaneTypeSeats(plane_type, function(resultp) {
+                        user.getAnAirplaneType(plane_type,function(resultt){
+                            //console.log(resultb);
+                            // var seat_list = []
+                            // req.session.seat_list = seat_list
+                            res.render('bookSeat', {economy: resulte, business: resultb, platinum: resultp, plane_type_name: resultt,trip: req.session.trip,guest_details: req.session.guests_details,moment: moment,seat_list: req.session.seat_list,total: req.session.total});
+                        });
+                    });
+                });
+            });
+    }
+    else{
+        res.redirect("/")
+    }
+});
 
 router.post('/addGuest', (req,res,next)=>{
     if(req.session.user){
@@ -247,7 +265,10 @@ router.post('/addGuest', (req,res,next)=>{
                 name: req.body.name,
                 age: req.body.age,
                 gender: req.body.gender,
-                requirements: req.body.requirements
+                requirements: req.body.requirements,
+                price: null,
+                seat_id: null,
+                pay: 0
             }
             guests_details.push(userInput);
             adults -= 1
@@ -262,7 +283,10 @@ router.post('/addGuest', (req,res,next)=>{
                 name: req.body.name,
                 age: req.body.age,
                 gender: req.body.gender,
-                requirements: req.body.requirements
+                requirements: req.body.requirements,
+                price: null,
+                seat_id: null,
+                pay: 0
             }
             guests_details.push(userInput);
             children -= 1
@@ -278,19 +302,85 @@ router.post('/addGuest', (req,res,next)=>{
                 age: req.body.age,
                 gender: req.body.gender,
                 requirements: req.body.requirements,
-                guardian: req.body.guardian
+                guardian: req.body.guardian,
+                price: null,
+                seat_id: null,
+                pay: 0
             }
             guests_details.push(userInput);
             infants -= 1
             req.session.guests_details = guests_details
             req.session.guests_booked[2] = infants
-            console.log(req.session.guests,req.session.guests_booked,req.session.guests_details)
+            //console.log(req.session.guests,req.session.guests_booked,req.session.guests_details)
             res.render('add_guest', {guests: req.session.guests,guests_booked: req.session.guests_booked,trip: req.session.trip,guests_details: req.session.guests_details,type:"i",moment: moment});
         }
     }
     else{
          res.redirect("/")
     }
+});
+
+router.post('/reserveSeat', (req,res,next)=>{
+        if(req.session.user){
+            var guest = req.body.guest
+            var price = parseInt(req.body.price)
+            var seat_id = req.body.seat_id
+            var pay = req.body.pay
+            var total = req.session.total
+            if (pay == "on"){
+                pay = 1
+                total = total+price
+            }
+            else{
+                pay = 0
+            }
+            console.log(req.session.total)
+            var guests = req.session.guests_details
+            var seat_list = req.session.seat_list
+            seat_list.push(seat_id)
+            for(i in guests){
+                if (guests[i].guest == guest){
+                    if(guests[i].guest[0] == "c"){
+                        guests[i].price = price;
+                        guests[i].seat_id = seat_id;
+                        guests[i].pay = pay;
+                    }
+                    else if(guests[i].guest[0] == "a"){
+                        guests[i].price = price;
+                        guests[i].seat_id = seat_id;
+                        guests[i].pay = pay;
+                       // console.log(guest[i].price)
+                    }
+                    else{
+                        guests[i].price = price;
+                        guests[i].seat_id = seat_id;
+                        guests[i].pay = pay;
+                        if(pay){
+                            total -= (price*3)/4
+                        }
+                        
+                        x = guests[i].guardian;
+                        for(j in guests){
+                            if(guests[j].name == x){
+                                guests[j].price = price;
+                                guests[j].seat_id = seat_id;
+                                guests[j].pay = pay;
+                            }
+                        }
+                    }
+                }
+                
+            }
+            req.session.total = total
+            res.redirect("/bookTrip")
+            console.log(guests)
+            console.log(req.session.seat_list)
+            
+            console.log(req.session.total)
+        }
+        else{
+            res.redirect("/")
+       }
 });
 
 // Get loggout page

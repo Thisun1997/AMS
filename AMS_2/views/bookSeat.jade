@@ -1,11 +1,12 @@
 extends layout
 
 block content
-    .login-panel(style="float:none")
-        +function(economy,business,platinum,plane_type_name,trip)
-
-mixin function(economy,business,platinum,plane_type_name,trip)
-    h3 #{plane_type_name.plane_type}
+    .login-panel(style="float:left;width:80%")
+        +function(economy,business,platinum,plane_type_name,trip,seat_list)
+    .greeting(style = "float:right;width:19%")
+        +function2(trip,price,moment,total)
+mixin function(economy,business,platinum,plane_type_name,trip,seat_list)
+    h3 seat reservation
     if platinum != null
             div(id="#{s.seat_id}" class="modal" style="height:10%")
                 p You should login to your account first.
@@ -115,44 +116,66 @@ mixin function(economy,business,platinum,plane_type_name,trip)
                             each seat_id in business
                                 if seat_id.seat_id[7] == "A"
                                     if seat_id.seat_id[9] == undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    include includes/add_guest
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in business
                                 if seat_id.seat_id[7] == "A"
                                     if seat_id.seat_id[9] != undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    include includes/add_guest
-                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
+
                         tr
                             each seat_id in business
                                 if seat_id.seat_id[7] == "B"
                                     if seat_id.seat_id[9] == undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    include includes/add_guest
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in business
                                 if seat_id.seat_id[7] == "B"
                                     if seat_id.seat_id[9] != undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                       if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    include includes/add_guest
-                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
+
                         tr(colspan= business.length/4)
                             td(colspan= business.length/4) 
                                 b passage
@@ -160,46 +183,66 @@ mixin function(economy,business,platinum,plane_type_name,trip)
                             each seat_id in business
                                 if seat_id.seat_id[7] == "C"
                                     if seat_id.seat_id[9] == undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    include includes/add_guest
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in business
                                 if seat_id.seat_id[7] == "C"
                                     if seat_id.seat_id[9] != undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    include includes/add_guest
-                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
+
                         tr
                             each seat_id in business
                                 if seat_id.seat_id[7] == "D"
                                     if seat_id.seat_id[9] == undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in business
                                 if seat_id.seat_id[7] == "D"
                                     if seat_id.seat_id[9] != undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
-                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
+
     if economy != null
             h3 Economy Seats
             table( class = "table table2")
@@ -207,48 +250,66 @@ mixin function(economy,business,platinum,plane_type_name,trip)
                             each seat_id in economy
                                 if seat_id.seat_id[7] == "A"
                                     if seat_id.seat_id[9] == undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in economy
                                 if seat_id.seat_id[7] == "A"
                                     if seat_id.seat_id[9] != undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
-                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
+
                         tr
                             each seat_id in economy
                                 if seat_id.seat_id[7] == "B"
                                     if seat_id.seat_id[9] == undefined
-                                       if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                       if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in economy
                                 if seat_id.seat_id[7] == "B"
                                     if seat_id.seat_id[9] != undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
-                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
+
                         tr(colspan= economy.length/4)
                             td(colspan= economy.length/4) 
                                 b passage
@@ -256,47 +317,116 @@ mixin function(economy,business,platinum,plane_type_name,trip)
                             each seat_id in economy
                                 if seat_id.seat_id[7] == "C"
                                     if seat_id.seat_id[9] == undefined
-                                       if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                       if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in economy
                                 if seat_id.seat_id[7] == "C"
                                     if seat_id.seat_id[9] != undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
-                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
+
                         tr
                             each seat_id in economy
                                 if seat_id.seat_id[7] == "D"
                                     if seat_id.seat_id[9] == undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+s.seat_id[8]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
                                                 a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]
                             each seat_id in economy
                                 if seat_id.seat_id[7] == "D"
                                     if seat_id.seat_id[9] != undefined
-                                        if seat_id.ticket_issued == 1
-                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                        if (seat_list[0])
+                                            -var c = 0
+                                            each s in seat_list
+                                                if s == seat_id.seat_id
+                                                    -c += 1
+                                        if seat_id.ticket_issued == 1 || c==1
+                                            td= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
                                         else
                                             td
-                                                div(id="#{seat_id.seat_id}" class="modal" style="height:50%")
-                                                    p #{seat_id.seat_id}
-                                                    p You should login to your account first.
-                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id.seat_id[9]
+                                                div(id="#{seat_id.seat_id}" class="modal" style="height:40%;width:300%")
+                                                    include includes/allocateSeat.jade
+                                                a(href="##{seat_id.seat_id}" rel="modal:open")= seat_id.seat_id[7]+seat_id.seat_id[8]+seat_id[9]
+
     else 
         p  No Airplane types found
+
+mixin function2(trip,price,moment,total)
+    p Date #{moment(trip.date).format('YYYY-MM-DD')}
+    p from #{trip.dept_code}(#{trip.dept_city}) 
+    p to #{trip.dest_code}(#{trip.dest_city}) 
+    p depatuer time: #{trip.dept_time} 
+    p arrival time: #{trip.arr_time}
+    p total:$ #{total}.00
+
+
+mixin functiong(guest_details)
+    -var array1=[]
+    -var array2=[]
+    -var array3=[]
+    -var array4=[]
+    if guest_details != null
+        each a in guest_details
+            if a.guest[0] == "a"
+              -array1.push(a)
+        
+        each i in guest_details 
+            if i.guest[0] == "i"
+                -array2.push(i)
+            
+        each a in array1
+            each g in array2
+                if g.guardian == a.name
+                    -array3.push(a)
+
+        each m in array1
+            -var c = 0
+            each n in array3
+                if m.guest == n.guest
+                    -c += 1
+            if c == 0
+                -array4.push(m)
+
+        
+        select(name="guest")
+            each k in array4
+                if k.seat_id == null
+                     option(value="#{k.guest}") #{k.name}
+
+            each i in guest_details
+                if i.seat_id == null 
+                    if i.guest[0] == "i"
+                            option(value="#{i.guest}") #{i.guardian} ( with #{i.name} ) 
+                    else if i.guest[0] == "c"
+                        option(value="#{i.guest}") #{i.name}
+            
+            

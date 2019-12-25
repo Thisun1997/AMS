@@ -49,7 +49,7 @@ mixin function(guests,trip,type,guests_booked)
                     tr
                         td age 
                         td 
-                            input(type="number" class="guest_num" name="age" min="4" max="11" required)
+                            input(type="number" class="guest_num" name="age" min="4" max="17" required)
 
                     tr
                         td gender 
@@ -96,13 +96,28 @@ mixin function(guests,trip,type,guests_booked)
                         td
                         td
                             input(type="submit" value="Add")
+        else
+            a(href="/bookTrip" rel="noopener" class="btn btn-sm btn-danger") Proceed
+             
 
 mixin function3(guests_details)
+    -var c = 0;
     if guests_details != null
+        each i in guests_details
+                if i.guest[0] == "i"
+                    -c +=1
         select(name="guardian")
-            each guardian in guests_details
-                if guardian.guest[0] == "a"
-                    option(value="#{guardian.name}") #{guardian.name}
+            each i in guests_details
+                if i.guest[0] == "i"
+                    each guardian in guests_details
+                        if guardian.guest[0] == "a"
+                            if guardian.name != i.guardian
+                                option(value="#{guardian.name}") #{guardian.name}
+                                break
+                else if c == 0
+                    if i.guest[0] == "a"
+                        option(value="#{i.name}") #{i.name}
+
 
 mixin function2(guests_details)
     if(guests_details != null)

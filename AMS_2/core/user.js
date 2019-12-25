@@ -180,6 +180,7 @@ User.prototype = {
             if(err) throw err
            
             if(result.length) {
+                //console.log(result);
                 callback(result);
             }else {
                 callback(null);
