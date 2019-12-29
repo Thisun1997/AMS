@@ -5,6 +5,10 @@ form(method="post" action="/reserveSeat")
                       td
                         +functiong(guest_details)
                   tr 
+                      td Seat type
+                      td 
+                        input(type="text" name="seat_type" value= "#{seat_id.seat_type}")
+                  tr 
                       td price of a seat
                       td 
                         if seat_id.seat_type = "economy"

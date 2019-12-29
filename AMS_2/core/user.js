@@ -128,7 +128,7 @@ User.prototype = {
             //console.log(user);
             if(user) {
                 // now we check his password.
-                if(password = user.password) {
+                if(password == user.password) {
                     // return his data.
                     callback(user);
                     return;

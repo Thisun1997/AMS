@@ -219,7 +219,9 @@ router.get("/bookTrip/:trip_id",(req,res,next)=>{
                     }
                     req.session.guests_booked = guests_booked;
                     var seat_list = []
-                    var total = 0
+                    var seat_type_count = [0,0,0]
+                    var total = parseFloat("0.00")
+                    req.session.seat_type_count = seat_type_count
                     req.session.seat_list = seat_list
                     req.session.total = total;
                     res.render('add_guest', {guests: req.session.guests,guests_booked: req.session.guests_booked,trip: req.session.trip,type: "a",moment:moment});
@@ -323,65 +325,90 @@ router.post('/addGuest', (req,res,next)=>{
 router.post('/reserveSeat', (req,res,next)=>{
         if(req.session.user){
             var guest = req.body.guest
-            var price = parseInt(req.body.price)
-            var seat_id = req.body.seat_id
-            var pay = req.body.pay
-            var total = req.session.total
-            if (pay == "on"){
-                pay = 1
-                total = total+price
-            }
-            else{
-                pay = 0
-            }
-            console.log(req.session.total)
-            var guests = req.session.guests_details
-            var seat_list = req.session.seat_list
-            seat_list.push(seat_id)
-            for(i in guests){
-                if (guests[i].guest == guest){
-                    if(guests[i].guest[0] == "c"){
-                        guests[i].price = price;
-                        guests[i].seat_id = seat_id;
-                        guests[i].pay = pay;
+            if(guest != null){
+                var price = parseFloat(req.body.price)
+                var seat_id = req.body.seat_id
+                var seat_type = req.body.seat_type
+                var pay = req.body.pay
+                var total = req.session.total
+                var seat_list = req.session.seat_list
+                var seat_type_count = req.session.seat_type_count
+                seat_list.push(seat_id)
+                if (pay == "on"){
+                    pay = 1
+                    total = total+price
+                    if(seat_type == "economy"){
+                        seat_type_count[0] += 1
                     }
-                    else if(guests[i].guest[0] == "a"){
-                        guests[i].price = price;
-                        guests[i].seat_id = seat_id;
-                        guests[i].pay = pay;
-                       // console.log(guest[i].price)
+                    else if(seat_type == "business"){
+                        seat_type_count[1] += 1
                     }
-                    else{
-                        guests[i].price = price;
-                        guests[i].seat_id = seat_id;
-                        guests[i].pay = pay;
-                        if(pay){
-                            total -= (price*3)/4
+                    if(seat_type == "platinum"){
+                        seat_type_count[2] += 1
+                    }
+                }
+                else{
+                    pay = 0
+                    price = 0
+                }
+                console.log(req.session.total)
+                var guests = req.session.guests_details
+                for(i in guests){
+                    if (guests[i].guest == guest){
+                        if(guests[i].guest[0] == "c"){
+                            guests[i].price = price;
+                            guests[i].seat_id = seat_id;
+                            guests[i].pay = pay;
                         }
-                        
-                        x = guests[i].guardian;
-                        for(j in guests){
-                            if(guests[j].name == x){
-                                guests[j].price = price;
-                                guests[j].seat_id = seat_id;
-                                guests[j].pay = pay;
+                        else if(guests[i].guest[0] == "a"){
+                            guests[i].price = price;
+                            guests[i].seat_id = seat_id;
+                            guests[i].pay = pay;
+                        // console.log(guest[i].price)
+                        }
+                        else{
+                            guests[i].price = (price)/4;
+                            guests[i].seat_id = seat_id;
+                            guests[i].pay = pay;
+                            if(pay){
+                                total += (parseInt(price))/4
+                            }
+                            
+                            x = guests[i].guardian;
+                            for(j in guests){
+                                if(guests[j].name == x){
+                                    guests[j].price = price;
+                                    guests[j].seat_id = seat_id;
+                                    guests[j].pay = pay;
+                                }
                             }
                         }
                     }
+                    
                 }
-                
+                req.session.total = total
+                req.session.seat_type_count = seat_type_count
+                res.redirect("/bookTrip")
+                console.log(guests)
+                console.log(req.session.seat_list)
+                console.log(seat_type_count)
+                console.log(req.session.total)
             }
-            req.session.total = total
-            res.redirect("/bookTrip")
-            console.log(guests)
-            console.log(req.session.seat_list)
-            
-            console.log(req.session.total)
+            else{
+                res.redirect("/bookTrip")
+            }
         }
         else{
             res.redirect("/")
-       }
+        }
+        
 });
+
+router.post('/reservation',(req,res,next)=>{
+    if(req.session.user){
+        console.log(req.session.guests_details)
+    }
+})
 
 // Get loggout page
 router.get('/loggout', (req, res, next) => {
