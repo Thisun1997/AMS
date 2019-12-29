@@ -406,7 +406,7 @@ router.post('/reserveSeat', (req,res,next)=>{
 
 router.post('/reservation',(req,res,next)=>{
     if(req.session.user){
-        console.log(req.session.guests_details)
+        
     }
 })
 
