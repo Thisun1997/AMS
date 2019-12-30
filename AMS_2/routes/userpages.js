@@ -95,8 +95,11 @@ router.get('/home', (req, res, next) => {
 router.post('/login', (req, res, next) => {
     // The data sent from the user are stored in the req.body object.
     // call our login function and it will return the result(the user data).
+
     user.login(req.body.email, req.body.password, function(result) {
+        
         if(result) {
+          
             // Store the user data in a session.
             req.session.user = result;
             req.session.x = 1;
@@ -104,6 +107,7 @@ router.post('/login', (req, res, next) => {
             // redirect the user to the home page.
             res.redirect('/home');
         }else {
+            
             // if the login function returns null send this error message back to the user.
             user.getAirports(function(result2){
                 res.render('index',{msg2:'Username/Password incorrect!',locations: result2});
@@ -126,6 +130,7 @@ router.get('/loginGuest',(req,res,next)=>{
 
 // Post register data
 router.post('/register', (req, res, next) => {
+    
     let userInput1 = {
         full_name: req.body.full_name,
         date_of_birth: req.body.date_of_birth,
