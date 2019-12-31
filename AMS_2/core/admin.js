@@ -227,6 +227,43 @@ Admin.prototype = {
         
     },
 
+    getUpdateDelayTable : function(shedule_id,dept_time,reason,callback){
+        let sql1 = 'insert into delay(delay_time,reason) values(?,?)';
+        let sql2 = 'UPDATE shedule SET delay_id = ? WHERE shedule_id = ?';
+
+        let bind1 = [dept_time,reason];
+        
+
+        pool.query(sql1, bind1, function(err, result) {
+            if(err) throw err;
+            var id = result.insertId;
+            let bind2 = [id,shedule_id]
+            
+            pool.query(sql2,bind2, function(err,result){
+                if(err) throw err;
+                callback(result);
+            })
+        });
+    },
+
+    getTodayRoutesDetails : function(callback){
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+       // console.log(date);
+        let sql = 'SELECT * FROM today_routes WHERE date = ?';
+        //==========================================================================================
+        //hard corded the time
+        pool.query(sql, ['2019-12-12'], function(err, result) {
+            if(err) throw err
+           
+            if(result.length) {
+                callback(result);
+            }else {
+                callback(null);
+            }
+        });
+    },
+
     getEconomyAirplaneTypeSeats : function(plane_type_id = null, callback)
     {
         let sql = `SELECT seat_id FROM seat WHERE plane_type_id = ? AND seat_type = "economy"`;
