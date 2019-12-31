@@ -197,20 +197,6 @@ router.get("/bookTrip/:trip_id",(req,res,next)=>{
                         }
                     }
                     console.log(req.session.trip);
-                    //console.log(req.session);
-                    //res.render('guestlogin', {title:"My application",locations: req.session.locations,search: req.session.search,moment: moment});
-                    //let plane_type = req.session.trip.plane_type_id;
-                    //console.log(plane_type);
-                    // user.getEconomyAirplaneTypeSeats(plane_type, function(resulte) {
-                    //     user.getBusinessAirplaneTypeSeats(plane_type, function(resultb) {
-                    //         user.getPlatinumAirplaneTypeSeats(plane_type, function(resultp) {
-                    //             user.getAnAirplaneType(plane_type,function(resultt){
-                    //                 //console.log(resultb);
-                    //                 res.render('bookSeat', {economy: resulte, business: resultb, platinum: resultp, plane_type_name: resultt,trip: req.session.trip});
-                    //             });
-                    //         });
-                    //     });
-                    // });
                     guests_booked = []
                     for(i in req.session.guests){
                         console.log(i);
@@ -234,12 +220,11 @@ router.get("/bookTrip/:trip_id",(req,res,next)=>{
 router.get("/bookTrip", (req,res,next) =>{
     //console.log(req.session.trip) 
     if(req.session.user){
-
         var plane_type = req.session.trip.plane_type_id;
-
-        user.getEconomyAirplaneTypeSeats(plane_type, function(resulte) {
-                user.getBusinessAirplaneTypeSeats(plane_type, function(resultb) {
-                    user.getPlatinumAirplaneTypeSeats(plane_type, function(resultp) {
+        let userinput = [req.session.trip.plane_type_id,req.session.trip.trip_id];
+        user.getEconomyAirplaneTypeSeats(userinput, function(resulte) {
+                user.getBusinessAirplaneTypeSeats(userinput, function(resultb) {
+                    user.getPlatinumAirplaneTypeSeats(userinput, function(resultp) {
                         user.getAnAirplaneType(plane_type,function(resultt){
                             //console.log(resultb);
                             // var seat_list = []
@@ -406,8 +391,29 @@ router.post('/reserveSeat', (req,res,next)=>{
 
 router.post('/reservation',(req,res,next)=>{
     if(req.session.user){
-        
+        let userInput1 = {
+            passenger_id: req.session.user.passenger_id,
+            trip_id: req.session.trip.trip_id
+        }
+        let userInput2 = {
+            economy: req.session.seat_type_count[0],
+            business: req.session.seat_type_count[1],
+            platinum: req.session.seat_type_count[2],
+            trip_id: req.session.trip.trip_id,
+            passenger_id: req.session.user.passenger_id
+        }
+        let userInput3 = {
+            guests: req.session.guests_details
+        }
+        console.log(userInput1,userInput2,userInput3)
+        user.makeReservation(userInput1,userInput2,userInput3,function(result){
+            res.redirect('/');
+        });
     }
+    else{
+        res.redirect("/")
+    }
+    
 })
 
 // Get loggout page

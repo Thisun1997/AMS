@@ -173,53 +173,139 @@ User.prototype = {
         });
     },
 
-    getEconomyAirplaneTypeSeats : function(plane_type_id = null, callback)
+    getEconomyAirplaneTypeSeats : function(userInput, callback)
     {
-        let sql = `SELECT * FROM seat LEFT OUTER JOIN ticket USING (seat_id) WHERE plane_type_id = ? AND seat_type = "economy"`;
-        pool.query(sql, plane_type_id,  function(err, result) {
+        let sql = `SELECT * FROM seat LEFT OUTER JOIN (ticket_reservation NATURAL JOIN reservation_member) USING (seat_id) WHERE plane_type_id = ? AND seat_type = "economy" AND trip_id = ?`
+        pool.query(sql, userInput, function(err, result1) {
             if(err) throw err
            
-            if(result.length) {
-                //console.log(result);
-                callback(result);
-            }else {
-                callback(null);
-            }
+            
+                let sql = `SELECT * FROM seat WHERE plane_type_id = ? AND seat_type = "economy"`
+                pool.query(sql, userInput, function(err, result2) {
+                    if(err) throw err
+                    if(result1.length) {
+                        if(result2.length) {
+                            for(i in result2){
+                                result2[i].ticket_issued = null
+                            }
+                            for(i in result1){
+                                for(j in result2){
+                                    if(result2[j].seat_id == result1[i].seat_id){
+                                        result2[j].ticket_issued = result1[i].ticket_issued
+                                    }
+                                }
+                            }
+                            console.log(result2)
+                            callback(result2)
+                        }else {
+                            callback(null);
+                        }
+                    }
+                    else{
+                        if(result2.length) {
+                            for(i in result2){
+                                result2[i].ticket_issued = null
+                            }
+                            callback(result2)
+                        }
+                        else{
+                            callback(null)
+                        }
+
+                    }
+                });
         });
     },
 
-    getBusinessAirplaneTypeSeats : function( plane_type_id = null, callback)
+    getBusinessAirplaneTypeSeats : function( userInput, callback)
     {
-        let sql = `SELECT * FROM seat LEFT OUTER JOIN ticket USING (seat_id) WHERE plane_type_id = ? AND seat_type = "business"`
-        pool.query(sql, plane_type_id, function(err, result) {
+        let sql = `SELECT * FROM seat LEFT OUTER JOIN (ticket_reservation NATURAL JOIN reservation_member) USING (seat_id) WHERE plane_type_id = ? AND seat_type = "business" AND trip_id = ?`
+        pool.query(sql, userInput, function(err, result1) {
             if(err) throw err
            
-            if(result.length) {
-                callback(result);
-            }else {
-                callback(null);
-            }
+            
+                let sql = `SELECT * FROM seat WHERE plane_type_id = ? AND seat_type = "business"`
+                pool.query(sql, userInput, function(err, result2) {
+                    if(err) throw err
+                    if(result1.length) {
+                        if(result2.length) {
+                            for(i in result2){
+                                result2[i].ticket_issued = null
+                            }
+                            for(i in result1){
+                                for(j in result2){
+                                    if(result2[j].seat_id == result1[i].seat_id){
+                                        result2[j].ticket_issued = result1[i].ticket_issued
+                                    }
+                                }
+                            }
+                            console.log(result2)
+                            callback(result2)
+                        }else {
+                            callback(null);
+                        }
+                    }
+                    else{
+                        if(result2.length) {
+                            for(i in result2){
+                                result2[i].ticket_issued = null
+                            }
+                            callback(result2)
+                        }
+                        else{
+                            callback(null)
+                        }
+                    }
+                });
         });
     },
 
-    getPlatinumAirplaneTypeSeats : function(plane_type_id = null, callback)
+    getPlatinumAirplaneTypeSeats : function(userInput, callback)
     {
-        let sql = `SELECT * FROM seat LEFT OUTER JOIN ticket USING (seat_id) WHERE plane_type_id = ? AND seat_type = "platinum"`
-        pool.query(sql, plane_type_id, function(err, result) {
+        let sql = `SELECT * FROM seat LEFT OUTER JOIN (ticket_reservation NATURAL JOIN reservation_member) USING (seat_id) WHERE plane_type_id = ? AND seat_type = "platinum" AND trip_id = ?`
+        pool.query(sql, userInput, function(err, result1) {
             if(err) throw err
            
-            if(result.length) {
-                callback(result);
-            }else {
-                callback(null);
-            }
+            
+                let sql = `SELECT * FROM seat WHERE plane_type_id = ? AND seat_type = "platinum"`
+                pool.query(sql, userInput, function(err, result2) {
+                    if(err) throw err
+                    if(result1.length) {
+                        if(result2.length) {
+                            for(i in result2){
+                                result2[i].ticket_issued = null
+                            }
+                            for(i in result1){
+                                for(j in result2){
+                                    if(result2[j].seat_id == result1[i].seat_id){
+                                        result2[j].ticket_issued = result1[i].ticket_issued
+                                    }
+                                }
+                            }
+                            console.log(result2)
+                            callback(result2)
+                        }else {
+                            callback(null);
+                        }
+                    }
+                    else{
+                        if(result2.length) {
+                            for(i in result2){
+                                result2[i].ticket_issued = null
+                            }
+                            callback(result2)
+                        }
+                        else{
+                            callback(null)
+                        }
+
+                    }
+                });
         });
     },
     getAnAirplaneType : function(plane_type_id = null,callback)
     {
         let sql = `SELECT * FROM plane_type WHERE plane_type_id = ?`;
-
-
         pool.query(sql, plane_type_id, function(err, result) {
             if(err) throw err
            
@@ -230,6 +316,66 @@ User.prototype = {
             }
         });
     },
+
+    makeReservation : function(body1, body2, body3, callback)
+    {
+        var bind1 = []
+        var bind2 = []
+        var bind3 = []
+        for(prop in body1){
+            bind1.push(body1[prop]);
+        }
+        let sql = `INSERT INTO reservation_member(passenger_id, trip_id) VALUES (?, ?)`;
+        pool.beginTransaction(function(err){
+            if(err) throw err;
+            pool.query(sql, bind1, function(err, result) {
+                if(err){
+                    pool.rollback(function(){
+                        throw err;
+                    });
+                }
+                var reservation_id = result.insertId; 
+                let sql = `CALL update_trip_seats(?,?,?,?,?)`
+                for(prop in body2){
+                    bind2.push(body2[prop]);
+                }
+                //console.log(bind2);
+                pool.query(sql, bind2, function(err, result) {
+                    if(err){
+                        pool.rollback(function() {
+                            throw err;
+                        });
+                    }
+                    var b = body3["guests"]
+                    for(i in b){
+                        console.log(i)
+                        bind3.push([reservation_id,b[i].name, b[i].age, b[i].gender, b[i].requirements, b[i].price, b[i].seat_id, b[i].pay]);
+                    }
+                    console.log(bind3)
+                    let sql = `INSERT INTO ticket_reservation(reservation_id, full_name,age,gender,requirements,price,seat_id,ticket_issued) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                            for (i in bind3){
+                                pool.query(sql, bind3[i], function(err, result) {
+                                    if(err){
+                                        pool.rollback(function() {
+                                            throw err;
+                                        });
+                                    }
+                                    pool.commit(function(err) {
+                                        if (err) { 
+                                            pool.rollback(function() {
+                                            throw err;
+                                        });
+                                        }
+                                        console.log('Transaction Complete.');
+                                    });
+                                });
+                            }
+                            callback(reservation_id)
+                });
+
+            });
+        });
+    }
 
 }
 
