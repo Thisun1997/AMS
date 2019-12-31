@@ -6,29 +6,29 @@ function User() {};
 
 User.prototype = {
     // Find the user data by id or username.
-    findguest : function(user = null, callback)
-    {
-        let sql = `SELECT * FROM guest_passenger WHERE passenger_id = ?`;
+    // findguest : function(user = null, callback)
+    // {
+    //     let sql = `SELECT * FROM guest_passenger WHERE passenger_id = ?`;
 
 
-        pool.query(sql, user, function(err, result) {
-            if(err) throw err
+    //     pool.query(sql, user, function(err, result) {
+    //         if(err) throw err
            
-            if(result.length) {
-                callback(result[0]);
-            }else {
-                callback(null);
-            }
-        });
-    },
+    //         if(result.length) {
+    //             callback(result[0]);
+    //         }else {
+    //             callback(null);
+    //         }
+    //     });
+    // },
 
     findmember : function(user = null, callback)
     {
         if (Number.isInteger(user)){
-            sql = `SELECT * FROM user_account NATURAL JOIN member_passenger WHERE passenger_id = ?`;
+            sql = `SELECT * FROM user_account NATURAL JOIN member_passenger LEFT OUTER JOIN passenger_category USING(category_id) WHERE passenger_id = ?`;
         }
         else{
-            sql = `SELECT * FROM user_account NATURAL JOIN member_passenger WHERE email = ?`;
+            sql = `SELECT * FROM user_account NATURAL JOIN member_passenger LEFT OUTER JOIN passenger_category USING(category_id) WHERE email = ?`;
         }
         pool.query(sql, user, function(err, result) {
             if(err) throw err
@@ -43,20 +43,20 @@ User.prototype = {
 
     // This function will insert data into the database. (create a new user)
     // body is an object 
-    createGuest : function(body, callback) 
-    { 
-        var bind = [];
-        for(prop in body){
-            bind.push(body[prop]);
-        }
-        let sql = `INSERT INTO guest_passenger(full_name, email, date_of_birth, gender, citizenship) VALUES (?, ?, ?, ?, ?)`;
-        // call the query give it the sql string and the values (bind array)
-        pool.query(sql, bind, function(err, result) {
-            if(err) throw err;
-            // return the last inserted id. if there is no error
-            callback(result.insertId);
-        });
-    },
+    // createGuest : function(body, callback) 
+    // { 
+    //     var bind = [];
+    //     for(prop in body){
+    //         bind.push(body[prop]);
+    //     }
+    //     let sql = `INSERT INTO guest_passenger(full_name, email, date_of_birth, gender, citizenship) VALUES (?, ?, ?, ?, ?)`;
+    //     // call the query give it the sql string and the values (bind array)
+    //     pool.query(sql, bind, function(err, result) {
+    //         if(err) throw err;
+    //         // return the last inserted id. if there is no error
+    //         callback(result.insertId);
+    //     });
+    // },
 
     createMember : function(body1, body2, callback) 
     {

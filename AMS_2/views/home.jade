@@ -8,8 +8,8 @@ mixin message(opp, user)
             p email address: #{user.email}
             p date of birth: #{moment(user.date_of_birth).format('YYYY-MM-DD')}
             p citizenship: #{user.citizenship}
-            p total number of reservations:
-            p passenger category:
+            p total number of reservations: #{user.no_of_reservations}
+            p passenger category: #{user.category_name}
     else 
         h1.greeting(style="margin-bottom:100px;") Welcome 
             span=user.full_name  
