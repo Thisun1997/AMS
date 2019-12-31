@@ -31,12 +31,12 @@ router.get('/', (req, res, next) => {
         }
         else if(req.session.msg){
             user.getAirports(function(result2){
-                res.render('index', {title:"My application",locations: result2,msg: req.session.msg})
+                res.render('index', {title:"My application",locations: result2,msg: req.session.msg,moment:moment})
             });
         }
         else{
             user.getAirports(function(result2){
-                res.render('index', {title:"My application",locations: result2})
+                res.render('index', {title:"My application",locations: result2,moment:moment})
             });
         }
     }
@@ -229,7 +229,7 @@ router.get("/bookTrip", (req,res,next) =>{
                             //console.log(resultb);
                             // var seat_list = []
                             // req.session.seat_list = seat_list
-                            res.render('bookSeat', {economy: resulte, business: resultb, platinum: resultp, plane_type_name: resultt,trip: req.session.trip,guest_details: req.session.guests_details,moment: moment,seat_list: req.session.seat_list,total: req.session.total});
+                            res.render('bookSeat', {user: req.session.user,economy: resulte, business: resultb, platinum: resultp, plane_type_name: resultt,trip: req.session.trip,guest_details: req.session.guests_details,moment: moment,seat_list: req.session.seat_list,total: req.session.total});
                         });
                     });
                 });

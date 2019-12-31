@@ -1,7 +1,7 @@
 const pool = require('./pool');
 //const bcrypt = require('bcryptjs');
 
-
+var bcrypt = require('bcrypt-nodejs');
 function User() {};
 
 User.prototype = {
@@ -68,6 +68,7 @@ User.prototype = {
         // this array will contain the values of the fields.
         var bind1 = [];
         var bind2 = [];
+        var bind3 = [];
         // loop in the attributes of the object and push the values into the bind array.
         for(prop in body1){
             bind1.push(body1[prop]);
@@ -95,7 +96,14 @@ User.prototype = {
                         for(prop in body2){
                             bind2.push(body2[prop]);
                         }
-                        pool.query(sql, bind2, function(err, result) {
+                        newEmail= body2['email']
+                        newpassword= body2['password']
+                        encryptPassword= bcrypt.hashSync(newpassword,null,null)
+     
+                        bind3.push(log)
+                        bind3.push(newEmail)
+                        bind3.push(encryptPassword);
+                        pool.query(sql, bind3, function(err, result) {
                             if(err){
                                 pool.rollback(function() {
                                     throw err;
@@ -127,12 +135,17 @@ User.prototype = {
             // if there is a user by this username.
             //console.log(user);
             if(user) {
-                // now we check his password.
-                if(password == user.password) {
+                if(bcrypt.compareSync(password,user.password)){
                     // return his data.
                     callback(user);
                     return;
-                }  
+                }
+                // now we check his password.
+                // if(password == user.password) {
+                //     // return his data.
+                //     callback(user);
+                //     return;
+                // }  
             }
             // if the username/password is wrong then return null.
             callback(null);

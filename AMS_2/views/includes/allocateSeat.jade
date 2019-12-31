@@ -9,10 +9,16 @@ form(method="post" action="/reserveSeat")
                       td 
                         input(type="text" name="seat_type" value= "#{seat_id.seat_type}")
                   tr 
-                      td price of a seat
-                      td 
                         if seat_id.seat_type = "economy"
-                          input(type="text" value= "#{trip.economy_price}.00" name="price" readonly)
+                          if user.category_id & trip.available_economy_seats <= 5
+                            td price of a seat 
+                              b (discounted)
+                            td
+                              input(type="text" value= "#{trip.economy_price*user.discount*0.01}.00" name="price" readonly)
+                          else
+                            td price of a seat
+                            td
+                              input(type="text" value= "#{trip.economy_price}.00" name="price" readonly)
                         else if seat_id.seat_type = "business"
                           input(type="text" value= "#{trip.business_price}.00" name="price" readonly)
                         else if seat_id.seat_type = "platinum"

@@ -23,6 +23,7 @@ append links
 block content
     script(type='text/javascript', src='/javascripts/location.js')
     script(type='text/javascript', src='/javascripts/guest_input.js')
+    script(type='text/javascript', src='/javascripts/date.js')
 
     .dashboard_user
             +message(opp, user)
@@ -33,7 +34,7 @@ block content
                   tr
                       th date 
                       td 
-                          input(type="date" name="date")
+                          input(type="date" name="date" id="txtDate")
                   tr 
                       th From  
                       td 

@@ -1,8 +1,10 @@
 extends admin
 
 block content
+    script(type='text/javascript', src='/javascripts/date.js')
+
     .login-panel(style="float:none; padding-left:200px")
-        h3 Add a route
+        h3 Add a Shedule
         +functione(msg)
         +functions(msg2)
         br
@@ -11,7 +13,7 @@ block content
                 tr
                     td date 
                     td 
-                        input(type="date" name="date")
+                        input(type="date" name="date" id="txtDate")
                 tr 
                     td Route
                     td 
@@ -30,7 +32,7 @@ block content
                 tr
                     td select date to edit the added trips 
                     td 
-                        input(type="date" name="date")
+                        input(type="date" name="date" id="txtDate2")
                 tr 
                     td
                     td

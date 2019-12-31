@@ -446,21 +446,11 @@ Admin.prototype = {
     getDate : function(callback)
     {
         let date_ob = new Date();
-        date_ob.setMonth(date_ob.getMonth()+3)
         let date = ("0" + date_ob.getDate()).slice(-2);
         let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
         let year = date_ob.getFullYear();
         let day1 = year + "-" + month + "-" + date ;
-
-        
-        date_ob.setDate(date_ob.getDate()+6)
-        let date2 = ("0" + date_ob.getDate()).slice(-2);
-        let month2 = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-        let year2 = date_ob.getFullYear();
-        let day2 = year2 + "-" + month2 + "-" + date2 ;
-
-        let dates = [day1,day2]
-        callback(dates)
+        callback(day1)
     },
 
     getSheduleDates : function(callback)

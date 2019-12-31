@@ -12,28 +12,14 @@ $(document).ready(function() {
       var confirm_password = $('#confirm_password').val();
    
       $(".error_2").remove();
-   
-      if (full_name.length < 1) {
-        $('#full_name').after('<std class="error_2">This field is required</td>');
-      }
-      if (gender.length < 1) {
-        $('#gender').after('<td class="error_2">This field is required</td>');
-      }
-      if (citizenship.length < 1) {
-        $('#citizenship').after('<td class="error_2">This field is required<</td>');
-      } if (email.length < 1) {
-        $('#email').after('<td class="error_2">This field is required</td>');
-      }
-      if (password.length < 8) {
+  
+      if (password.length < 6) {
         $('#password').after('<td class="error_2">Password must be at least 8 characters long</td>');
       }
-      if (date_of_birth.length < 8) {
-        $('#date_of_birth').after('<td class="error_2">date_of_birth must be at least 8 characters long</td>');
-      }
-      if(confirm_password.length<1){
+      else if(confirm_password.length<1){
         $('#confirm_password').after('<td class="error_2">Password must be at provided</td>');
       }
-        else {
+      else {
         var regEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         var validEmail = regEx.test(email);
         if (!validEmail || password != confirm_password) {
