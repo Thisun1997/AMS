@@ -1,0 +1,127 @@
+extends admin
+
+block content
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Add a Delay
+        +functione(msg)
+        +functions(msg2)
+        br
+        form(method="post" action="/admin/postDelayShedule")
+            table 
+                tr 
+                    td Trip
+                    td 
+                        +function(tripDetails)
+                tr  
+                    td Reason 
+                    td
+                        textarea(name="reason", cols="10", rows="2" required)
+                tr
+                    td New Departure time
+                    td 
+                        input(type="time" name="dept_time" value="" required)
+               
+                tr 
+                    td
+                    td
+                        input(type="submit" value="Add a Delay")
+
+                     
+    //- .login-panel(style="float:none; padding-left:200px; margin-top: 10px")
+    //-     +function1(timetable,timedata,route)
+    
+    //- .login-panel(style="float:none; padding-left:200px; margin-top: 10px")
+    //-     form(method="post" action="/admin/viewTrips")
+    //-         table
+    //-             tr
+    //-                 td select date to edit the added trips 
+    //-                 td 
+    //-                     input(type="date" name="date")
+    //-             tr 
+    //-                 td
+    //-                 td
+    //-                     input(type="submit" value="Proceed to edit")
+                
+
+mixin function(tripDetails)
+    if tripDetails!= null
+        select(name="shedule_id")
+            each trip in tripDetails
+                option(value="#{trip.shedule_id}") #{trip.x} -> #{trip.y} - #{trip.dept_time} -> #{trip.arr_time} #{trip.shedule_id}
+    else
+        p no trips for today!
+
+//- mixin function1(timetable,timedata,route)
+//-     form(method="post" action="/admin/addTrip")
+//-         if timetable != null
+//-             h5 Shedule and trip details
+//-             table
+//-                 tr
+//-                     td date 
+//-                     td 
+//-                         input(type="date" name="date" value="#{timetable[0]}" readonly = "true")
+//-                     td 
+//-                         input(type="hidden" name="time_table_id" value="#{timetable[1]}" readonly = "true")
+//-                 tr 
+//-                     td Route
+//-                     td
+//-                         input(type="text" name="route" value="#{route.x} -> #{route.y} - #{route.company_plane_code}" readonly = "true")
+//-                     td
+//-                         input(type="hidden" name="route_id" value="#{route.route_id}" readonly = "true")
+//-                 if timedata != null
+//-                     tr
+//-                         td depature time 
+//-                         td 
+//-                             input(type="time" name="dept_time" value="#{timedata.dept_time}")
+//-                     tr
+//-                         td arrival time 
+//-                         td 
+//-                             input(type="time" name="arr_time" value="#{timedata.arr_time}")
+//-                 else
+//-                     tr
+//-                         td depature time 
+//-                         td 
+//-                             input(type="time" name="dept_time")
+//-                     tr
+//-                         td arrival time 
+//-                         td 
+//-                             input(type="time" name="arr_time")
+//-                 +function2(seats)
+//-                 tr 
+//-                     td
+//-                     td
+//-                         input(type="submit" value="complete sheduling")
+//-         else
+//-             p add date and select route and click on proceed to shedule to enter other details..
+                
+
+
+mixin functione(msg)
+    if(msg)
+        .error
+            p #{msg}
+
+mixin functions(msg2)
+    if(msg2)
+        .success
+            p #{msg2}
+
+//- mixin function2(seats)
+//-             if(seats.tot_economy_seats)
+//-                 tr
+//-                     td Price of an economy seat 
+//-                         b (in $)
+//-                     td 
+//-                         input(type="text" name="economy_price")
+//-             if(seats.tot_business_seats)
+//-                 tr
+//-                     td Price of a business seat 
+//-                         b (in $)
+//-                     td 
+//-                         input(type="text" name="business_price")
+//-             if(seats.tot_platinum_seats)
+//-                 tr
+//-                     td Price of a platinum seat 
+//-                         b (in $)
+//-                     td 
+//-                         input(type="text" name="platinum_price")

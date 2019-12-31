@@ -9,83 +9,103 @@ const admin = new Admin();
 const validate = new Validate();
 
 // Get the index page
-router.get('/',checkNoAuthenticated, (req, res, next) => {
+router.get('/', checkNoAuthenticated, (req, res, next) => {
     let user = req.session.user;
     // If there is a session named user that means the use is logged in. so we redirect him to home page by using /home route below
-    validate.checkAdmin(user,function(result){
-        if(result) {
+    validate.checkAdmin(user, function (result) {
+        if (result) {
             res.redirect('/admin/home');
             return;
         }
-        else{
+        else {
             res.redirect('/');
         }
     });
     // IF not we just send the index page.
-    
+
 });
 
 // Get home page
 router.get('/home', (req, res, next) => {
     let user = req.session.user;
-    validate.checkAdmin(user,function(result){
-        if(result) {
-            res.render('admin', {opp:req.session.opp, name:user.full_name});
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            res.render('admin', { opp: req.session.opp, name: user.full_name });
             return;
         }
-        else{
-            if(user){
+        else {
+            if (user) {
                 res.redirect('http://localhost:3000/home');
-            }else{
+            } else {
                 res.redirect('/')
             }
-                
+
         }
     });
-    
+
 });
 
 // Post login data
-router.post('/login',(req, res, next) => {
+router.post('/login', (req, res, next) => {
     // The data sent from the user are stored in the req.body object.
     // call our login function and it will return the result(the user data).
-    if ( req.body.email == "" || req.body.password == ""){
-        res.render('adminLogin',{msg:'fields cannot be empty!'})
+    if (req.body.email == "" || req.body.password == "") {
+        res.render('adminLogin', { msg: 'fields cannot be empty!' })
     }
-    else{
-        validate.checkAdmin(req.body,function(result){
-            if(result){
-                result = {email:"admin",password:"admin"}
+    else {
+        validate.checkAdmin(req.body, function (result) {
+            if (result) {
+                result = { email: "admin", password: "admin" }
                 req.session.user = result;
                 req.session.opp = 1;
                 // redirect the user to the home page.
                 res.redirect('/admin/home');
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
-                res.render('adminLogin',{msg:'Username/Password incorrect!'});
+                res.render('adminLogin', { msg: 'Username/Password incorrect!' });
             }
-        }); 
-            // Store the user data in a session.
+        });
+        // Store the user data in a session.
     }
 
 });
 
 //airport
-router.get('/addAirportPage',(req,res,next)=>{
+router.get('/addAirportPage', (req, res, next) => {
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                admin.getAirports(function(result) {
-                    res.render('addAirport', {airports: result});
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getAirports(function (result) {
+                    res.render('addAirport', { airports: result });
                 });
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
-        }); 
+        });
     }
-    else{
+    else {
+        res.redirect("/")
+    }
+});
+
+router.get('/addDelayPage', (req, res, next) => {
+    console.log('hi')
+    let user = req.session.user;
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getTodayRoutesDetails(function (result) {
+                    res.render('add_delay', { tripDetails: result });
+                });
+            } else {
+                // if the login function returns null send this error message back to the user.
+                res.redirect("/")
+            }
+        });
+    }
+    else {
         res.redirect("/")
     }
 });
@@ -96,157 +116,189 @@ router.post('/addAirport', (req, res, next) => {
         code: req.body.code,
         city: req.body.city,
         state: req.body.state,
-        country:req.body.country,
+        country: req.body.country,
     };
-    
-    validate.checkAdmin(user,function(result){
-        if(result){
-                    admin.addAirport(userInput)
-                    res.redirect("/admin/addAirportPage")
-        }else {
-             // if the login function returns null send this error message back to the user.
+
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            admin.addAirport(userInput)
+            res.redirect("/admin/addAirportPage")
+        } else {
+            // if the login function returns null send this error message back to the user.
             res.redirect("/")
         }
-    }); 
+    });
 });
-    // call create function. to create a new user. if there is no error this function will return it's id.
+// call create function. to create a new user. if there is no error this function will return it's id.
 
 
 
-router.get("/deleteAirport/:airport_id",(req,res,next)=>{
+router.get("/deleteAirport/:airport_id", (req, res, next) => {
     let airport_id = req.params.airport_id;
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
                 admin.deleteAirport(airport_id)
                 res.redirect("/admin/addAirportPage")
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
-        }); 
+        });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
 
 
 //airplane type
-router.get('/addAirplaneTypePage',(req,res,next)=>{
+router.get('/addAirplaneTypePage', (req, res, next) => {
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                admin.getAirplaneTypes(function(result) {
-                res.render('addAirplaneType', {airplanetypes: result});
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getAirplaneTypes(function (result) {
+                    res.render('addAirplaneType', { airplanetypes: result });
                 });
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
         });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
 
+router.post('/postDelayShedule', (req, res, next) => {
+
+    let user = req.session.user;
+
+
+    let shedule_id = req.body.shedule_id;
+    let dept_time = req.body.dept_time;
+    let reason = req.body.reason;
+
+
+        console.log(shedule_id)
+
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+
+            if (result == true) {
+                admin.getUpdateDelayTable(shedule_id, dept_time, reason, function (result) {
+                    // res.render('addDelayPage', {airplanetypes: result, msg:"fields cannot be empty"});
+                    res.redirect('/admin/addDelayPage');
+                });
+            }
+            else {
+                res.redirect('/')
+            }
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
+
+});
 router.post('/addAirplaneType', (req, res, next) => {
     let user = req.session.user;
     let userInput = {
         plane_type: req.body.plane_type,
         tot_economy_seats: req.body.tot_economy_seats,
         tot_business_seats: req.body.tot_business_seats,
-        tot_platinum_seats:req.body.tot_platinum_seats,
+        tot_platinum_seats: req.body.tot_platinum_seats,
     };
     //admin.addAirplaneType(userInput)
-    
-            validate.checkAdmin(user,function(result){
-                if(result){
-                    validate.check(userInput,function(result){
-                        if (result == true){
-                            admin.getAirplaneTypes(function(result) {
-                                res.render('addAirplaneType', {airplanetypes: result, msg:"fields cannot be empty"});
-                            });
-                        }
-                        else{
-                            admin.addAirplaneTypeAndSeats(userInput)
-                            res.redirect("/admin/addAirplaneTypePage")
-                        }
+
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            validate.check(userInput, function (result) {
+                if (result == true) {
+                    admin.getAirplaneTypes(function (result) {
+                        res.render('addAirplaneType', { airplanetypes: result, msg: "fields cannot be empty" });
                     });
                 }
                 else {
-                    // if the login function returns null send this error message back to the user.
-                    res.redirect("/")
+                    admin.addAirplaneTypeAndSeats(userInput)
+                    res.redirect("/admin/addAirplaneTypePage")
                 }
             });
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
 });
 
-router.get("/deleteAirplaneType/:plane_type",(req,res,next)=>{
+router.get("/deleteAirplaneType/:plane_type", (req, res, next) => {
     let plane_type = req.params.plane_type;
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
                 admin.deleteAirplaneType(plane_type)
                 res.redirect("/admin/addAirplaneTypePage")
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
         });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
 
-router.get("/viewAirplaneType/:plane_type",(req,res,next)=>{
+router.get("/viewAirplaneType/:plane_type", (req, res, next) => {
     let plane_type = req.params.plane_type;
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                admin.getEconomyAirplaneTypeSeats(plane_type, function(resulte) {
-                    admin.getBusinessAirplaneTypeSeats(plane_type, function(resultb) {
-                        admin.getPlatinumAirplaneTypeSeats(plane_type, function(resultp) {
-                            admin.getAnAirplaneType(plane_type,function(resultt){
-                                res.render('viewAirplaneType', {economy: resulte, business: resultb, platinum: resultp, plane_type_name: resultt});
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getEconomyAirplaneTypeSeats(plane_type, function (resulte) {
+                    admin.getBusinessAirplaneTypeSeats(plane_type, function (resultb) {
+                        admin.getPlatinumAirplaneTypeSeats(plane_type, function (resultp) {
+                            admin.getAnAirplaneType(plane_type, function (resultt) {
+                                res.render('viewAirplaneType', { economy: resulte, business: resultb, platinum: resultp, plane_type_name: resultt });
                             });
                         });
                     });
                 });
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
         });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
 
 //airplane
-router.get('/addAirplanePage',(req,res,next)=>{
+router.get('/addAirplanePage', (req, res, next) => {
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                admin.getAirplanes(function(result) {
-                    admin.getAirplaneTypes(function(result2){
-                        res.render('addAirplane', {airplanes: result, airplanetypes: result2});
-                    })   
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getAirplanes(function (result) {
+                    admin.getAirplaneTypes(function (result2) {
+                        res.render('addAirplane', { airplanes: result, airplanetypes: result2 });
+                    })
                 });
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
         });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
@@ -258,70 +310,70 @@ router.post('/addAirplane', (req, res, next) => {
         plane_type: req.body.plane_type
     };
     // call create function. to create a new user. if there is no error this function will return it's id.
-            validate.checkAdmin(user,function(result){
-                if(result){
-                    validate.check(userInput,function(result){
-                        if (result == true){
-                            admin.getAirplanes(function(result) {
-                                admin.getAirplaneTypes(function(result2){
-                                    res.render('addAirplane', {airplanes: result, airplanetypes: result2, msg:"fields cannot be empty"});
-                                })   
-                            });
-                        }
-                        else{
-                            admin.addAirplane(userInput)
-                            res.redirect("/admin/addAirplanePage")
-                        }
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            validate.check(userInput, function (result) {
+                if (result == true) {
+                    admin.getAirplanes(function (result) {
+                        admin.getAirplaneTypes(function (result2) {
+                            res.render('addAirplane', { airplanes: result, airplanetypes: result2, msg: "fields cannot be empty" });
+                        })
                     });
                 }
                 else {
-                    // if the login function returns null send this error message back to the user.
-                    res.redirect("/")
+                    admin.addAirplane(userInput)
+                    res.redirect("/admin/addAirplanePage")
                 }
-            });    
+            });
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
     });
+});
 
-router.get("/deleteAirplane/:plane_id",(req,res,next)=>{
+router.get("/deleteAirplane/:plane_id", (req, res, next) => {
     let plane_id = req.params.plane_id;
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
                 admin.deleteAirplane(plane_id)
                 res.redirect("/admin/addAirplanePage")
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
-        }); 
+        });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
 
 //
-router.get('/login',checkNoAuthenticated,(req,res,next)=>{
+router.get('/login', checkNoAuthenticated, (req, res, next) => {
     res.render('adminLogin')
 });
 
 
 //passenger category
-router.get('/addPassengerCategoryPage',(req,res,next)=>{
+router.get('/addPassengerCategoryPage', (req, res, next) => {
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                admin.getPassengerCategories(function(result) {
-                    res.render('addPassengerCategory', {categories: result});
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getPassengerCategories(function (result) {
+                    res.render('addPassengerCategory', { categories: result });
                 });
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
-        }); 
+        });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
@@ -333,25 +385,25 @@ router.post('/addPassengerCategory', (req, res, next) => {
         No_of_reservations: req.body.No_of_reservations,
         discount: req.body.discount,
     };
-            validate.checkAdmin(user,function(result){
-                if(result){
-                    validate.check(userInput,function(result){
-                        if (result == true){
-                            admin.getPassengerCategories(function(result) {
-                                res.render('addPassengerCategory', {categories: result, msg:"fields cannot be empty"});
-                            });
-                        }
-                        else{
-                            admin.addPassengerCategory(userInput)
-                            res.redirect("/admin/addPassengerCategoryPage")
-                        }
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            validate.check(userInput, function (result) {
+                if (result == true) {
+                    admin.getPassengerCategories(function (result) {
+                        res.render('addPassengerCategory', { categories: result, msg: "fields cannot be empty" });
                     });
-                }else {
-                    // if the login function returns null send this error message back to the user.
-                    res.redirect("/")
+                }
+                else {
+                    admin.addPassengerCategory(userInput)
+                    res.redirect("/admin/addPassengerCategoryPage")
                 }
             });
+        } else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
     });
+});
 
 
 
@@ -363,57 +415,57 @@ router.post('/editPassengerCategory', (req, res, next) => {
         category_name: req.body.category_name,
     };
     // call create function. to create a new user. if there is no error this function will return it's id.
-    validate.checkAdmin(user,function(result){
-        if(result){
+    validate.checkAdmin(user, function (result) {
+        if (result) {
             admin.editPassengerCategory(userInput)
             res.redirect("/admin/addPassengerCategoryPage")
-        }else {
+        } else {
             // if the login function returns null send this error message back to the user.
             res.redirect("/")
         }
     });
 });
 
-router.get("/editPassengerCategory/:category_id",(req,res,next)=>{
+router.get("/editPassengerCategory/:category_id", (req, res, next) => {
     let category_id = req.params.category_id;
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                admin.getAPassengerCategory(category_id, function(result) {
-                    res.render('editPassengerCategoryPage', {category: result});
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getAPassengerCategory(category_id, function (result) {
+                    res.render('editPassengerCategoryPage', { category: result });
                 });
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
         });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
 
 //add route
-router.get('/addRoutePage',(req,res,next)=>{
+router.get('/addRoutePage', (req, res, next) => {
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                admin.getAirplanes(function(result1) {
-                    admin.getAirports(function(result2){
-                        admin.getRoute(function(result) {
-                            res.render('addRoute', {airplanes: result1, airports: result2, routeDetails: result});
-                        }); 
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getAirplanes(function (result1) {
+                    admin.getAirports(function (result2) {
+                        admin.getRoute(function (result) {
+                            res.render('addRoute', { airplanes: result1, airports: result2, routeDetails: result });
+                        });
                     });
-                }); 
-            }else {
+                });
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
         });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
@@ -429,11 +481,11 @@ router.post('/addRoute', (req, res, next) => {
         dept_time: req.body.dept_time,
         arr_time: req.body.arr_time
     };
-    validate.checkAdmin(user,function(result){
-        if(result){
-            admin.addRoute(userInput1,userInput2);
-            res.redirect("/admin/addRoutePage") 
-        }else {
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            admin.addRoute(userInput1, userInput2);
+            res.redirect("/admin/addRoutePage")
+        } else {
             // if the login function returns null send this error message back to the user.
             res.redirect("/")
         }
@@ -442,21 +494,21 @@ router.post('/addRoute', (req, res, next) => {
 
 
 //addshedule
-router.get('/addShedulePage',(req,res,next)=>{
+router.get('/addShedulePage', (req, res, next) => {
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                admin.getRoute(function(result) {
-                    res.render('addShedule', {routeDetails: result});
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getRoute(function (result) {
+                    res.render('addShedule', { routeDetails: result });
                 });
-            }else {
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
         });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
@@ -465,33 +517,33 @@ router.post('/addShedule', (req, res, next) => {
     let user = req.session.user;
     let date = req.body.date;
     let route_id = req.body.route_id
-    if (date == "" || route_id == ""){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                admin.getRoute(function(result2) {
-                    res.render('addShedule',{routeDetails: result2,msg: "fields cannot be empty"})
+    if (date == "" || route_id == "") {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getRoute(function (result2) {
+                    res.render('addShedule', { routeDetails: result2, msg: "fields cannot be empty" })
                 });
             }
-            else{
+            else {
                 res.redirect("/")
             }
         });
     }
-    else{
-        validate.checkAdmin(user,function(result){
-            if(result){
-                    admin.addTimeTable(date,function(result1){
-                        admin.getRoute(function(result2) {
-                            admin.getRouteTime(route_id,function(result3){
-                                admin.getAroute(route_id,function(result4){
-                                    admin.getNo_ofSeats(route_id,function(result5){
-                                        res.render('addShedule',{timetable: result1,routeDetails: result2,timedata: result3,route: result4,seats: result5})
-                                    });
+    else {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.addTimeTable(date, function (result1) {
+                    admin.getRoute(function (result2) {
+                        admin.getRouteTime(route_id, function (result3) {
+                            admin.getAroute(route_id, function (result4) {
+                                admin.getNo_ofSeats(route_id, function (result5) {
+                                    res.render('addShedule', { timetable: result1, routeDetails: result2, timedata: result3, route: result4, seats: result5 })
                                 });
                             });
                         });
                     });
-            }else {
+                });
+            } else {
                 // if the login function returns null send this error message back to the user.
                 res.redirect("/")
             }
@@ -501,7 +553,7 @@ router.post('/addShedule', (req, res, next) => {
 
 
 //add trip
-router.post('/addTrip',(req,res,next) => {
+router.post('/addTrip', (req, res, next) => {
     let user = req.session.user;
     let userInput2 = {
         economy_price: req.body.economy_price,
@@ -513,54 +565,54 @@ router.post('/addTrip',(req,res,next) => {
         dept_time: req.body.dept_time,
         arr_time: req.body.arr_time
     }
-                validate.checkAdmin(user,function(result){
-                    if(result){
-                        validate.check(userInput1,function(result1){
-                            validate.check(userInput2,function(result2){
-                                if (result1 == true || result2 == true){
-                                    admin.getRoute(function(result2) {
-                                            res.render('addShedule',{routeDetails: result2,msg: "fields cannot be empty"})
-                                    });
-                                }
-                                else{
-                                    let time_table_id = req.body.time_table_id;
-                                    admin.addSheduleAndTrip(userInput1,userInput2,time_table_id);
-                                    admin.getRoute(function(result) {
-                                        res.render('addShedule', {routeDetails: result,msg2:"trip added successfully"});
-                                    });
-                                }
-                            });
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            validate.check(userInput1, function (result1) {
+                validate.check(userInput2, function (result2) {
+                    if (result1 == true || result2 == true) {
+                        admin.getRoute(function (result2) {
+                            res.render('addShedule', { routeDetails: result2, msg: "fields cannot be empty" })
                         });
                     }
                     else {
-                        // if the login function returns null send this error message back to the user.
-                        res.redirect("/")
+                        let time_table_id = req.body.time_table_id;
+                        admin.addSheduleAndTrip(userInput1, userInput2, time_table_id);
+                        admin.getRoute(function (result) {
+                            res.render('addShedule', { routeDetails: result, msg2: "trip added successfully" });
+                        });
                     }
                 });
-        });
+            });
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
+});
 
 
-router.post('/viewTrips',(req,res,next)=>{
+router.post('/viewTrips', (req, res, next) => {
     let user = req.session.user;
     var date = req.body.date
-    validate.checkAdmin(user,function(result){
-        if(result){
-                    if (date){
-                        admin.viewTrips(date,function(result) {
-                            if (result){
-                                //console.log(result);
-                                res.render('viewTrip',{date: date,tripDetails: result})
-                            }
-                            else{
-                                res.render('viewTrip',{date: date,msg: "No trips found"})
-                            }
-                        });
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            if (date) {
+                admin.viewTrips(date, function (result) {
+                    if (result) {
+                        //console.log(result);
+                        res.render('viewTrip', { date: date, tripDetails: result })
                     }
-                    else{
-                        admin.getRoute(function(result2) {
-                            res.render('addShedule',{date: date,tripDetails: result2,msg: "fields cannot be empty"})
-                        }); 
+                    else {
+                        res.render('viewTrip', { date: date, msg: "No trips found" })
                     }
+                });
+            }
+            else {
+                admin.getRoute(function (result2) {
+                    res.render('addShedule', { date: date, tripDetails: result2, msg: "fields cannot be empty" })
+                });
+            }
         }
         else {
             // if the login function returns null send this error message back to the user.
@@ -569,20 +621,20 @@ router.post('/viewTrips',(req,res,next)=>{
     });
 });
 
-router.get('/editTrip/:trip_id',(req,res,next)=>{
+router.get('/editTrip/:trip_id', (req, res, next) => {
     let user = req.session.user;
     let trip_id = req.params.trip_id;
-    validate.checkAdmin(user,function(result){
-        if(result){
-                        admin.viewForEditTrips(trip_id,function(result) {
-                            //console.log(result);
-                            if (result){
-                                res.render('editTrip',{tripDetails: result[0],moment: moment})
-                            }
-                            else{
-                                res.render('editTrip',{msg: "No trips found"})
-                            }
-                        });
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            admin.viewForEditTrips(trip_id, function (result) {
+                //console.log(result);
+                if (result) {
+                    res.render('editTrip', { tripDetails: result[0], moment: moment })
+                }
+                else {
+                    res.render('editTrip', { msg: "No trips found" })
+                }
+            });
         }
         else {
             // if the login function returns null send this error message back to the user.
@@ -591,10 +643,10 @@ router.get('/editTrip/:trip_id',(req,res,next)=>{
     });
 });
 
-router.post('/editTrip',(req,res,next)=>{
+router.post('/editTrip', (req, res, next) => {
     let user = req.session.user;
     let date = req.body.date;
-    let userInput1= {
+    let userInput1 = {
         arr_time: req.body.arr_time,
         dept_time: req.body.dept_time,
         shedule_id: req.body.shedule_id
@@ -605,17 +657,17 @@ router.post('/editTrip',(req,res,next)=>{
         platinum_price: req.body.platinum_price,
         trip_id: req.body.trip_id
     }
-    validate.checkAdmin(user,function(result){
-        if(result){
-            admin.editTrip(userInput1,userInput2,function(result1){
-                if(result1 == true){
-                    admin.viewTrips(date,function(result) {
-                        if (result){
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            admin.editTrip(userInput1, userInput2, function (result1) {
+                if (result1 == true) {
+                    admin.viewTrips(date, function (result) {
+                        if (result) {
                             //console.log(result);
-                            res.render('viewTrip',{date: date,tripDetails: result,msg2:"updated succesfully"})
+                            res.render('viewTrip', { date: date, tripDetails: result, msg2: "updated succesfully" })
                         }
-                        else{
-                            res.render('viewTrip',{date: date,msg: "No trips found"})
+                        else {
+                            res.render('viewTrip', { date: date, msg: "No trips found" })
                         }
                     });
                 }
@@ -629,20 +681,20 @@ router.post('/editTrip',(req,res,next)=>{
 });
 
 
-router.get("/viewTimeTablePage",(req,res,next)=>{
+router.get("/viewTimeTablePage", (req, res, next) => {
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                        admin.viewTimeTables(function(result) {
-                            if (result){
-                                //console.log(result);
-                                res.render('viewTimeTable',{timetables: result,moment: moment})
-                            }
-                            else{   
-                                res.render('viewTimeTable',{msg: "No time tables found"})
-                            }
-                        });
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.viewTimeTables(function (result) {
+                    if (result) {
+                        //console.log(result);
+                        res.render('viewTimeTable', { timetables: result, moment: moment })
+                    }
+                    else {
+                        res.render('viewTimeTable', { msg: "No time tables found" })
+                    }
+                });
             }
             else {
                 // if the login function returns null send this error message back to the user.
@@ -650,30 +702,30 @@ router.get("/viewTimeTablePage",(req,res,next)=>{
             }
         });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
 
 
-router.get("/viewTripDetails/:time_table_id",(req,res,next)=>{
+router.get("/viewTripDetails/:time_table_id", (req, res, next) => {
     let time_table_id = req.params.time_table_id;
     let user = req.session.user;
-    if(user){
-        validate.checkAdmin(user,function(result){
-            if(result){
-                        admin.viewTripDetails(time_table_id,function(result1) {
-                            admin.viewTimeTables(function(result2) {
-                                if (result1){
-                                    //console.log(result);
-                                    //console.log(result1)
-                                    res.render('viewTimeTable',{sheduleDetails: result1,timetables: result2,to_view: time_table_id,moment: moment})
-                                }
-                                else{   
-                                    res.render('viewTimeTable',{timetables: result2,to_view: time_table_id,moment: moment,msg: "nothing found"})
-                                }
-                            });
-                        });
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.viewTripDetails(time_table_id, function (result1) {
+                    admin.viewTimeTables(function (result2) {
+                        if (result1) {
+                            //console.log(result);
+                            //console.log(result1)
+                            res.render('viewTimeTable', { sheduleDetails: result1, timetables: result2, to_view: time_table_id, moment: moment })
+                        }
+                        else {
+                            res.render('viewTimeTable', { timetables: result2, to_view: time_table_id, moment: moment, msg: "nothing found" })
+                        }
+                    });
+                });
             }
             else {
                 // if the login function returns null send this error message back to the user.
@@ -681,7 +733,7 @@ router.get("/viewTripDetails/:time_table_id",(req,res,next)=>{
             }
         });
     }
-    else{
+    else {
         res.redirect("/")
     }
 });
@@ -690,30 +742,30 @@ router.get("/viewTripDetails/:time_table_id",(req,res,next)=>{
 // Get loggout page
 router.get('/loggout', (req, res, next) => {
     // Check if the session is exist
-    if(req.session.user) {
+    if (req.session.user) {
         // destroy the session and redirect the user to the index page.
-        req.session.destroy(function() {
+        req.session.destroy(function () {
             res.redirect('/');
         });
     }
 });
 
 
-function checkNoAuthenticated(req,res,next){
-    let user=req.session.user;
+function checkNoAuthenticated(req, res, next) {
+    let user = req.session.user;
     console.log("user")
-    if(user){
-        if(user.email == "admin"){
+    if (user) {
+        if (user.email == "admin") {
             return res.redirect('/admin/home')
         }
-        else{
+        else {
             res.redirect('/home')
         }
     }
-    else{
+    else {
         next()
     }
-    
+
 }
 
 // function isLoggedIn(req,res,next
