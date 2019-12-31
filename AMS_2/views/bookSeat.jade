@@ -241,7 +241,7 @@ mixin functions1(seat_id,plane_type_name,trip,seat_list)
                                                     -c += 1
                                         if c==1
                                             td(style="background-color:green")= seat_id.seat_id[7]+seat_id.seat_id[8]
-                                        else if seat_id.ticket_issued == 1
+                                        else if seat_id.ticket_issued == 1 
                                             td(style="background-color:red")= seat_id.seat_id[7]+seat_id.seat_id[8]
                                         else
                                             td
