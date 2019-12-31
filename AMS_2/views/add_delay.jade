@@ -26,7 +26,30 @@ block content
                     td
                         input(type="submit" value="Add a Delay")
 
-                     
+    if hasDelay
+        +function_res(todayDelays)
+    
+
+    mixin function_res(todayDelays)
+        table( class = "table table-striped")
+            thead 
+                tr
+                    th Dept Airport
+                    th Arr Airport
+                    th Dept Time
+                    th Arr Time
+                    th New Arr Time
+                    th reason
+            tbody                    
+                each s in todayDelays
+                    tr
+                        td= s.x
+                        td= s.y
+                        td= s.dept_time
+                        td= s.arr_time
+                        td= s.delay_time
+                        td= s.reason
+                                      
     //- .login-panel(style="float:none; padding-left:200px; margin-top: 10px")
     //-     +function1(timetable,timedata,route)
     
@@ -125,3 +148,5 @@ mixin functions(msg2)
 //-                         b (in $)
 //-                     td 
 //-                         input(type="text" name="platinum_price")
+
+

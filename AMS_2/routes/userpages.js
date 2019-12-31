@@ -156,6 +156,14 @@ router.post('/register', (req, res, next) => {
 
 });
 
+router.get('/delays', (req,res,next) => {
+    let passengerId = req.session.user.passenger_id;
+    console.log(req.session.user)
+    user.relevantDelays(passengerId, function(result){
+        res.render('showDelays', {relevantDelays : result, moment: moment});
+    });
+});
+
 router.post('/guestLogin', (req, res, next) => {
     // prepare an object containing all user inputs.
     let userInput = {
