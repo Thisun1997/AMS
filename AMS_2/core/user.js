@@ -162,8 +162,13 @@ User.prototype = {
             if (err) {
                 throw err
             }
-            if (result.length) {
-                callback(result);
+            if (result) {
+                if(result.length){
+                    callback(result);
+                }
+                else{
+                    callback(null);
+                }
             }else{
                 callback(null);
             }

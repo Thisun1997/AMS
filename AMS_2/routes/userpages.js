@@ -160,7 +160,7 @@ router.get('/delays', (req,res,next) => {
     let passengerId = req.session.user.passenger_id;
     console.log(req.session.user)
     user.relevantDelays(passengerId, function(result){
-        res.render('showDelays', {relevantDelays : result, hasDelayList: result.length, moment: moment});
+        res.render('showDelays', {relevantDelays : result, moment: moment});
     });
 });
 
