@@ -97,7 +97,13 @@ router.get('/addDelayPage', (req, res, next) => {
         validate.checkAdmin(user, function (result) {
             if (result) {
                 admin.getTodayRoutesDetails(function (result) {
-                    res.render('add_delay', { tripDetails: result });
+                    // res.render('add_delay', { tripDetails: result });
+                    admin.getAllTodayDelays(function(result1){
+                        admin.getTodayRoutesDetails(function(result2){
+                            res.render('add_delay',{tripDetails: result,todayDelays:result1,hasDelay:result1.length});
+                        })
+                        console.log(result1);
+                    })
                 });
             } else {
                 // if the login function returns null send this error message back to the user.
@@ -176,8 +182,6 @@ router.get('/addAirplaneTypePage', (req, res, next) => {
 router.post('/postDelayShedule', (req, res, next) => {
 
     let user = req.session.user;
-
-
     let shedule_id = req.body.shedule_id;
     let dept_time = req.body.dept_time;
     let reason = req.body.reason;
@@ -191,8 +195,14 @@ router.post('/postDelayShedule', (req, res, next) => {
             if (result == true) {
                 admin.getUpdateDelayTable(shedule_id, dept_time, reason, function (result) {
                     // res.render('addDelayPage', {airplanetypes: result, msg:"fields cannot be empty"});
-                    res.redirect('/admin/addDelayPage');
-                });
+                    admin.getAllTodayDelays(function(result1){
+                        admin.getTodayRoutesDetails(function(result2){
+                            res.render('add_delay',{tripDetails: result2,todayDelays:result1,hasDelay:result1.length});
+                        })
+                        console.log(result1);
+                    });
+                    }
+                );
             }
             else {
                 res.redirect('/')

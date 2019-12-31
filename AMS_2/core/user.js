@@ -154,6 +154,22 @@ User.prototype = {
         });
     },
 
+    relevantDelays : function(passenger_id,callback) 
+    {
+        let sql = 'SELECT delay_time,x,y,dept_time,arr_time,reason,date FROM today_routes NATURAL JOIN reservation_member WHERE passenger_id = ?';
+        console.log(passenger_id);
+        pool.query(sql,[passenger_id],function(err, result){
+            if (err) {
+                throw err
+            }
+            if (result.length) {
+                callback(result);
+            }else{
+                callback(null);
+            }
+        });
+    },
+
     search : function(body, callback)
     {
         bind = []

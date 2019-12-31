@@ -18,7 +18,10 @@ mixin message(opp, user)
 
 append links 
     li(style="float: right;")
-        a(href="/loggout") Loggout 
+        a(href="/loggout") Logout 
+    li(style="float: right;")
+        a(href="/delays") Delays
+
 
 block content
     script(type='text/javascript', src='/javascripts/location.js')

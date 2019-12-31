@@ -246,6 +246,21 @@ Admin.prototype = {
         });
     },
 
+    getAllTodayDelays : function(callback){
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        let sql = 'select * from today_routes natural join delay where date=?';
+//====================================================
+//date eka hard cordw karla thiyenne
+        pool.query(sql, [date], function(err, result) {
+            if (err) {
+                throw err
+            }
+            console.log(result);
+            callback(result);
+        })
+    },
+
     getTodayRoutesDetails : function(callback){
         var today = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -253,7 +268,7 @@ Admin.prototype = {
         let sql = 'SELECT * FROM today_routes WHERE date = ?';
         //==========================================================================================
         //hard corded the time
-        pool.query(sql, ['2019-12-12'], function(err, result) {
+        pool.query(sql, [date], function(err, result) {
             if(err) throw err
            
             if(result.length) {
