@@ -1,0 +1,77 @@
+extends admin
+
+block content
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Given a flight no, all passengers travelling in it (next immediate flight) below age 18, above age 18 
+        br
+        form(method="post" action="/admin/generateReport3")
+            table 
+                tr 
+                    td Trip
+                    td 
+                        +function(tripDetails)
+                tr 
+                    td
+                    td
+                        input(type="submit" value="view")
+    +functions(ab18,be18)
+
+
+mixin functions(ab18,be18)
+        br
+        if ab18 != null
+            if ab18[0] != null
+                .login-panel(style="float:none; padding-left:60px")
+                    h4 Passangers above age 18
+                    table( class = "table table-striped")
+                        thead 
+                            tr
+                                th seat_id
+                                th full_name
+                                th age
+                                th gender
+                                th requirements
+                        tbody                    
+                            each s in ab18
+                                tr
+                                    td= s.seat_id
+                                    td= s.full_name 
+                                    td= s.age
+                                    td= s.gender 
+                                    td= s.requirements
+        
+        br
+        if be18 != null
+            if be18[0] != null
+                .login-panel(style="float:none; padding-left:60px")
+                    h4 Passangers below age 18
+                    table( class = "table table-striped")
+                        thead 
+                            tr
+                                th seat_id
+                                th full_name
+                                th age
+                                th gender
+                                th requirements
+                        tbody                    
+                            each s in be18
+                                tr
+                                    td= s.seat_id
+                                    td= s.full_name 
+                                    td= s.age
+                                    td= s.gender 
+                                    td= s.requirements
+                                        
+                
+
+mixin function(tripDetails)
+    if tripDetails!= null
+        select(name="shedule_id")
+            each trip in tripDetails
+                option(value="#{trip.shedule_id}") #{trip.x} -> #{trip.y} - #{trip.dept_time} -> #{trip.arr_time}
+    else
+        p no trips for today! 
+
+
+
+

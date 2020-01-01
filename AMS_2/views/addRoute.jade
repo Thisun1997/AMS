@@ -1,8 +1,7 @@
 extends admin
 
 block content
-    script(type='text/javascript', src='/javascripts/location.js')
-
+    script(type='text/javascript', src='/javascripts/airport_location.js')
     .login-panel(style="float:none; padding-left:200px")
         h3 Add a route
         +functione(msg)
@@ -52,7 +51,8 @@ mixin function1(airplanes)
 
 mixin function2(airports)
     if airports!= null
-        select(name="dest_airport_code")
+        select(name="dest_airport_code" class="airport_location")
+            option(disabled selected value) -- select an option -- 
             each airport in airports
                 option(value="#{airport.airport_id}") #{airport.code}
     else
@@ -66,7 +66,8 @@ mixin function2(airports)
 
 mixin function4(airports)
     if airports!= null
-        select(name="dept_airport_code")
+        select(name="dept_airport_code" class="airport_location")
+            option(disabled selected value) -- select an option -- 
             each airport in airports
                 option(value="#{airport.airport_id}") #{airport.code}
     else

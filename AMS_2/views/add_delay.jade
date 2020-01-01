@@ -70,7 +70,7 @@ mixin function(tripDetails)
     if tripDetails!= null
         select(name="shedule_id")
             each trip in tripDetails
-                option(value="#{trip.shedule_id}") #{trip.x} -> #{trip.y} - #{trip.dept_time} -> #{trip.arr_time} #{trip.shedule_id}
+                option(value="#{trip.shedule_id}") #{trip.x} -> #{trip.y} - #{trip.dept_time} -> #{trip.arr_time}
     else
         p no trips for today!
 

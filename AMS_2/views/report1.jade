@@ -1,0 +1,52 @@
+extends admin
+
+block content
+    script(type='text/javascript', src='/javascripts/date.js')
+
+    .login-panel(style="float:none; padding-left:200px")
+        h2 Given a date range, number of passengers travelling to a given destination 
+        br
+        form(method="post" action="/admin/generateReport1")
+            table 
+                tr
+                    td From 
+                    td 
+                        input(type="date" name="date1" required)
+                    td to
+                    td
+                        input(type="date" name="date2" required)
+                tr 
+                    td Destination
+                    td 
+                        +function(airports)
+                tr 
+                    td
+                    td
+                        input(type="submit" value="view")
+    +function2(data)
+
+
+mixin function(airports)
+    if airports!= null
+        select(name="airport_id" id="airport_id")
+            each airport in airports
+                option(value="#{airport.airport_id}" required) #{airport.code}
+    else
+        p no airports added
+
+mixin function2(data)
+        if data != null
+            br
+            .login-panel(style="float:none; padding-left:70px")
+                table( class = "table table-striped")
+                        thead(class="thead-dark") 
+                            tr
+                                th total economy passengers
+                                th total business passengers
+                                th total platinum passengers
+                        tbody
+                            tr
+                                each d in data
+                                    td= d.tot_economy_passengers
+                                    td= d.tot_business_passengers
+                                    td= d.tot_platinum_passengers
