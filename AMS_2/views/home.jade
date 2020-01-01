@@ -35,7 +35,7 @@ block content
 
     .dashboard_user(style="height: 386px;")
             +message(opp, user)
-    .login-panel(style="height: 386px;")
+    .login-panel(style="height: 386px;width:870px;")
         .searchbar
             form(method="post" action="/search")
               table 
@@ -94,12 +94,14 @@ block content
 
 
 mixin functiondept(locations)
-      select(name="dept_airport_code" id="dept_airport_code")
+    if locations
+        select(name="dept_airport_code" id="dept_airport_code")
             option(disabled selected value) -- select an option -- 
             each location in locations
                 option(value="#{location.airport_id}") #{location.city} - #{location.country} (#{location.code})
 
 mixin functiondest(locations)
+    if locations
       select(name="dest_airport_code" id="dest_airport_code")
             option(disabled selected value) -- select an option -- 
             each location in locations

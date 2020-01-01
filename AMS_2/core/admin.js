@@ -440,8 +440,7 @@ Admin.prototype = {
         let sql = `UPDATE passenger_category SET No_of_reservations = ?, discount = ? WHERE category_name = ?`;
         // call the query give it the sql string and the values (bind array)
         pool.query(sql, bind, function(err, result) {
-            if(err) throw err;
-            
+            if(err) throw err;           
         });
     },
 

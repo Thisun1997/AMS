@@ -40,7 +40,8 @@ mixin function(guests,trip,type,guests_booked)
                         td
                             input(type="submit" value="Add")
         else if guests_booked[1] != 0
-            h4 Booking for child guest  #{guests[1]-guests_booked[1]+1}
+            h3 Booking for child guest  #{guests[1]-guests_booked[1]+1}
+            br
             form(method="post" action="/addGuest")
                 table
                     tr
@@ -67,7 +68,8 @@ mixin function(guests,trip,type,guests_booked)
                         td
                             input(type="submit" value="Add")
         else if guests_booked[2] != 0
-            h4 Booking for infant guest  #{guests[2]-guests_booked[2]+1}
+            h3 Booking for infant guest  #{guests[2]-guests_booked[2]+1}
+            br
             form(method="post" action="/addGuest")
                 table
                     tr
