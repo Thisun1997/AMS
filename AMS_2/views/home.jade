@@ -5,11 +5,11 @@ mixin message(opp, user)
         .greeting(style = "margin-right:5px;")
             h4
                 span=user.full_name 
-            p email address: #{user.email}
-            p date of birth: #{moment(user.date_of_birth).format('YYYY-MM-DD')}
-            p citizenship: #{user.citizenship}
-            p total number of reservations: #{user.no_of_reservations}
-            p passenger category: #{user.category_name}
+            p Email address: #{user.email}
+            p Date of birth: #{moment(user.date_of_birth).format('YYYY-MM-DD')}
+            p Citizenship: #{user.citizenship}
+            p Number of reservations: #{user.no_of_reservations}
+            p Passenger category: #{user.category_name}
     else 
         h1.greeting(style="margin-bottom:100px;") Welcome 
             span=user.full_name  
@@ -30,14 +30,15 @@ block content
 
     .dashboard_user
             +message(opp, user)
-    .login-panel
+    .login-panel(style="height: 386px;")
         .searchbar
             form(method="post" action="/search")
               table 
                   tr
-                      th date 
+                      th Date 
                       td 
                           input(type="date" name="date" id="txtDate")
+                  br
                   tr 
                       th From  
                       td 
@@ -45,6 +46,7 @@ block content
                       td &nbsp; 
                         b To
                           +functiondest(locations)
+                  br
                   tr
                       th(rowspan="2") Guests: 
                       td Adults
@@ -82,8 +84,8 @@ block content
                       td
                       td
                           input(type="submit" value="Search")
-    
-    +function_res(search,msg,seat_type)
+    .function(style="margin-top: 386px")
+        +function_res(search,msg,seat_type)
 
 
 mixin functiondept(locations)
@@ -101,18 +103,17 @@ mixin functiondest(locations)
 mixin function_res(search,msg,seat_type)
           if(search != null)
             br
-            h4 search results for flights from #{search[0].dept_code} (#{search[0].dept_city}) to #{search[0].dest_code} (#{search[0].dest_city}) on #{moment(search[0].date).format('YYYY-MM-DD')}
-            br
+            h4 Search results for flights from #{search[0].dept_code} (#{search[0].dept_city}) to #{search[0].dest_code} (#{search[0].dest_city}) on #{moment(search[0].date).format('YYYY-MM-DD')}
             table( class = "table table-striped")
                 thead 
                     tr
-                        th plane
-                        th depatuer time
-                        th arrival time
-                        th economy seat (in $)
-                        th business seat (in $)
-                        th platinum seat (in $)
-                        th action
+                        th Plane
+                        th Departure time
+                        th Arrival time
+                        th Economy seat (in $)
+                        th Business seat (in $)
+                        th Platinum seat (in $)
+                        th Action
                 tbody                    
                     each s in search
                         tr
@@ -133,4 +134,5 @@ mixin function_res(search,msg,seat_type)
           else if (msg != null)
             h5 #{msg}
           else
-            h5 search results will appear here..
+            br
+            h5 Search results will appear here..
