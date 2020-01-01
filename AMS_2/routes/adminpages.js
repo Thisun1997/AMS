@@ -982,16 +982,6 @@ function checkNoAuthenticated(req, res, next) {
 
 }
 
-// function isLoggedIn(req,res,next
-//     let User=req.session.user;
-//     if(User){
-//         return next()
-//     }
 
-//     // if(req.session.user){
-//     //     return next()
-//     // }
-//     res.redirect('http://localhost:3000/')
-// }
 
 module.exports = router;
