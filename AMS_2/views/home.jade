@@ -5,11 +5,16 @@ mixin message(opp, user)
         .greeting(style = "margin-right:5px;")
             h4
                 span #{user.first_name} #{user.last_name}
-            p email address: #{user.email}
-            p date of birth: #{moment(user.date_of_birth).format('YYYY-MM-DD')}
-            p citizenship: #{user.citizenship}
-            p total number of reservations: #{user.no_of_reservations}
-            p passenger category: #{user.category_name}
+            p Email address: 
+                b #{user.email}
+            p Date of birth: 
+                b #{moment(user.date_of_birth).format('YYYY-MM-DD')}
+            p Citizenship:
+                b #{user.citizenship}
+            p Number of reservations: 
+                b #{user.no_of_reservations}
+            p Passenger category: 
+                b #{user.category_name}
     else 
         h1.greeting(style="margin-bottom:100px;") Welcome 
             span #{user.first_name} #{user.last_name}
@@ -28,7 +33,7 @@ block content
     script(type='text/javascript', src='/javascripts/guest_input.js')
     script(type='text/javascript', src='/javascripts/date.js')
 
-    .dashboard_user
+    .dashboard_user(style="height: 386px;")
             +message(opp, user)
     .login-panel(style="height: 386px;")
         .searchbar
@@ -108,8 +113,8 @@ mixin function_res(search,msg,seat_type)
                 thead 
                     tr
                         th Plane
-                        th Departure time
-                        th Arrival time
+                        th Dept time
+                        th Arr time
                         th Economy seat (in $)
                         th Business seat (in $)
                         th Platinum seat (in $)

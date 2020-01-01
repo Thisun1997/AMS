@@ -929,6 +929,28 @@ router.post('/generateReport4', (req, res, next) => {
     });
 });
 
+router.get('/generateReport5', (req, res, next) => {
+    let user = req.session.user;
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if(result){
+                admin.generateReport5(function (result1) {
+                    if (result1) {
+                        //console.log(result1);
+                        res.render('report5', {data: result1})
+                    }
+                    else {
+                        res.redirect('/')
+                    }
+                });
+            }
+        });
+    }
+    else {
+        res.redirect("/")
+    }
+});
+
 // Get loggout page
 router.get('/loggout', (req, res, next) => {
     // Check if the session is exist
@@ -941,7 +963,6 @@ router.get('/loggout', (req, res, next) => {
 });
 
 
-// router.get('/')
 function checkNoAuthenticated(req, res, next) {
     let user = req.session.user;
     console.log(user)
