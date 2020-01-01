@@ -38,17 +38,11 @@ app.use('/guest',guestRouter);
 
 // Errors => page not found 404
 app.use(errorController.get404);
-// app.use((req, res, next) =>  {
-//     var err = new Error('Page not found');
-//     err.status = 404;
-//     next(err);
-// })
+
 
 // Handling errors (send them to the client)
-app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.send(err.message);
-});
+app.use(errorController.get500);
+
 
 
 module.exports = app;
