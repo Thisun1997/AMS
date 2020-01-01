@@ -4,6 +4,7 @@
 body 
 {
     background-image: url("../images/3.jpg");
+    /* background-image: url("../images/logo-new.png"); */
     /* background-image: radial-gradient(circle, #6a8eae, #5e8db2, #518bb6, #3f8ab9, #2589bd); */
     font-family: sans-serif;
 }
@@ -65,8 +66,8 @@ nav ul li a:hover
 .login-panel, .register-panel, .registerguest
 {
     padding: 20px 20px 50px 20px;
-    border: 1px solid #ccc;
-    background-color: #D9D7DD;
+    border: 1px solid rgb(240, 235, 235);
+    background-color: rgb(235, 232, 241);
     overflow: auto;
     border-radius: 10px;
     opacity: 0.9;
