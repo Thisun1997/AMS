@@ -13,6 +13,8 @@ router.get('/', checkNoAuthenticated, (req, res, next) => {
     let user = req.session.user;
     // If there is a session named user that means the use is logged in. so we redirect him to home page by using /home route below
     validate.checkAdmin(user, function (result) {
+        console.log('dsvdv');
+        console.log(result)
         if (result) {
             res.redirect('/admin/home');
             return;
@@ -29,8 +31,9 @@ router.get('/', checkNoAuthenticated, (req, res, next) => {
 router.get('/home', (req, res, next) => {
     let user = req.session.user;
     validate.checkAdmin(user, function (result) {
+        console.log(req.session.user)
         if (result) {
-            res.render('admin', { opp: req.session.opp, name: user.full_name });
+            res.render('admin');
             return;
         }
         else {
@@ -760,7 +763,7 @@ router.get("/generateReport1", (req, res, next) => {
                         res.render('report1', { airports: result})
                     }
                     else {
-                        res.render('/')
+                        res.render('/admin')
                     }
                 });
             }
@@ -787,7 +790,7 @@ router.post('/generateReport1', (req, res, next) => {
                         res.render('report1', {airports: result,data :result1})
                     }
                     else {
-                        res.render('/')
+                        res.render('/admin')
                     }
                 });
             });
@@ -837,15 +840,23 @@ router.post('/generateReport2', (req, res, next) => {
 router.get("/generateReport3", (req, res, next) => {
     let user = req.session.user;
     if (user) {
+        console.log("user")
         validate.checkAdmin(user, function (result) {
+            console.log(result)
+            console.log(user)
             if(result){
+                console.log(result)
                 admin.getTodayRoutesDetails(function (result1) {
                     if (result1) {
                         console.log(result1);
+                        console.log('hi')
+                        console.log(req.session.user)
+
                         res.render('report3', { tripDetails: result1})
                     }
                     else {
-                        res.redirect('/')
+                        console.log('hi')
+                        res.redirect('/admin')
                     }
                 });
             }
@@ -883,10 +894,12 @@ router.get("/generateReport4", (req, res, next) => {
                 admin.getAirports(function (result1) {
                     if (result1) {
                         console.log(result1);
+                        console.log(user)
+                        console.log(req.session.user)
                         res.render('report4', { locations: result1})
                     }
                     else {
-                        res.redirect('/')
+                        res.redirect('/admin')
                     }
                 });
             }
@@ -928,15 +941,17 @@ router.get('/loggout', (req, res, next) => {
 });
 
 
-router.get('/')
+// router.get('/')
 function checkNoAuthenticated(req, res, next) {
     let user = req.session.user;
-    console.log("user")
+    console.log(user)
     if (user) {
         if (user.email == "admin") {
+            console.log('dvds1')
             return res.redirect('/admin/home')
         }
         else {
+            console.log('2')
             res.redirect('/home')
         }
     }
