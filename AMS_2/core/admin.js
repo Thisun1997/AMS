@@ -873,6 +873,25 @@ Admin.prototype = {
                 callback(null);
             }
         });
+    },
+
+    generateReport5 : function(callback){
+        sql = `SELECT plane_type.plane_type, sum(ticket_reservation.price) AS revenue FROM seat NATURAL JOIN ticket_reservation NATURAL JOIN plane_type GROUP BY seat.plane_type_id`
+        pool.query(sql, function(err, result) {
+            if(err) throw err
+            if(result){
+                //console.log(result[0]);
+                if(result.length) {
+                    console.log(result)
+                    callback(result);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
     }
 }
 

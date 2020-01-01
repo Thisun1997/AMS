@@ -1,0 +1,19 @@
+extends admin
+
+block content
+    +function(data)
+
+mixin function(data)
+        if data != null
+            br
+            .login-panel(style="float:none; padding-left:70px")
+                table( class = "table table-striped")
+                        thead(class="thead-dark") 
+                            tr
+                                th plane type
+                                th Revenue generated upto today
+                        tbody
+                            each d in data
+                                tr
+                                    td= d.plane_type
+                                    td $ #{d.revenue}.00
