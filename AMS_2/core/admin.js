@@ -109,14 +109,6 @@ Admin.prototype = {
         });
     },
 
-    deleteAirplaneType : function(plane_type,_callback){
-        let sql = 'DELETE FROM plane_type WHERE plane_type = ?';
-        pool.query(sql, plane_type, function(err, _result) {
-            if(err) throw err;
-            // return the last inserted id. if there is no error
-        });
-    },
-
     editAirplaneType : function(body) 
     {
         var bind = [];
@@ -250,8 +242,6 @@ Admin.prototype = {
         var today = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         let sql = 'select * from today_routes natural join delay where date=?';
-//====================================================
-//date eka hard cordw karla thiyenne
         pool.query(sql, [date], function(err, result) {
             if (err) {
                 throw err
@@ -266,8 +256,6 @@ Admin.prototype = {
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
        // console.log(date);
         let sql = 'SELECT * FROM today_routes WHERE date = ?';
-        //==========================================================================================
-        //hard corded the time
         pool.query(sql, [date], function(err, result) {
             if(err) throw err
            
@@ -800,6 +788,92 @@ Admin.prototype = {
             }
         });
     },
+
+    generateReport1 : function(userInput,callback){
+        sql = `select sum(trip.tot_economy_passengers) AS tot_economy_passengers,sum(trip.tot_business_passengers) AS tot_business_passengers,sum(trip.tot_platinum_passengers) AS tot_platinum_passengers FROM time_table natural join time_table_shedule natural join shedule natural join route natural join trip where route.dest_airport_id = ? and ?<time_table.date<?`
+        pool.query(sql, userInput,function(err, result) {
+            if(err) throw err
+            if(result){
+                //console.log(result[0]);
+                if(result.length) {
+                    callback(result);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
+
+    generateReport2 : function(userInput,callback){
+        sql = `SELECT category_name,COUNT(reservation_id) AS no_of_bookings FROM (time_table natural join time_table_shedule natural join shedule NATURAL JOIN trip NATURAL JOIN reservation_member NATURAL JOIN member_passenger) LEFT OUTER JOIN passenger_category USING (category_id) WHERE ? < date < ? GROUP BY (category_id)`
+        pool.query(sql, userInput,function(err, result) {
+            if(err) throw err
+            if(result){
+                //console.log(result[0]);
+                if(result.length) {
+                    callback(result);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
+
+    generateReport3 : function(userInput,callback){
+        sql = `select seat_id, full_name, age, gender, requirements FROM today_routes NATURAL JOIN reservation_member NATURAL JOIN ticket_reservation WHERE shedule_id = ?`
+        var ab18 = []
+        var be18 = []
+        pool.query(sql, userInput,function(err, result) {
+            if(err) throw err
+            if(result){
+                //console.log(result[0]);
+                if(result.length) {
+                    for(i in result){
+                        if(result[i].age>18){
+                            ab18.push(result[i])
+                        }
+                        else{
+                            be18.push(result[i])
+                        }
+                    }
+                    console.log(ab18)
+                    console.log(be18)
+
+                    callback([ab18,be18]);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    },
+
+    generateReport4 : function(userInput,callback){
+        sql = `SELECT * FROM past_flights WHERE x = ? AND y = ?`
+        pool.query(sql, userInput,function(err, result) {
+            if(err) throw err
+            if(result){
+                //console.log(result[0]);
+                if(result.length) {
+                    console.log(result)
+                    callback(result);
+                }else {
+                    callback(null);
+                }
+            }
+            else {
+                callback(null);
+            }
+        });
+    }
 }
 
 module.exports = Admin;

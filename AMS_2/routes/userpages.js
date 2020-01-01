@@ -127,7 +127,8 @@ router.get('/loginGuest',(req,res,next)=>{
 // Post register data
 router.post('/register', (req, res, next) => {
     let userInput1 = {
-        full_name: req.body.full_name,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
         date_of_birth: req.body.date_of_birth,
         gender:req.body.gender,
         citizenship: req.body.citizenship,

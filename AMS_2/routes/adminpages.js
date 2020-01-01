@@ -749,6 +749,173 @@ router.get("/viewTripDetails/:time_table_id", (req, res, next) => {
 });
 
 
+router.get("/generateReport1", (req, res, next) => {
+    let user = req.session.user;
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                admin.getAirports(function (result) {
+                    if (result) {
+                        //console.log(result);
+                        res.render('report1', { airports: result})
+                    }
+                    else {
+                        res.render('/')
+                    }
+                });
+            }
+            else {
+                // if the login function returns null send this error message back to the user.
+                res.redirect("/")
+            }
+        });
+    }
+    else {
+        res.redirect("/")
+    }
+});
+
+router.post('/generateReport1', (req, res, next) => {
+    let user = req.session.user;
+    let userInput = [ req.body.airport_id,req.body.date1, req.body.date2]
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            admin.generateReport1(userInput, function (result1) {
+                admin.getAirports(function (result) {
+                    if (result) {
+                        console.log(result1);
+                        res.render('report1', {airports: result,data :result1})
+                    }
+                    else {
+                        res.render('/')
+                    }
+                });
+            });
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
+});
+
+router.get("/generateReport2", (req, res, next) => {
+    let user = req.session.user;
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if (result) {
+                res.render('report2')
+            }
+            else {
+                // if the login function returns null send this error message back to the user.
+                res.redirect("/")
+            }
+        });
+    }
+    else {
+        res.redirect("/")
+    }
+});
+
+router.post('/generateReport2', (req, res, next) => {
+    let user = req.session.user;
+    let userInput = [req.body.date1, req.body.date2]
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            admin.generateReport2(userInput, function (result1) {
+                        console.log(result1);
+                        res.render('report2', {data :result1});
+            });
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
+});
+
+router.get("/generateReport3", (req, res, next) => {
+    let user = req.session.user;
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if(result){
+                admin.getTodayRoutesDetails(function (result1) {
+                    if (result1) {
+                        console.log(result1);
+                        res.render('report3', { tripDetails: result1})
+                    }
+                    else {
+                        res.redirect('/')
+                    }
+                });
+            }
+        });
+    }
+    else {
+        res.redirect("/")
+    }
+});
+
+router.post('/generateReport3', (req, res, next) => {
+    let user = req.session.user;
+    let userInput = req.body.shedule_id
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            admin.getTodayRoutesDetails(function (result1) {
+                    admin.generateReport3(userInput, function (result2) {
+                        //console.log(result1);
+                        res.render('report3', {ab18 :result2[0],be18 :result2[1],tripDetails: result1});
+                    });
+            });   
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
+});
+
+router.get("/generateReport4", (req, res, next) => {
+    let user = req.session.user;
+    if (user) {
+        validate.checkAdmin(user, function (result) {
+            if(result){
+                admin.getAirports(function (result1) {
+                    if (result1) {
+                        console.log(result1);
+                        res.render('report4', { locations: result1})
+                    }
+                    else {
+                        res.redirect('/')
+                    }
+                });
+            }
+        });
+    }
+    else {
+        res.redirect("/")
+    }
+});
+
+router.post('/generateReport4', (req, res, next) => {
+    let user = req.session.user;
+    let userInput = [req.body.dept_airport_code,req.body.dest_airport_code]
+    validate.checkAdmin(user, function (result) {
+        if (result) {
+            admin.getAirports(function (result1) {
+                    admin.generateReport4(userInput, function (result2) {
+                        //console.log(result1);
+                        res.render('report4', {data :result2,locations: result1,moment:moment});
+                    });
+            });   
+        }
+        else {
+            // if the login function returns null send this error message back to the user.
+            res.redirect("/")
+        }
+    });
+});
+
 // Get loggout page
 router.get('/loggout', (req, res, next) => {
     // Check if the session is exist
@@ -761,6 +928,7 @@ router.get('/loggout', (req, res, next) => {
 });
 
 
+router.get('/')
 function checkNoAuthenticated(req, res, next) {
     let user = req.session.user;
     console.log("user")

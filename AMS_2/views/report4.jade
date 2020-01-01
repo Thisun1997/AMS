@@ -1,0 +1,60 @@
+extends admin
+
+block content
+    script(type='text/javascript', src='/javascripts/location.js')
+    .login-panel(style="float:none; padding-left:200px")
+        h3 Given origin and destination, all past flights, states, passenger counts data
+        form(method="post" action="/admin/generateReport4")
+              table 
+    
+                  tr 
+                      th From  
+                      td 
+                          +functiondept(locations)
+                      td &nbsp; 
+                        b To
+                          +functiondest(locations)
+                  tr 
+                      td
+                      td
+                      td
+                          input(type="submit" value="View")
+    +function(data)
+
+mixin functiondept(locations)
+      select(name="dept_airport_code" id="dept_airport_code")
+            option(disabled selected value) -- select an option -- 
+            each location in locations
+                option(value="#{location.code}") #{location.city} - #{location.country} (#{location.code})
+
+mixin functiondest(locations)
+      select(name="dest_airport_code" id="dest_airport_code")
+            option(disabled selected value) -- select an option -- 
+            each location in locations
+                option(value="#{location.code}") #{location.city} - #{location.country} (#{location.code})
+
+mixin function(data)
+    if data != null
+            br
+            .login-panel(style="float:none; padding-left:20px")
+                table( class = "table table-striped")
+                        thead(class="thead-dark") 
+                            tr
+                                th date
+                                th plane code
+                                th depature time
+                                th arrival time 
+                                th economy passangers
+                                th business passangers
+                                th platinum passangers
+                        tbody
+                                each d in data
+                                    tr
+                                        td #{moment(d.date).format('YYYY-MM-DD')}
+                                        td= d.company_plane_code
+                                        td= d.dept_time
+                                        td= d.arr_time
+                                        td= d.tot_economy_passengers
+                                        td= d.tot_business_passengers
+                                        td= d.tot_platinum_passengers
+

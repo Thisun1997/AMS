@@ -5,4 +5,4 @@ $(document).ready(function(){
        var value = $(this).val();
       $(this).data('previous',value); $('select').not(this).find('option[value="'+value+'"]').hide();
     });
-    });
+   });

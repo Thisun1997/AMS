@@ -4,7 +4,7 @@ mixin message(opp, user)
     if(opp)
         .greeting(style = "margin-right:5px;")
             h4
-                span=user.full_name 
+                span #{user.first_name} #{user.last_name}
             p email address: #{user.email}
             p date of birth: #{moment(user.date_of_birth).format('YYYY-MM-DD')}
             p citizenship: #{user.citizenship}
@@ -12,7 +12,7 @@ mixin message(opp, user)
             p passenger category: #{user.category_name}
     else 
         h1.greeting(style="margin-bottom:100px;") Welcome 
-            span=user.full_name  
+            span #{user.first_name} #{user.last_name}
             |  to our website
 
 

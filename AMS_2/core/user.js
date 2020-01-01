@@ -79,7 +79,7 @@ User.prototype = {
                 callback(null)
             }
             else{
-                let sql = `INSERT INTO member_passenger(full_name, date_of_birth, gender, citizenship) VALUES (?, ?, ?, ?)`;
+                let sql = `INSERT INTO member_passenger(first_name,last_name, date_of_birth, gender, citizenship) VALUES (?,?, ?, ?, ?)`;
                 // call the query give it the sql string and the values (bind array)
                 pool.beginTransaction(function(err){
                     if(err) throw err;

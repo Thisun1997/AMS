@@ -1,0 +1,49 @@
+extends admin
+
+block content
+    script(type='text/javascript', src='/javascripts/date.js')
+
+    .login-panel(style="float:none; padding-left:200px")
+        h2 Given a date range, number of bookings by each passenger type 
+        br
+        form(method="post" action="/admin/generateReport2")
+            table 
+                tr
+                    td From 
+                    td 
+                        input(type="date" name="date1" required)
+                    td to
+                    td
+                        input(type="date" name="date2" required)
+                tr 
+                    td
+                    td
+                        input(type="submit" value="view")
+    +function2(data)
+
+
+mixin function(airports)
+    if airports!= null
+        select(name="airport_id" id="airport_id")
+            each airport in airports
+                option(value="#{airport.airport_id}" required) #{airport.code}
+    else
+        p no airports added
+
+mixin function2(data)
+        if data != null
+            br
+            .login-panel(style="float:none; padding-left:70px")
+                table( class = "table table-striped")
+                        thead(class="thead-dark") 
+                            tr
+                                th passenger category
+                                th number of bookings
+                        tbody
+                                each d in data
+                                    tr
+                                        if d.category_name == null
+                                            td normal
+                                        else
+                                            td #{d.category_name}
+                                        td #{d.no_of_bookings}
