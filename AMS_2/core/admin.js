@@ -250,8 +250,7 @@ Admin.prototype = {
         var today = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         let sql = 'select * from today_routes natural join delay where date=?';
-//====================================================
-//date eka hard cordw karla thiyenne
+
         pool.query(sql, [date], function(err, result) {
             if (err) {
                 throw err
