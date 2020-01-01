@@ -2,18 +2,9 @@ extends admin
 
 block content
     .login-panel(style="float:none; padding-left:200px")
-        h3 Given a flight no, all passengers travelling in it (next immediate flight) below age 18, above age 18 
+        h3 All passengers travelling in trips sheduled today below age 18, above age 18 
         br
-        form(method="post" action="/admin/generateReport3")
-            table 
-                tr 
-                    td Trip
-                    td 
-                        +function(tripDetails)
-                tr 
-                    td
-                    td
-                        input(type="submit" value="view")
+        +function(tripDetails)
     +functions(ab18,be18)
 
 
@@ -66,9 +57,18 @@ mixin functions(ab18,be18)
 
 mixin function(tripDetails)
     if tripDetails!= null
-        select(name="shedule_id")
-            each trip in tripDetails
-                option(value="#{trip.shedule_id}") #{trip.x} -> #{trip.y} - #{trip.dept_time} -> #{trip.arr_time}
+        form(method="post" action="/admin/generateReport3")
+            table 
+                tr 
+                    td Trip
+                    td 
+                        select(name="shedule_id")
+                            each trip in tripDetails
+                                option(value="#{trip.shedule_id}") #{trip.x} -> #{trip.y} - #{trip.dept_time} -> #{trip.arr_time}
+                tr 
+                    td
+                    td
+                        input(type="submit" value="view")
     else
         p no trips for today! 
 

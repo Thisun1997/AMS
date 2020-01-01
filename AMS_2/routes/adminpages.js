@@ -856,7 +856,7 @@ router.get("/generateReport3", (req, res, next) => {
                     }
                     else {
                         console.log('hi')
-                        res.redirect('/admin')
+                        res.render('report3', { msg: "No trips for today"})
                     }
                 });
             }

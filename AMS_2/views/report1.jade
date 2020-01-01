@@ -4,7 +4,7 @@ block content
     script(type='text/javascript', src='/javascripts/date.js')
 
     .login-panel(style="float:none; padding-left:200px")
-        h2 Given a date range, number of passengers travelling to a given destination 
+        h2 Given a date range, number of seats reserved to a given destination 
         br
         form(method="post" action="/admin/generateReport1")
             table 
@@ -41,9 +41,9 @@ mixin function2(data)
                 table( class = "table table-striped")
                         thead(class="thead-dark") 
                             tr
-                                th total economy passengers
-                                th total business passengers
-                                th total platinum passengers
+                                th total economy seats
+                                th total business seats
+                                th total platinum seats
                         tbody
                             tr
                                 each d in data

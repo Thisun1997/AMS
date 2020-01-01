@@ -48,16 +48,22 @@ form(method="post" action="/search")
 
 
 mixin functiondept(locations)
-      select(name="dept_airport_code" id="dept_airport_code")
+    if locations
+        select(name="dept_airport_code" id="dept_airport_code")
             option(disabled selected value) -- select an option -- 
             each location in locations
                 option(value="#{location.airport_id}") #{location.city} - #{location.country} (#{location.code})
+    else
+        p no locations
 
 mixin functiondest(locations)
-      select(name="dest_airport_code" id="dest_airport_code")
+    if locations
+        select(name="dest_airport_code" id="dest_airport_code")
             option(disabled selected value) -- select an option -- 
             each location in locations
                 option(value="#{location.airport_id}") #{location.city} - #{location.country} (#{location.code})
+    else
+        p no locations
 
 mixin function_res(search,msg,seat_type)
           if(search != null)
