@@ -875,7 +875,12 @@ router.post('/generateReport3', (req, res, next) => {
             admin.getTodayRoutesDetails(function (result1) {
                     admin.generateReport3(userInput, function (result2) {
                         //console.log(result1);
-                        res.render('report3', {ab18 :result2[0],be18 :result2[1],tripDetails: result1});
+                        if(result2){
+                            res.render('report3', {ab18 :result2[0],be18 :result2[1],tripDetails: result1});
+                        }
+                        else{
+                            res.render('report3', {tripDetails: result1,msg: "no passengers"});
+                        }
                     });
             });   
         }
