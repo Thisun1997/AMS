@@ -34,8 +34,7 @@ nav ul
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-image: linear-gradient(to left, #1c5ebe, #4c78c8, #7193d0, #95add7, #bac8de);
-}
+    background-image: linear-gradient(to left, #5e85be, #7695c6, #8da6ce, #a3b7d6, #bac8de);}
 nav ul li 
 {
     float: left;
