@@ -71,6 +71,14 @@ nav ul li a:hover
     overflow: auto;
     border-radius: 10px;;
 }
+.login-panel1
+{
+    padding: 15px 10px 0px 10px;
+    border: 1px solid #ccc;
+    background-color: #D9D7DD;
+    overflow: auto;
+    border-radius: 10px;
+}
 .login-panel
 {
     float: right;
