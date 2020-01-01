@@ -136,11 +136,11 @@ mixin function(economy,business,platinum,plane_type_name,trip,seat_list,user)
 mixin function2(trip,price,moment,total,guest_details)
     -var j = guest_details.length
     -var k = 0
-    p Date #{moment(trip.date).format('YYYY-MM-DD')}
-    p from #{trip.dept_code}(#{trip.dept_city}) 
-    p to #{trip.dest_code}(#{trip.dest_city}) 
-    p depatuer time: #{trip.dept_time} 
-    p arrival time: #{trip.arr_time}
+    p Date: #{moment(trip.date).format('YYYY-MM-DD')}
+    p From: #{trip.dept_code}(#{trip.dept_city}) 
+    p To: #{trip.dest_code}(#{trip.dest_city}) 
+    p Departure time: #{trip.dept_time} 
+    p Arrival time: #{trip.arr_time}
     each i in guest_details
         if(i.price)
             p #{i.name} - $ #{i.price}
@@ -149,7 +149,7 @@ mixin function2(trip,price,moment,total,guest_details)
         if i.price != null 
             -k += 1
 
-    p total: $ #{total}
+    h4 Total: $ #{total}
     if k == j
         div(id="details" class="modal" style="height:100%;width:300%")
             p Summary of your reservation

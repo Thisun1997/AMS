@@ -6,6 +6,7 @@ const adminRouter = require('./routes/adminpages');
 const guestRouter = require('./routes/guestpages');
 const app = express();
 
+const errorController = require('./controllers/error')
 
 // for body parser. to collect data that sent from the client.
 app.use(express.urlencoded( { extended : false}));
@@ -36,17 +37,12 @@ app.use('/admin',adminRouter);
 app.use('/guest',guestRouter);
 
 // Errors => page not found 404
-app.use((req, res, next) =>  {
-    var err = new Error('Page not found');
-    err.status = 404;
-    next(err);
-})
+app.use(errorController.get404);
+
 
 // Handling errors (send them to the client)
-app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.send(err.message);
-});
+app.use(errorController.get500);
+
 
 
 module.exports = app;

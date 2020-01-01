@@ -2,36 +2,37 @@ extends layout
 
 block content
     script(type='text/javascript', src='/javascripts/prevent_back.js')
-    .login-panel(style="float:none")
+    .login-panel1(style="float:none;")
         h3 You are going to make a reservation for flight from #{trip.dept_code}(#{trip.dept_city}) to #{trip.dest_code}(#{trip.dest_city}) on #{moment(trip.date).format('YYYY-MM-DD')}
-        p depatuer time: #{trip.dept_time} &nbsp;&nbsp; arrival time: #{trip.arr_time}
+        p Departure time: #{trip.dept_time} &nbsp;&nbsp; Arrival time: #{trip.arr_time}
     br
-    .login-panel(style="float:none")
+    .login-panel1(style="margin-right:310px;")
         +function(guests,trip,type,guests_booked)
         +function2(guests_details)
 
 mixin function(guests,trip,type,guests_booked)
         
         if guests_booked[0] != 0
-            h4 Booking for adult guest #{guests[0]-guests_booked[0]+1}
-            form(method="post" action="/addGuest")
+            h3(style="margin-left:20px") Booking for adult guest #{guests[0]-guests_booked[0]+1}
+            br
+            form(method="post" action="/addGuest" style="margin-left: 150px")
                 table
                     tr
-                        td full name 
+                        td Full name 
                         td 
                             input(type="text" name="name" required)
                     tr
-                        td age 
+                        td Age 
                         td 
                             input(type="number" class="guest_num" name="age" min="18" required)
                     tr
-                        td gender 
+                        td Gender 
                             td 
                                 select(name="gender" id="gender" required)
                                     option(value="male") male
                                     option(value="female") female
                     tr
-                        td requirements 
+                        td Requirements 
                         td 
                             input(type="text" name="requirements")
                     tr 
@@ -43,22 +44,22 @@ mixin function(guests,trip,type,guests_booked)
             form(method="post" action="/addGuest")
                 table
                     tr
-                        td full name 
+                        td Full name 
                         td 
                             input(type="text" name="name" required)
                     tr
-                        td age 
+                        td Age 
                         td 
                             input(type="number" class="guest_num" name="age" min="4" max="17" required)
 
                     tr
-                        td gender 
+                        td Gender 
                             td 
                                 select(name="gender" id="gender" required)
                                     option(value="male") male
                                     option(value="female") female
                     tr
-                        td requirements 
+                        td Requirements 
                         td 
                             input(type="text" name="requirements")
                     tr 
@@ -70,16 +71,16 @@ mixin function(guests,trip,type,guests_booked)
             form(method="post" action="/addGuest")
                 table
                     tr
-                        td full name 
+                        td Full name 
                         td 
                             input(type="text" name="name" required)
                     tr
-                        td age 
+                        td Age 
                         td 
                             input(type="number" class="guest_num" name="age" min="1" max="3" required)
 
                     tr
-                        td gender 
+                        td Gender 
                         td 
                             select(name="gender" id="gender" required)
                                 option(value="male") male
@@ -89,7 +90,7 @@ mixin function(guests,trip,type,guests_booked)
                         td 
                             +function3(guests_details)
                     tr
-                        td requirements 
+                        td Requirements 
                         td 
                             input(type="text" name="requirements")
                     tr 
@@ -124,10 +125,10 @@ mixin function2(guests_details)
         table( class = "table table-striped")
                 thead 
                     tr
-                        th name of the guest
-                        th age	
-                        th gender
-                        th requirements
+                        th Name of the guest
+                        th Age	
+                        th Gender
+                        th Requirements
                 tbody
                     each g in guests_details
                         tr
@@ -139,5 +140,5 @@ mixin function2(guests_details)
                             td= g.gender
                             td= g.requirements
     else
-        p added guests will appear here
+        p Added guests will appear here
                             

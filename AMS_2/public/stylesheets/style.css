@@ -3,7 +3,8 @@
 
 body 
 {
-    background-image: radial-gradient(circle, #6a8eae, #5e8db2, #518bb6, #3f8ab9, #2589bd);
+    background-image: url("../images/3.jpg");
+    /* background-image: radial-gradient(circle, #6a8eae, #5e8db2, #518bb6, #3f8ab9, #2589bd); */
     font-family: sans-serif;
 }
 .table, .table td, .table tr, .table select
@@ -33,9 +34,8 @@ nav ul
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-image: linear-gradient(to right, #272d2d, #3f474a, #5b636a, #7d7f8a, #a39ba8);
+    background-image: linear-gradient(to left, #1c5ebe, #4c78c8, #7193d0, #95add7, #bac8de);
 }
-
 nav ul li 
 {
     float: left;
@@ -54,7 +54,7 @@ nav ul li a:hover
     background-color: #111;
 }
 .active {
-    background-color: #43B929;
+    background-color: rgb(20, 4, 252);
   }
 .page-wrapper
 {
@@ -69,7 +69,16 @@ nav ul li a:hover
     border: 1px solid #ccc;
     background-color: #D9D7DD;
     overflow: auto;
-    border-radius: 10px;;
+    border-radius: 10px;
+    opacity: 0.9;
+}
+.login-panel1
+{
+    padding: 15px 10px 0px 10px;
+    border: 1px solid #ccc;
+    background-color: #D9D7DD;
+    overflow: auto;
+    border-radius: 10px;
 }
 .login-panel
 {
