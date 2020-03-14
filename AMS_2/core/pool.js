@@ -7,7 +7,7 @@ const pool = mysql.createConnection({
     host: 'localhost',
     user: 'root', // use your mysql username.
     password: '', // user your mysql password.
-    database: 'backup_ams'
+    database: 'ams_backup'
 });
 
 pool.connect(function(err) {
