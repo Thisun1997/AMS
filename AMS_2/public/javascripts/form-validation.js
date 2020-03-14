@@ -23,7 +23,7 @@ $(document).ready(function() {
         var regEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         var validEmail = regEx.test(email);
         if (!validEmail || password != confirm_password) {
-            if (!validEmail || password){
+            if (!validEmail){
                 $('#email').after('<td class="error_2">Enter a valid email</td>');
             }
             if(password != confirm_password){
